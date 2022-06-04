@@ -1,4 +1,8 @@
-# Frontend of the Rentd web application
+<div align="center"> 
+    <img src="./client/src/assets/logo.png" alt="" width="100" height="100" />
+</div>
+
+# Rentd frontend
 
 To run the frontend locally on your computer, follow these steps:
 1. Clone the project using git.
