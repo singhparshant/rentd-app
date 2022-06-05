@@ -6,13 +6,11 @@ const logger = require('morgan');
 require('dotenv').config()
 const mongoose = require("mongoose");
 const connectionString = process.env.ATLAS_UIR;
-const indexRouter = require('./routes/index');
 const productsRouter = require('./routes/products.js');
 
 const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
@@ -33,7 +31,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
 app.use('/products', productsRouter);
 
 // catch 404 and forward to error handler
