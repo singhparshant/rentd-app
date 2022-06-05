@@ -35,6 +35,7 @@ Test client:           # This job runs in the test stage.
   stage: test   # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running client tests"
+    - cd client
     - CI=true npm test
     - echo "Tests Passed!"
 
