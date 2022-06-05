@@ -21,11 +21,10 @@ Build client:          # This job runs in the build stage, which runs first.
 Build server:          # This job runs in the build stage, which runs first.
   stage: build
   script: 
-    - echo "Starting server build"
+    - echo "Starting server dependencies install"
     - cd server
     - npm ci
-    - npm run build
-    - echo "Build successful!"
+    - echo "dependencies install successful!"
   artifacts:
     expire_in: 1 hour
     paths:
@@ -36,12 +35,13 @@ Test client:           # This job runs in the test stage.
   stage: test   # It only starts when the job in the build stage completes successfully.
   script:
     - echo "Running client tests"
+    - cd client
     - CI=true npm test
     - echo "Tests Passed!"
 
-Test server:           # This job runs in the test stage.
-  stage: test   # It only starts when the job in the build stage completes successfully.
-  script:
-    - echo "Running server tests"
-    - CI=true npm test
-    - echo "Tests Passed!"
+# Test server:           # This job runs in the test stage.
+#   stage: test   # It only starts when the job in the build stage completes successfully.
+#   script:
+#     - echo "Running server tests"
+#     - CI=true npm test
+#     - echo "Tests Passed!"
