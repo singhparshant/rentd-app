@@ -2,7 +2,16 @@ const express = require("express");
 const Product = require("../models/product");
 const router = express.Router();
 
-//getting all products
+
+/**
+ * @swagger
+ * /products:
+ *  get:
+ *    description: get all products
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 router.get("/", async (req, res) => {
   try {
     let products = await Product.find();
@@ -12,7 +21,19 @@ router.get("/", async (req, res) => {
   }
 });
 
-//add new product
+/**
+ * @swagger
+ * /product:
+ *    post:
+ *      description: Add a new product
+ *    requestBody:
+ *      content: 
+ *          application/json
+ *        
+ *    responses:
+ *      '201':
+ *        description: Successfully created user
+ */
 router.post("/", async (req, res) => {
   try {
     let product = new Product(req.body);
