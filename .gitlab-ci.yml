@@ -10,7 +10,7 @@ Build client:          # This job runs in the build stage, which runs first.
     - echo "Starting client build"
     - cd client
     - npm ci
-    - npm build
+    - npm run build
     - echo "Build successful!"
   artifacts:
     expire_in: 1 hour
@@ -24,7 +24,7 @@ Build server:          # This job runs in the build stage, which runs first.
     - echo "Starting server build"
     - cd server
     - npm ci
-    - npm build
+    - npm run build
     - echo "Build successful!"
   artifacts:
     expire_in: 1 hour
