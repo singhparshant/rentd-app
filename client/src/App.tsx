@@ -1,13 +1,37 @@
-import React from 'react';
-import logo from "./assets/logo.png"
+import { Button } from "@mui/material";
+import React from "react";
+import { ErrorBoundary, FallbackProps } from "react-error-boundary";
+import Body from "./Components/body/Body";
+import Footer from "./Components/footer/Footer";
+import NavBar from "./Components/navBar/NavBar";
 
-function App() {
+// const Bomb = () => {
+//   throw new Error("Error Message");
+// };
+
+const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
-  <div className='app'>
-    <h1>Welcome to Rentd</h1>
-    <img src={logo} alt="" width="100" height="100" />
-  </div>
+    <div role="alert">
+      <p>An error occurred:</p>
+      <pre>{error.message}</pre>
+      <Button variant="contained" onClick={resetErrorBoundary}>
+        Try again
+      </Button>
+    </div>
   );
-}
+};
+
+const App = () => {
+  return (
+    <div className="app">
+      <ErrorBoundary FallbackComponent={ErrorHandler}>
+        {/* <Bomb /> */}
+        <NavBar />
+        <Body />
+        <Footer />
+      </ErrorBoundary>
+    </div>
+  );
+};
 
 export default App;
