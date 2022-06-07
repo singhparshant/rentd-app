@@ -1,47 +1,47 @@
-image: node:latest
+# image: node:latest
 
-stages:         # List of stages for jobs, and their order of execution
-  - build
-  - test
+# stages:         # List of stages for jobs, and their order of execution
+#   - build
+#   - test
 
-Build client:          # This job runs in the build stage, which runs first.
-  stage: build
-  script: 
-    - echo "Starting client build"
-    - cd client
-    - npm ci
-    - npm run build
-    - echo "Build successful!"
-  artifacts:
-    expire_in: 1 hour
-    paths:
-    - build
-    - node_modules/
-
-Build server:          # This job runs in the build stage, which runs first.
-  stage: build
-  script: 
-    - echo "Starting server dependencies install"
-    - cd server
-    - npm ci
-    - echo "dependencies install successful!"
-  artifacts:
-    expire_in: 1 hour
-    paths:
-    - build
-    - node_modules/
-
-# Test client:           # This job runs in the test stage.
-#   stage: test   # It only starts when the job in the build stage completes successfully.
-#   script:
-#     - echo "Running client tests"
+# Build client:          # This job runs in the build stage, which runs first.
+#   stage: build
+#   script: 
+#     - echo "Starting client build"
 #     - cd client
-#     - CI=true npm test
-#     - echo "Tests Passed!"
+#     - npm ci
+#     - npm run build
+#     - echo "Build successful!"
+#   artifacts:
+#     expire_in: 1 hour
+#     paths:
+#     - build
+#     - node_modules/
 
-# Test server:           # This job runs in the test stage.
-#   stage: test   # It only starts when the job in the build stage completes successfully.
-#   script:
-#     - echo "Running server tests"
-#     - CI=true npm test
-#     - echo "Tests Passed!"
+# Build server:          # This job runs in the build stage, which runs first.
+#   stage: build
+#   script: 
+#     - echo "Starting server dependencies install"
+#     - cd server
+#     - npm ci
+#     - echo "dependencies install successful!"
+#   artifacts:
+#     expire_in: 1 hour
+#     paths:
+#     - build
+#     - node_modules/
+
+# # Test client:           # This job runs in the test stage.
+# #   stage: test   # It only starts when the job in the build stage completes successfully.
+# #   script:
+# #     - echo "Running client tests"
+# #     - cd client
+# #     - CI=true npm test
+# #     - echo "Tests Passed!"
+
+# # Test server:           # This job runs in the test stage.
+# #   stage: test   # It only starts when the job in the build stage completes successfully.
+# #   script:
+# #     - echo "Running server tests"
+# #     - CI=true npm test
+# #     - echo "Tests Passed!"
