@@ -1,9 +1,9 @@
 import { Button } from "@mui/material";
 import React from "react";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
-import Body from "./Components/body/Body";
-import Footer from "./Components/footer/Footer";
-import NavBar from "./Components/navBar/NavBar";
+import Body from "./components/body/Body";
+import Footer from "./components/footer/Footer";
+import NavBar from "./components/navBar/NavBar";
 
 // const Bomb = () => {
 //   throw new Error("Error Message");
