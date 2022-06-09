@@ -1,9 +1,11 @@
 import React from "react";
 import logo from "../../../assets/logo.png";
 
-type Props = {};
+interface BodyProps {
 
-const Body = (props: Props) => {
+};
+
+const Body = (props: BodyProps) => {
   return (
     <div>
       <h1>Welcome to Rentd</h1>

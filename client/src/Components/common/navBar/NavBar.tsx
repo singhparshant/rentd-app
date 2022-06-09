@@ -1,8 +1,10 @@
 import React from "react";
 
-type Props = {};
+interface NavbarProps {
 
-const NavBar = (props: Props) => {
+};
+
+const NavBar = (props: NavbarProps) => {
   return <div style={{ backgroundColor: "red" }}>NavBar</div>;
 };
 
