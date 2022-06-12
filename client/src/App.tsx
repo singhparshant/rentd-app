@@ -8,15 +8,15 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import HomeScreen from "./components/customerApp/HomeScreen/HomeScreen";
+import HomeScreen from "./components/customerApp/homeScreen/HomeScreen";
 import NotFound from "./components/common/notFound/NotFound";
 import SignUp from "./components/common/signUp/SignUp";
 import Login from "./components/common/login/Login";
 import ProductDetailsScreen from "./components/common/productDetails/ProductDetailsScreen";
-import CartScreen from "./components/customerApp/CartScreen/CartScreen";
-import CheckoutScreen from "./components/customerApp/CheckoutScreen/CheckoutScreen";
-import OrdersScreen from "./components/customerApp/OrdersScreen/OrdersScreen";
-import OrderDetailsScreen from "./components/customerApp/OrderDetailsScreen/OrderDetailsScreen";
+import CartScreen from "./components/customerApp/cartScreen/CartScreen";
+import CheckoutScreen from "./components/customerApp/checkoutScreen/CheckoutScreen";
+import OrdersScreen from "./components/customerApp/ordersScreen/OrdersScreen";
+import OrderDetailsScreen from "./components/customerApp/orderDetailsScreen/OrderDetailsScreen";
 
 const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
