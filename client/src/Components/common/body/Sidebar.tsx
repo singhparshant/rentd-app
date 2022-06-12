@@ -1,8 +1,10 @@
 import React from "react";
 
-type Props = {};
+interface SidebarProps {
 
-const Sidebar = (props: Props) => {
+};
+
+const Sidebar = (props: SidebarProps) => {
   return <div>Sidebar</div>;
 };
 

@@ -1,8 +1,10 @@
 import React from "react";
 
-type Props = {};
+interface FooterProps {
 
-const Footer = (props: Props) => {
+};
+
+const Footer = (props: FooterProps) => {
   return <div>Footer</div>;
 };
 
