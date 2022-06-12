@@ -8,15 +8,9 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import HomeScreen from "./components/customerApp/homeScreen/HomeScreen";
-import NotFound from "./components/common/notFound/NotFound";
-import SignUp from "./components/common/signUp/SignUp";
-import Login from "./components/common/login/Login";
-import ProductDetailsScreen from "./components/common/productDetails/ProductDetailsScreen";
-import CartScreen from "./components/customerApp/cartScreen/CartScreen";
-import CheckoutScreen from "./components/customerApp/checkoutScreen/CheckoutScreen";
-import OrdersScreen from "./components/customerApp/ordersScreen/OrdersScreen";
-import OrderDetailsScreen from "./components/customerApp/orderDetailsScreen/OrderDetailsScreen";
+import { customerAppRoutes } from "./routes/customerAppRoutes";
+import useAuthState from "./zustand/useAuthState";
+
 
 const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
@@ -31,45 +25,26 @@ const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
 };
 
 const App = () => {
-  return (
-    <div className="app">
-      <ErrorBoundary FallbackComponent={ErrorHandler}>
-        <Router>
-          <NavBar />
-          <Switch>
-            <Route exact path="/">
-              <HomeScreen />
-            </Route>
-            <Route exact path="/register">
-              <SignUp />
-            </Route>
-            <Route exact path="/login">
-              <Login />
-            </Route>
-            <Route exact path="/product/:id">
-              <ProductDetailsScreen />
-            </Route>
-            <Route exact path="/cart">
-              <CartScreen />
-            </Route>
-            <Route exact path="/checkout">
-              <CheckoutScreen />
-            </Route>
-            <Route exact path="/orders">
-              <OrdersScreen />
-            </Route>
-            <Route exact path="/orders/:id">
-              <OrderDetailsScreen />
-            </Route>
-            <Route path="*">
-              <NotFound />
-            </Route>
-          </Switch>
-          <Footer/>
-        </Router>
-      </ErrorBoundary>
-    </div>
-  );
+
+  const { user } = useAuthState() as any;
+
+  if (!user || user.role === "customer") {
+    return (
+      <div className="app">
+        <ErrorBoundary FallbackComponent={ErrorHandler}>
+          <Router>
+            <NavBar />
+            <Switch>
+              {customerAppRoutes.map((route, idx) =>
+                <Route key={idx} exact path={route.path}>{route.component} </Route>)}
+            </Switch>
+            <Footer />
+          </Router>
+        </ErrorBoundary>
+      </div>
+    );
+  }
+  return <></>
 };
 
 export default App;
