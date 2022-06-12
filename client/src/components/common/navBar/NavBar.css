@@ -1,5 +1,6 @@
 .navbar {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   background-color: #d9d9d9;
   height: 80px;
@@ -19,22 +20,14 @@
   width: 40%;
   padding: 5px;
   border-radius: 10px;
-  margin-left: 20px;
 }
 
 .searchInput {
   width: 100%;
   border-width: 0px;
   border-style: solid;
-  font-size: 20px;
 }
 
 .searchInput:focus {
   outline: none;
-}
-
-.searchIcon {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
 }
