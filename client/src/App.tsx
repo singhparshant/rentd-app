@@ -4,10 +4,14 @@ import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import Body from "./components/common/body/Body";
 import Footer from "./components/common/footer/Footer";
 import NavBar from "./components/common/navBar/NavBar";
-
-// const Bomb = () => {
-//   throw new Error("Error Message");
-// };
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import HomeScreen from "./components/customerApp/HomeScreen";
+import NotFound from "./components/common/notFound/NotFound";
 
 const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
@@ -25,10 +29,20 @@ const App = () => {
   return (
     <div className="app">
       <ErrorBoundary FallbackComponent={ErrorHandler}>
-        {/* <Bomb /> */}
-        <NavBar />
-        <Body />
-        <Footer />
+        <Router>
+          <NavBar />
+          <Switch>
+            <Route exact path="/">
+              <HomeScreen />
+            </Route>
+
+
+
+            <Route path="*">
+              <NotFound />
+            </Route>
+          </Switch>
+        </Router>
       </ErrorBoundary>
     </div>
   );
