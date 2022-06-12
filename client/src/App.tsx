@@ -11,6 +11,7 @@ import {
 import { customerAppRoutes } from "./routes/customerAppRoutes";
 import useAuthState from "./zustand/useAuthState";
 import { supplierAppRoutes } from "./routes/supplierAppRoutes";
+import { adminAppRoutes } from "./routes/adminAppRoutes";
 
 
 const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
@@ -61,7 +62,18 @@ const App = () => {
       </div>
     )
   } else if (user.role === "admin") {
-    return <>Admin</>
+    return <div className="app">
+      <ErrorBoundary FallbackComponent={ErrorHandler}>
+        <Router>
+          <NavBar />
+          <Switch>
+            {adminAppRoutes.map((route, idx) =>
+              <Route key={idx} exact path={route.path}>{route.component} </Route>)}
+          </Switch>
+          <Footer />
+        </Router>
+      </ErrorBoundary>
+    </div>
   }
   return <>Error</>
 };
