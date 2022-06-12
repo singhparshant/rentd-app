@@ -6,14 +6,14 @@ import SignUp from "../components/common/signUp/SignUp";
 import CartScreen from "../components/customerApp/cartScreen/CartScreen";
 import CheckoutScreen from "../components/customerApp/checkoutScreen/CheckoutScreen";
 import HomeScreen from "../components/customerApp/homeScreen/HomeScreen"
-import OrderDetailsScreen from "../components/customerApp/orderDetailsScreen/OrderDetailsScreen";
-import OrdersScreen from "../components/customerApp/ordersScreen/OrdersScreen";
+import OrderDetailsScreen from "../components/common/orderDetailsScreen/OrderDetailsScreen";
+import OrdersScreen from "../components/common/ordersScreen/OrdersScreen";
 
-export interface Route {
+export interface AppRoute {
     path: string;
     component: ReactNode;
 }
-export const customerAppRoutes: Array<Route> = [
+export const customerAppRoutes: Array<AppRoute> = [
     {
         path: "/",
         component: <HomeScreen />
@@ -27,7 +27,7 @@ export const customerAppRoutes: Array<Route> = [
         component: <Login />
     },
     {
-        path: "/product/:id",
+        path: "/products/:id",
         component: <ProductDetailsScreen />
     },
     {
