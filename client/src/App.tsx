@@ -12,6 +12,8 @@ import {
 } from "react-router-dom";
 import HomeScreen from "./components/customerApp/HomeScreen";
 import NotFound from "./components/common/notFound/NotFound";
+import SignUp from "./components/common/signUp/SignUp";
+import Login from "./components/common/login/Login";
 
 const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
@@ -35,9 +37,12 @@ const App = () => {
             <Route exact path="/">
               <HomeScreen />
             </Route>
-
-
-
+            <Route exact path="/register">
+              <SignUp />
+            </Route>
+            <Route exact path="/login">
+              <Login />
+            </Route>
             <Route path="*">
               <NotFound />
             </Route>
