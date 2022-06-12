@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function CartScreen() {
   return (
-    <h1>Your cart</h1>
+    <h1>Your Cart</h1>
   )
 }

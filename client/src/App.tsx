@@ -15,6 +15,8 @@ import Login from "./components/common/login/Login";
 import ProductDetailsScreen from "./components/common/productDetails/ProductDetailsScreen";
 import CartScreen from "./components/customerApp/CartScreen/CartScreen";
 import CheckoutScreen from "./components/customerApp/CheckoutScreen/CheckoutScreen";
+import OrdersScreen from "./components/customerApp/OrdersScreen/OrdersScreen";
+import OrderDetailsScreen from "./components/customerApp/OrderDetailsScreen/OrderDetailsScreen";
 
 const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
@@ -52,6 +54,12 @@ const App = () => {
             </Route>
             <Route exact path="/checkout">
               <CheckoutScreen />
+            </Route>
+            <Route exact path="/orders">
+              <OrdersScreen />
+            </Route>
+            <Route exact path="/orders/:id">
+              <OrderDetailsScreen />
             </Route>
             <Route path="*">
               <NotFound />
