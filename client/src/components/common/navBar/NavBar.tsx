@@ -5,7 +5,7 @@ interface NavbarProps {
 };
 
 const NavBar = (props: NavbarProps) => {
-  return <div style={{ backgroundColor: "red" }}>NavBar</div>;
+  return <h1>NavBar</h1>;
 };
 
 export default NavBar;
