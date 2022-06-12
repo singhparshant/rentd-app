@@ -30,52 +30,35 @@ const App = () => {
 
   const { user } = useAuthState() as any;
 
-  if (!user || user.role === "customer") {
-    return (
-      <div className="app">
-        <ErrorBoundary FallbackComponent={ErrorHandler}>
-          <Router>
-            <NavBar />
-            <Switch>
-              {customerAppRoutes.map((route, idx) =>
-                <Route key={idx} exact path={route.path}>{route.component} </Route>)}
-            </Switch>
-            <Footer />
-          </Router>
-        </ErrorBoundary>
-      </div>
-    );
+  const routes = () => {
+    if (!user || user.role === "customer") {
+      return customerAppRoutes.map((route, idx) =>
+        <Route key={idx} exact path={route.path}>{route.component} </Route>)
+    }
+    if (user.role === "supplier") {
+      return supplierAppRoutes.map((route, idx) =>
+        <Route key={idx} exact path={route.path}>{route.component} </Route>)
+    }
+    if (user.role === "admin") {
+      return adminAppRoutes.map((route, idx) =>
+        <Route key={idx} exact path={route.path}>{route.component} </Route>)
+    }
   }
-  else if (user.role === "supplier") {
-    return (
-      <div className="app">
-        <ErrorBoundary FallbackComponent={ErrorHandler}>
-          <Router>
-            <NavBar />
-            <Switch>
-              {supplierAppRoutes.map((route, idx) =>
-                <Route key={idx} exact path={route.path}>{route.component} </Route>)}
-            </Switch>
-            <Footer />
-          </Router>
-        </ErrorBoundary>
-      </div>
-    )
-  } else if (user.role === "admin") {
-    return <div className="app">
+
+  return (
+    <div className="app">
       <ErrorBoundary FallbackComponent={ErrorHandler}>
         <Router>
           <NavBar />
           <Switch>
-            {adminAppRoutes.map((route, idx) =>
-              <Route key={idx} exact path={route.path}>{route.component} </Route>)}
+            {routes()}
           </Switch>
           <Footer />
         </Router>
       </ErrorBoundary>
     </div>
-  }
-  return <>Error</>
+  );
+
 };
 
 export default App;
