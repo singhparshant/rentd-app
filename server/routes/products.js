@@ -17,9 +17,39 @@ router.get("/", async (req, res) => {
     let products = await Product.find();
     res.status(200).json(products);
   } catch (err) {
-    res.status(400).json(err.message);
+    res.status(400).res.status(400).json(err.message);
   }
 });
+
+function getProduct(name) {
+  try{
+    let products = await Product.getProduct({"name": name});
+    return json(products);
+  }
+  catch (err){
+    return res.status(400).json(err.message);
+  }
+}
+function getAllProductsSupplier(supplierIdArg){
+  try{
+    let products = await Product.find({"supplierId": supplierIdArg});
+    return json(products);
+  }
+  catch (err){
+    return res.status(400).json(err.message);
+  }
+}
+
+function productFilterPrice(min, max){
+  try{
+    let products = await Product.find({"monthlyPrice": {$gt: min, $lt: max}});
+    return json(products);
+  }
+  catch (err){
+    return res.status(400).json(err.message);
+  }
+}
+
 
 /**
  * @swagger
