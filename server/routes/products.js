@@ -14,12 +14,14 @@ const router = express.Router();
  */
 router.get("/", async (req, res) => {
   try {
+    console.log("Hello");
     let products = await Product.find();
     res.status(200).json(products);
   } catch (err) {
     res.status(400).json(err.message);
   }
 });
+
 
 /**
  * @swagger
