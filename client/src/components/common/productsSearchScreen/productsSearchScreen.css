@@ -1,0 +1,14 @@
+.container{
+    height: 100vh;
+    display: flex;
+    padding: "5px";
+}
+
+.sideBar{
+    width: "20%"; 
+    background-color: "#6b2d76"
+}
+
+.products{
+    width: "80%";
+}
