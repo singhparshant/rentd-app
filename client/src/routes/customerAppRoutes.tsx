@@ -9,6 +9,17 @@ import HomeScreen from "../components/customerApp/homeScreen/HomeScreen";
 import OrderDetailsScreen from "../components/common/orderDetailsScreen/OrderDetailsScreen";
 import OrdersScreen from "../components/common/ordersScreen/OrdersScreen";
 import ProductsSearchScreen from "../components/common/productsSearchScreen/ProductsSearchScreen";
+import {
+  checkoutPath,
+  getCartPath,
+  getOrderByIdPath,
+  getOrdersPath,
+  getProductByIdPath,
+  landingPagePath,
+  loginPagePath,
+  registerPagePath,
+  searchProductPath,
+} from "../api/requestPaths";
 
 export interface AppRoute {
   path: string;
@@ -16,39 +27,39 @@ export interface AppRoute {
 }
 export const customerAppRoutes: Array<AppRoute> = [
   {
-    path: "/",
+    path: landingPagePath,
     component: <HomeScreen />,
   },
   {
-    path: "/register",
+    path: registerPagePath,
     component: <SignUp />,
   },
   {
-    path: "/login",
+    path: loginPagePath,
     component: <Login />,
   },
   {
-    path: "/products/:id",
+    path: getProductByIdPath,
     component: <ProductDetailsScreen />,
   },
   {
-    path: "/products/search/:searchString",
+    path: searchProductPath,
     component: <ProductsSearchScreen />,
   },
   {
-    path: "/cart",
+    path: getCartPath,
     component: <CartScreen />,
   },
   {
-    path: "/checkout",
+    path: checkoutPath,
     component: <CheckoutScreen />,
   },
   {
-    path: "/orders",
+    path: getOrdersPath,
     component: <OrdersScreen />,
   },
   {
-    path: "/orders/:id",
+    path: getOrderByIdPath,
     component: <OrderDetailsScreen />,
   },
   {
