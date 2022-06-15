@@ -7,7 +7,7 @@ export interface AuthUser {
 }
 
 const useAuthState = create((set) => ({
-  user: { name: "Anoir", role: "supplier" },
+  user: { name: "Anoir", role: "admin" },
   loading: true,
   setUser: (user: any) => set({ user }),
   setLoading: (loading: Boolean) => set({ loading }),

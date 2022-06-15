@@ -4,7 +4,12 @@ import logo from "../../../assets/logo.png";
 import { Link } from "react-router-dom";
 import { ReactComponent as CartIcon } from "../../../assets/icons/cart.svg";
 import Button from "@mui/material/Button";
-import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  createFilterOptions,
+  styled,
+  TextField,
+} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import useAuthState from "../../../zustand/useAuthState";
 
@@ -138,8 +143,31 @@ const SupplierNavBar = ({ user, onLogout }: NabBarProps) => {
 };
 
 const AdminNavBar = ({ user, onLogout }: NabBarProps) => {
-  return <nav className="navbar"></nav>;
+  return (
+    <nav className="navbar">
+      <Link to="/">
+        <img className="logo" src={logo} alt="logo" />
+      </Link>
+
+      <Link to="/profile" style={{ textDecoration: "none" }}>
+        <Avatar
+          alt={user.name}
+          src={user.imageUrl}
+          style={{ color: "#2b0245" }}
+        />
+      </Link>
+      <Button
+        children={<span>Logout</span>}
+        style={{ marginRight: 10, color: "red" }}
+        onClick={onLogout}
+      />
+    </nav>
+  );
 };
+
+const CustomButton = styled(Button)({
+  color: "#2b0245",
+}) as typeof Button;
 
 const products: readonly any[] = [
   { name: "Bike" },
