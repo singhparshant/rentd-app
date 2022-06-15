@@ -15,6 +15,7 @@ const addProductPath = "/addProduct";
 const applicationsPath = "/applications";
 const applicationsByIdPath = "/applications/:id";
 const profilePath = "/profile";
+const settingsPath = "/settings";
 
 export {
   landingPagePath,
@@ -31,4 +32,5 @@ export {
   applicationsPath,
   applicationsByIdPath,
   profilePath,
+  settingsPath,
 };

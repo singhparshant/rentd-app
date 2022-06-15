@@ -8,10 +8,28 @@ import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import useAuthState from "../../../zustand/useAuthState";
 
-const filter = createFilterOptions<any>();
+interface NabBarProps {
+  user: any;
+  onLogout: () => void;
+}
 
 const NavBar = () => {
   const user = useAuthState((state: any) => state.user);
+  const setUser = useAuthState((state: any) => state.setUser);
+  const handleLogout = () => {
+    setUser(null);
+  };
+  if (!user || user.role === "customer")
+    return <CustomerNavBar user={user} onLogout={handleLogout} />;
+  if (user.role === "supplier")
+    return <SupplierNavBar user={user} onLogout={handleLogout} />;
+  if (user.role === "admin")
+    return <AdminNavBar user={user} onLogout={handleLogout} />;
+  return <></>;
+};
+
+const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
+  const filter = createFilterOptions<any>();
   const [value, setValue] = React.useState<any | null>(null);
 
   return (
@@ -78,10 +96,49 @@ const NavBar = () => {
           <Link to="/profile">
             <Avatar alt={user.name} src={user.imageUrl} />
           </Link>
+
+          <Button
+            children={<span>Logout</span>}
+            style={{ marginRight: 10, color: "red" }}
+            onClick={onLogout}
+          />
         </>
       )}
     </nav>
   );
+};
+
+const SupplierNavBar = ({ user, onLogout }: NabBarProps) => {
+  return (
+    <nav className="navbar">
+      <Link to="/">
+        <img className="logo" src={logo} alt="logo" />
+      </Link>
+
+      <Link to="/products" style={{ textDecoration: "none" }}>
+        <Button children={<span>Products</span>} />
+      </Link>
+      <Link to="/orders" style={{ textDecoration: "none" }}>
+        <Button children={<span>Orders</span>} />
+      </Link>
+      <Link to="/settings" style={{ textDecoration: "none" }}>
+        <Button children={<span>Settings</span>} />
+      </Link>
+      <Link to="/profile" style={{ textDecoration: "none" }}>
+        <Avatar alt={user.name} src={user.imageUrl} />
+      </Link>
+
+      <Button
+        children={<span>Logout</span>}
+        style={{ marginRight: 10, color: "red" }}
+        onClick={onLogout}
+      />
+    </nav>
+  );
+};
+
+const AdminNavBar = ({ user, onLogout }: NabBarProps) => {
+  return <nav className="navbar"></nav>;
 };
 
 const products: readonly any[] = [
