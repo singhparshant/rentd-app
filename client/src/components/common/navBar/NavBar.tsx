@@ -5,14 +5,15 @@ import { Link } from "react-router-dom";
 import { ReactComponent as CartIcon } from "../../../assets/icons/cart.svg";
 import Button from "@mui/material/Button";
 import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
-interface NavbarProps {
-  mode?: "customer" | "supplier" | "admin";
-}
+import Avatar from "@mui/material/Avatar";
+import useAuthState from "../../../zustand/useAuthState";
+
 const filter = createFilterOptions<any>();
 
-const NavBar = ({ mode }: NavbarProps) => {
+const NavBar = () => {
+  const user = useAuthState((state: any) => state.user);
   const [value, setValue] = React.useState<any | null>(null);
-  console.log("value", value);
+
   return (
     <nav className="navbar">
       <Link to="/">
@@ -20,6 +21,7 @@ const NavBar = ({ mode }: NavbarProps) => {
       </Link>
       <React.Fragment>
         <Autocomplete
+          style={{ backgroundColor: "white", borderRadius: 7 }}
           value={value}
           onChange={(event: any, newValue: any) => {
             setValue(newValue);
@@ -57,9 +59,27 @@ const NavBar = ({ mode }: NavbarProps) => {
       <Link to="/cart">
         <CartIcon />
       </Link>
-      <Link to="/register" style={{ textDecoration: "none" }}>
-        <Button children={<span>Join Us</span>} style={{ marginRight: 10 }} />
-      </Link>
+      {!user && (
+        <Link to="/register" style={{ textDecoration: "none" }}>
+          <Button children={<span>Join Us</span>} style={{ marginRight: 10 }} />
+        </Link>
+      )}
+
+      {user && (
+        <>
+          <Link to="/orders" style={{ textDecoration: "none" }}>
+            <Button
+              children={<span>Orders</span>}
+              style={{ marginRight: 10 }}
+            />
+          </Link>
+
+          <p>Hello, {user.name}</p>
+          <Link to="/profile">
+            <Avatar alt={user.name} src={user.imageUrl} />
+          </Link>
+        </>
+      )}
     </nav>
   );
 };

@@ -52,7 +52,7 @@ const App = () => {
     <div className="app">
       <ErrorBoundary FallbackComponent={ErrorHandler}>
         <Router>
-          <NavBar mode={user?.role} />
+          <NavBar />
           <Switch>{routes()}</Switch>
           <Footer />
         </Router>
