@@ -49,8 +49,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/products', productsRouter);
-app.use("/shoppingCarts", shoppingCartRouter);
-app.use("/users", userRouter);
+app.use("/shoppingCart", shoppingCartRouter);
+app.use("/user", userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

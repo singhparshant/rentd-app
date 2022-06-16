@@ -1,30 +1,18 @@
 const express = require("express");
-const Product = require("../models/product");
-const ShoppingCart = require("../models/shoppingCart");
-const User = require("../models/user");
 const router = express.Router();
 
-
-router.get("/", async (req, res) => {
-  try {
-    console.log("Hello");
-    let shoppingCarts = await ShoppingCart.find();
-    res.status(200).json(shoppingCarts);
-  } catch (err) {
-    res.status(400).json(err.message);
-  }
-});
+const shoppingCartController = require("../controllers/shoppingCart");
 
 
-router.post("/", async (req, res) => {
-  try {
-    let shoppingCart = new ShoppingCart(req.body);
-    shoppingCart = await shoppingCart.save();
-    res.status(200).json(shoppingCart);
-  } catch (err) {
-    res.status(400).json(err.message);
-  }
-});
+router.get("/", shoppingCartController.list);
+
+router.post("/", shoppingCartController.create);
+
+router.get("/:id", shoppingCartController.read);
+
+router.post("/update/:id", shoppingCartController.update);
+
+router.post("/delete/:id", shoppingCartController.remove);
 
 
 module.exports = router;
