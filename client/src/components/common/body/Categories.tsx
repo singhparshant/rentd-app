@@ -6,35 +6,29 @@ import {
   useTheme,
   SelectChangeEvent,
   Theme,
+  TextField,
 } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import React, { useState } from "react";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+const categories = ["Mobility", "Furniture", "Household"];
 
-const names = ["Mobility", "Furniture", "Household"];
-
-function getStyles(name: string, personName: readonly string[], theme: Theme) {
+function getStyles(
+  category: string,
+  personcategory: readonly string[],
+  theme: Theme
+) {
   return {
     fontWeight:
-      personName.indexOf(name) === -1
+      personcategory.indexOf(category) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
 }
 
-export default function MultipleSelectChip() {
+const Categories = () => {
   const theme = useTheme();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
@@ -53,12 +47,12 @@ export default function MultipleSelectChip() {
     <FormControl sx={{ margin: 2, width: "90%" }}>
       <InputLabel id="demo-multiple-chip-label">Categories</InputLabel>
       <Select
-        labelId="demo-multiple-chip-label"
-        id="demo-multiple-chip"
+        // labelId="demo-multiple-chip-label"
+        label={"Categories"}
         multiple
         value={selectedCategories}
         onChange={handleChange}
-        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+        // input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
         renderValue={(selected) => (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
             {selected.map((value) => (
@@ -66,20 +60,19 @@ export default function MultipleSelectChip() {
             ))}
           </Box>
         )}
-        MenuProps={MenuProps}
       >
-        {names.map((name) => (
+        {categories.map((category) => (
           <MenuItem
-            key={name}
-            value={name}
-            style={getStyles(name, selectedCategories, theme)}
+            key={category}
+            value={category}
+            style={getStyles(category, selectedCategories, theme)}
           >
-            {name}
+            {category}
           </MenuItem>
         ))}
       </Select>
     </FormControl>
   );
-}
+};
 
-// export default Categories;
+export default Categories;
