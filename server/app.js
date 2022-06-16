@@ -7,9 +7,11 @@ require('dotenv').config()
 const mongoose = require("mongoose");
 const connectionString = process.env.ATLAS_UIR;
 const productsRouter = require('./routes/products.js');
+const shoppingCartRouter = require('./routes/shoppingCart.js');
+const userRouter = require('./routes/user.js');
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-
+const User = require("./models/user");
 const app = express();
 
 //setup SwaggerUI documentation
@@ -47,6 +49,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/products', productsRouter);
+app.use("/shoppingCart", shoppingCartRouter);
+app.use("/user", userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
