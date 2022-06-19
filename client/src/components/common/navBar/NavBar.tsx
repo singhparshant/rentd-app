@@ -1,17 +1,13 @@
 import React from "react";
 import "./NavBar.css";
 import logo from "../../../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ReactComponent as CartIcon } from "../../../assets/icons/cart.svg";
-import Button from "@mui/material/Button";
-import {
-  Autocomplete,
-  createFilterOptions,
-  styled,
-  TextField,
-} from "@mui/material";
+import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import useAuthState from "../../../zustand/useAuthState";
+import toast from "react-hot-toast";
+import Cart from "./Cart";
 
 interface NabBarProps {
   user: any;
@@ -34,6 +30,7 @@ const NavBar = () => {
 };
 
 const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
+  const location = useLocation();
   const filter = createFilterOptions<any>();
   const [value, setValue] = React.useState<any | null>(null);
 
@@ -80,33 +77,36 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
         />
       </React.Fragment>
       <Link to="/cart">
-        <CartIcon />
+        <Cart />
       </Link>
       {!user && (
         <Link to="/register" style={{ textDecoration: "none" }}>
-          <Button children={<span>Join Us</span>} style={{ marginRight: 10 }} />
+          <div className="button">Join Us</div>
         </Link>
       )}
 
       {user && (
         <>
           <Link to="/orders" style={{ textDecoration: "none" }}>
-            <Button
-              children={<span>Orders</span>}
-              style={{ marginRight: 10 }}
-            />
+            <div
+              className={`button ${
+                location.pathname === "/orders" ? "active" : ""
+              }`}
+            >
+              Orders
+            </div>
           </Link>
 
           <p>Hello, {user.name}</p>
-          <Link to="/profile">
-            <Avatar alt={user.name} src={user.imageUrl} />
-          </Link>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Link to="/profile" style={{ textDecoration: "none" }}>
+              <Avatar alt={user.name} src={user.imageUrl} />
+            </Link>
 
-          <Button
-            children={<span>Logout</span>}
-            style={{ marginRight: 10, color: "red" }}
-            onClick={onLogout}
-          />
+            <div onClick={onLogout} className="button">
+              Logout
+            </div>
+          </div>
         </>
       )}
     </nav>
@@ -114,60 +114,76 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
 };
 
 const SupplierNavBar = ({ user, onLogout }: NabBarProps) => {
+  const location = useLocation();
+
+  const buttons = [
+    {
+      buttonText: "Products",
+      path: "/products",
+    },
+    { buttonText: "Orders", path: "/orders" },
+  ];
   return (
     <nav className="navbar">
       <Link to="/">
         <img className="logo" src={logo} alt="logo" />
       </Link>
+      <div style={{ display: "flex" }}>
+        {buttons.map((btn) => (
+          <Link to={btn.path} style={{ textDecoration: "none" }}>
+            <div
+              className={`button ${
+                location.pathname === btn.path ? "active" : ""
+              }`}
+            >
+              {btn.buttonText}
+            </div>
+          </Link>
+        ))}
+      </div>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Link to="/profile" style={{ textDecoration: "none" }}>
+          <Avatar alt={user.name} src={user.imageUrl} />
+        </Link>
 
-      <Link to="/products" style={{ textDecoration: "none" }}>
-        <Button children={<span>Products</span>} />
-      </Link>
-      <Link to="/orders" style={{ textDecoration: "none" }}>
-        <Button children={<span>Orders</span>} />
-      </Link>
-      <Link to="/settings" style={{ textDecoration: "none" }}>
-        <Button children={<span>Settings</span>} />
-      </Link>
-      <Link to="/profile" style={{ textDecoration: "none" }}>
-        <Avatar alt={user.name} src={user.imageUrl} />
-      </Link>
-
-      <Button
-        children={<span>Logout</span>}
-        style={{ marginRight: 10, color: "red" }}
-        onClick={onLogout}
-      />
+        <div onClick={onLogout} className="button">
+          Logout
+        </div>
+      </div>
     </nav>
   );
 };
 
 const AdminNavBar = ({ user, onLogout }: NabBarProps) => {
+  const location = useLocation();
   return (
     <nav className="navbar">
       <Link to="/">
         <img className="logo" src={logo} alt="logo" />
       </Link>
 
-      <Link to="/profile" style={{ textDecoration: "none" }}>
-        <Avatar
-          alt={user.name}
-          src={user.imageUrl}
-          style={{ color: "#2b0245" }}
-        />
+      <Link to="/applications">
+        <div
+          className={`button ${
+            location.pathname === "/applications" ? "active" : ""
+          }`}
+        >
+          Applications
+        </div>
       </Link>
-      <Button
-        children={<span>Logout</span>}
-        style={{ marginRight: 10, color: "red" }}
-        onClick={onLogout}
-      />
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Link to="/profile" style={{ textDecoration: "none" }}>
+          <Avatar alt={user.name} src={user.imageUrl} />
+        </Link>
+
+        <div onClick={onLogout} className="button">
+          Logout
+        </div>
+      </div>
     </nav>
   );
 };
-
-const CustomButton = styled(Button)({
-  color: "#2b0245",
-}) as typeof Button;
 
 const products: readonly any[] = [
   { name: "Bike" },

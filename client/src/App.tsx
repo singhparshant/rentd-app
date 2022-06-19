@@ -8,6 +8,7 @@ import { customerAppRoutes } from "./routes/customerAppRoutes";
 import useAuthState from "./zustand/useAuthState";
 import { supplierAppRoutes } from "./routes/supplierAppRoutes";
 import { adminAppRoutes } from "./routes/adminAppRoutes";
+import { Toaster } from "react-hot-toast";
 
 const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
@@ -52,6 +53,7 @@ const App = () => {
     <div className="app">
       <ErrorBoundary FallbackComponent={ErrorHandler}>
         <Router>
+          <Toaster />
           <NavBar />
           <Switch>{routes()}</Switch>
           <Footer />

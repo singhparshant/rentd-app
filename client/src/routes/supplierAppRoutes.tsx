@@ -1,3 +1,4 @@
+import { Redirect } from "react-router-dom";
 import {
   addProductPath,
   getOrderByIdPath,
@@ -6,7 +7,6 @@ import {
   getProductsPath,
   landingPagePath,
   profilePath,
-  settingsPath,
 } from "../api/requestPaths";
 import NotFound from "../components/common/notFound/NotFound";
 import OrderDetailsScreen from "../components/common/orderDetailsScreen/OrderDetailsScreen";
@@ -15,14 +15,12 @@ import ProductDetailsScreen from "../components/common/productDetails/ProductDet
 import ProfileScreen from "../components/common/profileScreen/ProfileScreen";
 import AddProductScreen from "../components/supplierApp/addProductScreen/AddProductScreen";
 import ProductsScreen from "../components/supplierApp/productsScreen/ProductsScreen";
-import SettingsScreen from "../components/supplierApp/settingsScreen/SettingsScreen";
-import SupplierHomeScreen from "../components/supplierApp/supplierHomeScreen/SupplierHomeScreen";
 import { AppRoute } from "./customerAppRoutes";
 
 export const supplierAppRoutes: Array<AppRoute> = [
   {
     path: landingPagePath,
-    component: <SupplierHomeScreen />,
+    component: <Redirect to={getOrdersPath} />,
   },
 
   {
@@ -50,7 +48,6 @@ export const supplierAppRoutes: Array<AppRoute> = [
     component: <AddProductScreen />,
   },
   { path: profilePath, component: <ProfileScreen /> },
-  { path: settingsPath, component: <SettingsScreen /> },
   {
     path: "/*",
     component: <NotFound />,

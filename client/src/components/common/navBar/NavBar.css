@@ -1,14 +1,13 @@
 .navbar {
-  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #d9d9d9;
+  background-color: #feb93f;
   height: 70px;
+  color: #2b0245;
 }
 
 .logo {
   height: 70px;
   cursor: pointer;
-  border-radius: 10px;
 }

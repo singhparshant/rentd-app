@@ -5,7 +5,7 @@ export interface AuthUser {
   userName: string;
   role: string;
 }
-
+//TODO: make it persistent
 const useAuthState = create((set) => ({
   user: { name: "Anoir", role: "admin" },
   loading: true,
