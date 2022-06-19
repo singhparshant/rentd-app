@@ -2,11 +2,9 @@ import React from "react";
 import "./NavBar.css";
 import logo from "../../../assets/logo.png";
 import { Link, useLocation } from "react-router-dom";
-import { ReactComponent as CartIcon } from "../../../assets/icons/cart.svg";
 import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import useAuthState from "../../../zustand/useAuthState";
-import toast from "react-hot-toast";
 import Cart from "./Cart";
 
 interface NabBarProps {
@@ -80,9 +78,26 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
         <Cart />
       </Link>
       {!user && (
-        <Link to="/register" style={{ textDecoration: "none" }}>
-          <div className="button">Join Us</div>
-        </Link>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Link to="/register" style={{ textDecoration: "none" }}>
+            <div
+              className={`button ${
+                location.pathname === "/register" ? "active" : ""
+              }`}
+            >
+              Join Us
+            </div>
+          </Link>
+          <Link to="/login" style={{ textDecoration: "none" }}>
+            <div
+              className={`button ${
+                location.pathname === "/login" ? "active" : ""
+              }`}
+            >
+              Login
+            </div>
+          </Link>
+        </div>
       )}
 
       {user && (
