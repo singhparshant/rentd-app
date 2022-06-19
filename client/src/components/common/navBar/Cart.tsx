@@ -5,8 +5,7 @@ import useCart from "../../../zustand/useCart";
 export default function Cart() {
   const cart = useCart((state: any) => state.cart);
   const numItems = cart.length;
-  console.log("cart", cart);
-  console.log("numItems", numItems);
+
   return (
     <div className="cartContainer">
       <svg
@@ -17,6 +16,7 @@ export default function Cart() {
         viewBox="0 0 24 24"
         stroke="currentColor"
         strokeWidth="2"
+        color="#2b0245"
       >
         <path
           stroke-linecap="round"
