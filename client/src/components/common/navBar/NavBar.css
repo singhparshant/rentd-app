@@ -2,32 +2,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #d9d9d9;
-  height: 80px;
+  background-color: #feb93f;
+  height: 70px;
+  color: #2b0245;
 }
 
 .logo {
-  height: 80px;
+  height: 70px;
   cursor: pointer;
-}
-
-.searchField {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  height: 25px;
-  width: 40%;
-  padding: 5px;
-  border-radius: 10px;
-}
-
-.searchInput {
-  width: 100%;
-  border-width: 0px;
-  border-style: solid;
-}
-
-.searchInput:focus {
-  outline: none;
 }

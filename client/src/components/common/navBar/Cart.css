@@ -1,0 +1,19 @@
+.cartContainer {
+  position: relative;
+}
+
+.numItems {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  height: 13px;
+  width: 13px;
+  border-radius: 9999px;
+  background-color: red;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  padding: 6px;
+  color: white;
+  font-weight: bold;
+}

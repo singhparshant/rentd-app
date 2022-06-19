@@ -19,7 +19,9 @@ import {
   loginPagePath,
   registerPagePath,
   searchProductPath,
+  profilePath,
 } from "../api/requestPaths";
+import ProfileScreen from "../components/common/profileScreen/ProfileScreen";
 
 export interface AppRoute {
   path: string;
@@ -62,6 +64,7 @@ export const customerAppRoutes: Array<AppRoute> = [
     path: getOrderByIdPath,
     component: <OrderDetailsScreen />,
   },
+  { path: profilePath, component: <ProfileScreen /> },
   {
     path: "/*",
     component: <NotFound />,
