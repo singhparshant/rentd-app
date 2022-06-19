@@ -140,10 +140,11 @@ const SupplierNavBar = ({ user, onLogout }: NabBarProps) => {
   ];
   return (
     <nav className="navbar">
-      <Link to="/">
-        <img className="logo" src={logo} alt="logo" />
-      </Link>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Link to="/">
+          <img className="logo" src={logo} alt="logo" />
+        </Link>
+
         {buttons.map((btn) => (
           <Link to={btn.path} style={{ textDecoration: "none" }}>
             <div
@@ -173,19 +174,21 @@ const AdminNavBar = ({ user, onLogout }: NabBarProps) => {
   const location = useLocation();
   return (
     <nav className="navbar">
-      <Link to="/">
-        <img className="logo" src={logo} alt="logo" />
-      </Link>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Link to="/">
+          <img className="logo" src={logo} alt="logo" />
+        </Link>
 
-      <Link to="/applications">
-        <div
-          className={`button ${
-            location.pathname === "/applications" ? "active" : ""
-          }`}
-        >
-          Applications
-        </div>
-      </Link>
+        <Link to="/applications" style={{ textDecoration: "none" }}>
+          <div
+            className={`button ${
+              location.pathname === "/applications" ? "active" : ""
+            }`}
+          >
+            Applications
+          </div>
+        </Link>
+      </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <Link to="/profile" style={{ textDecoration: "none" }}>

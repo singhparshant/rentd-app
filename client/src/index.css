@@ -13,5 +13,5 @@ body {
 
 .active,
 .button:hover {
-  opacity: 70%;
+  background-color: #6f4689;
 }
