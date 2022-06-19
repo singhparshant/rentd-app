@@ -22,7 +22,7 @@ const Duration = (props: Props) => {
   const handleChange = (e: SelectChangeEvent) => {
     console.log(e.target.value);
 
-    // setDuration(e.target.value as number);
+    setDuration(e.target.value);
   };
   return (
     <FormControl variant="outlined" sx={{ width: "90%", margin: "10px" }}>

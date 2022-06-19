@@ -1,0 +1,14 @@
+.bodyContainer{
+    height: 100vh;
+    display: flex;
+    padding: 5px;
+}
+
+.sideBarContainer{
+    width: 20%; 
+    background-color: whitesmoke
+}
+
+.productsContainer{
+    width: 80%;
+}
