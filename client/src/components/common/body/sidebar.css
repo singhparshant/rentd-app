@@ -1,0 +1,11 @@
+.sidebar{
+    display: "flex";
+    flex-direction: column;
+    justify-content: "space-between";
+}
+
+.title{
+    display: flex;
+    justify-content: center;
+    align-items: center,
+}

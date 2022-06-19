@@ -19,8 +19,8 @@ const customMarks = [
     label: "€80",
   },
   {
-    value: 100,
-    label: ">€100",
+    value: 1000000,
+    label: "All",
   },
 ];
 

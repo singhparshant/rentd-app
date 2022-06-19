@@ -8,7 +8,7 @@ import CheckoutScreen from "../components/customerApp/checkoutScreen/CheckoutScr
 import HomeScreen from "../components/customerApp/homeScreen/HomeScreen";
 import OrderDetailsScreen from "../components/common/orderDetailsScreen/OrderDetailsScreen";
 import OrdersScreen from "../components/common/ordersScreen/OrdersScreen";
-import ProductsSearchScreen from "../components/common/productsSearchScreen/ProductsSearchScreen";
+// import ProductsSearchScreen from "../components/common/productsSearchScreen/ProductsSearchScreen";
 import {
   checkoutPath,
   getCartPath,
@@ -18,7 +18,7 @@ import {
   landingPagePath,
   loginPagePath,
   registerPagePath,
-  searchProductPath,
+  //   searchProductPath,
   profilePath,
 } from "../api/requestPaths";
 import ProfileScreen from "../components/common/profileScreen/ProfileScreen";
@@ -44,10 +44,10 @@ export const customerAppRoutes: Array<AppRoute> = [
     path: getProductByIdPath,
     component: <ProductDetailsScreen />,
   },
-  {
-    path: searchProductPath,
-    component: <ProductsSearchScreen />,
-  },
+  //   {
+  //     path: searchProductPath,
+  //     component: <ProductsSearchScreen />,
+  //   },
   {
     path: getCartPath,
     component: <CartScreen />,

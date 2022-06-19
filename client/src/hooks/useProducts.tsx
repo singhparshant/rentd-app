@@ -6,6 +6,7 @@ import { Product } from "../components/common/interfaces/Interfaces";
 const useProducts = () => {
   const [loading, setLoading] = useState<Boolean>(false);
   const [data, setData] = useState<Product[]>([]);
+  const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -13,12 +14,12 @@ const useProducts = () => {
         const response: Product[] = await axiosInstance.get(getProductsPath);
         setData(response);
       } catch (error: any) {
-        console.error(error.message);
+        setError(error);
       }
       setLoading(false);
     };
     fetchData();
   }, []);
-  return { data, loading };
+  return { data, loading, error };
 };
 export default useProducts;
