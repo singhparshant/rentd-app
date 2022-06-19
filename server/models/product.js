@@ -10,8 +10,8 @@ let productSchema = new Schema(
     discount: Number,
     deposit: Number,
     maxRentDuration: Number,
-    images:    {
-      type: Buffer, 
+    images: {
+      type: Buffer,
       contentType: String
     },
     description: String,
@@ -21,9 +21,10 @@ let productSchema = new Schema(
     avgRating: Number,
     numberRatings: Number,
     category: {
-      type: String, 
+      type: String,
       index: true
-    }
+    },
+    productImages: [String]
   },
   { timestamps: true }
 );

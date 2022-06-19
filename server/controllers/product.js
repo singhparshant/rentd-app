@@ -1,4 +1,5 @@
 //"use strict";
+const fs = require("fs");
 
 const Product = require("../models/product");
 
@@ -21,7 +22,7 @@ const list = async (req, res) => {
 
 const create = async (req, res) => {
   // check if the body of the request contains at least 1 property
-  if(Object.keys(req.body).length === 0)
+  if (Object.keys(req.body).length === 0)
     return res.status(400).json({
       success: false,
       err: "Bad request",
@@ -53,9 +54,9 @@ const read = async (req, res) => {
       success: false,
       err: "Bad request",
       message: "The request parameter is absent",
-  });
+    });
 
-  try{
+  try {
     let product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({
@@ -64,6 +65,10 @@ const read = async (req, res) => {
         message: "Product not found",
       });
     }
+    product.productImages = product.productImages.map(imgId => {
+      return fs.readFileSync(`${__dirname}/../storage/${imgId}`, 'base64');
+    })
+
     res.status(200).json(product);
   } catch (err) {
     console.log(err);
@@ -78,9 +83,9 @@ const read = async (req, res) => {
 const update = async (req, res) => {
   let productId = req.params.id
   let update = req.body
-  Product.findByIdAndUpdate(productId, {$set: update}, {new: true})
+  Product.findByIdAndUpdate(productId, { $set: update }, { new: true })
     .then(data => {
-      if(!data) {
+      if (!data) {
         return res.status(404).json({
           success: false,
           message: "Product not found with id " + req.params.id
@@ -92,15 +97,15 @@ const update = async (req, res) => {
         message: "Product successfully updated"
       });
     }).catch(err => {
-      if(err.kind === 'ObjectId') {
+      if (err.kind === 'ObjectId') {
         return res.status(404).json({
           success: false,
           message: "Product not found with id " + req.params.id
         });
       }
       return res.status(500).send({
-          success: false,
-          message: "Error updating product with id " + req.params.id
+        success: false,
+        message: "Error updating product with id " + req.params.id
       });
     });
 }
@@ -122,15 +127,15 @@ const remove = async (req, res) => {
     }).catch(err => {
       if (err.kind === 'ObjectId' || err.name === 'NotFound') {
         return res.status(404).send({
-            success: false,
-            message: "Product not found with id " + req.params.id
+          success: false,
+          message: "Product not found with id " + req.params.id
         });
       }
       return res.status(500).send({
         success: false,
         message: "Could not delete product with id " + req.params.id
+      });
     });
-  });
 }
 
-module.exports = {list, create, read, update, remove};
+module.exports = { list, create, read, update, remove };
