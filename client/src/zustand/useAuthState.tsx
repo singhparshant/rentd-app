@@ -19,7 +19,7 @@ interface FilterStore {
 }
 
 const useAuthState = create((set) => ({
-  // user: { name: "parshant", role: "customer" },
+  user: null,
   loading: true,
   setUser: (user: any) => set({ user }),
   setLoading: (loading: Boolean) => set({ loading }),
