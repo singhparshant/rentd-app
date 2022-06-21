@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt")
+const jwt = require('jsonwebtoken')
+
 
 const list = async (req, res) => {
   try {
@@ -13,6 +15,7 @@ const list = async (req, res) => {
 const create = async (req, res) => {
   try {
     let user = new User(req.body);
+    //hash password before storing it in the db
     const passwordPlainText = req.body.password
     const passwordHash = await bcrypt.hash(passwordPlainText, 10);
     user.passwordHash = passwordHash;
@@ -22,6 +25,29 @@ const create = async (req, res) => {
     res.status(400).json(err.message);
   }
 }
+
+const login = async (req, res) => {
+  const email = req.body.email;
+  const passwordPlainText = req.body.password;
+
+  const user = await User.findOne({ "email": email });
+  if (user.length === 0)
+    res.status(404).send("Please verify your email address!")
+  else {
+    //user exists -> verify password
+    const isValid = await bcrypt.compare(passwordPlainText, user.passwordHash);
+    if (isValid) {
+      //generate token
+      const payload = { id: user._id, role: user.role }
+      const jwtToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
+      const response = { username: user.username, role: user.role, jwtToken };
+      res.status(200).json(response);
+    }
+    else
+      res.status(401).send("Please verify your password!")
+  }
+}
+
 
 const read = (req, res) => { }
 
@@ -55,4 +81,4 @@ const remove = async (req, res) => {
     });
 }
 
-module.exports = { list, create, read, update, remove };
+module.exports = { list, create, read, update, remove, login };
