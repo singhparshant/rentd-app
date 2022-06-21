@@ -31,7 +31,7 @@ const login = async (req, res) => {
   const passwordPlainText = req.body.password;
 
   const user = await User.findOne({ "email": email });
-  if (user.length === 0)
+  if (!user)
     res.status(404).send("Please verify your email address!")
   else {
     //user exists -> verify password
@@ -40,7 +40,8 @@ const login = async (req, res) => {
       //generate token
       const payload = { id: user._id, role: user.role }
       const jwtToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
-      const response = { username: user.username, role: user.role, jwtToken };
+      const response = { username: user.username, role: user.role };
+      res.cookie("jwt", jwtToken);
       res.status(200).json(response);
     }
     else
