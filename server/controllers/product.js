@@ -111,7 +111,7 @@ const update = async (req, res) => {
 }
 
 const remove = async (req, res) => {
-  Product.findByIdAndRemove(req.params.id)
+  Product.findByIdAndDelete(req.params.id)
     .then(data => {
       if (!data) {
         return res.status(404).json({
