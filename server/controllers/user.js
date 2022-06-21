@@ -41,7 +41,7 @@ const login = async (req, res) => {
       const payload = { id: user._id, role: user.role }
       const jwtToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
       const response = { username: user.username, role: user.role };
-      res.cookie("jwt", jwtToken);
+      res.cookie("jwt", jwtToken, { httpOnly: true });
       res.status(200).json(response);
     }
     else
