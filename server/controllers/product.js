@@ -1,5 +1,6 @@
 //"use strict";
 const fs = require("fs");
+const jwt = require("jsonwebtoken");
 
 const Product = require("../models/product");
 
@@ -21,6 +22,17 @@ const list = async (req, res) => {
 }
 
 const create = async (req, res) => {
+  const token = req.cookies["jwt"];
+  if (!token)
+    return res.status(403).send("You are not logged in.")
+  try {
+    const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    if (!payload.role === "supplier")
+      return res.status(403).send("You have to be a supplier.");
+  } catch (error) {
+    return res.status(403).send("Invalid token.");
+  }
+
   // check if the body of the request contains at least 1 property
   if (Object.keys(req.body).length === 0)
     return res.status(400).json({
