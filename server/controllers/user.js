@@ -49,6 +49,11 @@ const login = async (req, res) => {
   }
 }
 
+const logout = async (req, res) => {
+  res.cookie("jwt", "", { maxAge: 1 });
+  res.send("Successfully logged out!");
+}
+
 
 const read = (req, res) => { }
 
@@ -82,4 +87,4 @@ const remove = async (req, res) => {
     });
 }
 
-module.exports = { list, create, read, update, remove, login };
+module.exports = { list, create, read, update, remove, login, logout };

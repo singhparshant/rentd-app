@@ -6,6 +6,7 @@ import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import useAuthState from "../../../zustand/useAuthState";
 import Cart from "./Cart";
+import axiosInstance from "../../../api/axios";
 
 interface NabBarProps {
   user: any;
@@ -16,10 +17,18 @@ const NavBar = () => {
   const history = useHistory();
   const user = useAuthState((state: any) => state.user);
   const setUser = useAuthState((state: any) => state.setUser);
-  const handleLogout = () => {
-    setUser(null);
-    history.push("/");
+
+  const handleLogout = async () => {
+    try {
+      //delete jwt cookie from browser
+      await axiosInstance.get("/user/logout");
+      setUser(null);
+      history.push("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   if (!user || user.role === "customer")
     return <CustomerNavBar user={user} onLogout={handleLogout} />;
   if (user.role === "supplier")
@@ -28,7 +37,6 @@ const NavBar = () => {
     return <AdminNavBar user={user} onLogout={handleLogout} />;
   return <></>;
 };
-
 const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
   const location = useLocation();
   const filter = createFilterOptions<any>();

@@ -27,7 +27,7 @@ export default function Login() {
       setUser(user);
       history.push("/");
     } catch (error) {
-      toast.error("invalid credentials");
+      toast.error("please try again!");
     }
   };
 
