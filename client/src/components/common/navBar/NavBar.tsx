@@ -1,7 +1,7 @@
 import React from "react";
 import "./NavBar.css";
 import logo from "../../../assets/logo.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import useAuthState from "../../../zustand/useAuthState";
@@ -13,10 +13,12 @@ interface NabBarProps {
 }
 
 const NavBar = () => {
+  const history = useHistory();
   const user = useAuthState((state: any) => state.user);
   const setUser = useAuthState((state: any) => state.setUser);
   const handleLogout = () => {
     setUser(null);
+    history.push("/");
   };
   if (!user || user.role === "customer")
     return <CustomerNavBar user={user} onLogout={handleLogout} />;
@@ -112,7 +114,7 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
             </div>
           </Link>
 
-          <p>Hello, {user.name}</p>
+          <p className="greeting">Hello, {user.username}!</p>
           <div style={{ display: "flex", alignItems: "center" }}>
             <Link to="/profile" style={{ textDecoration: "none" }}>
               <Avatar alt={user.name} src={user.imageUrl} />
@@ -157,7 +159,9 @@ const SupplierNavBar = ({ user, onLogout }: NabBarProps) => {
           </Link>
         ))}
       </div>
+
       <div style={{ display: "flex", alignItems: "center" }}>
+        <p className="greeting">Hello, {user.username}!</p>
         <Link to="/profile" style={{ textDecoration: "none" }}>
           <Avatar alt={user.name} src={user.imageUrl} />
         </Link>
@@ -191,6 +195,7 @@ const AdminNavBar = ({ user, onLogout }: NabBarProps) => {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
+        <p className="greeting">Hello, {user.username}!</p>
         <Link to="/profile" style={{ textDecoration: "none" }}>
           <Avatar alt={user.name} src={user.imageUrl} />
         </Link>

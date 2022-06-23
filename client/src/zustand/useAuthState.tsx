@@ -1,4 +1,5 @@
 import create from "zustand";
+import { persist } from "zustand/middleware";
 
 export interface AuthUser {
   userId: string;
@@ -7,11 +8,19 @@ export interface AuthUser {
 }
 //TODO: make it persistent
 
-const useAuthState = create((set) => ({
-  user: { name: "parshant", role: "customer" },
-  loading: true,
-  setUser: (user: any) => set({ user }),
-  setLoading: (loading: Boolean) => set({ loading }),
-}));
+const useAuthState = create(
+  persist(
+    (set) => ({
+      user: null,
+      loading: true,
+      setUser: (user: any) => set({ user }),
+      setLoading: (loading: Boolean) => set({ loading }),
+    }),
+    {
+      name: "authState", // unique name
+      getStorage: () => localStorage, // (optional) by default, 'localStorage' is used
+    }
+  )
+);
 
 export default useAuthState;
