@@ -1,4 +1,5 @@
 import create from "zustand";
+import { persist } from "zustand/middleware";
 
 export interface AuthUser {
   userId: string;
@@ -18,12 +19,20 @@ interface FilterStore {
   setFilters: (newFilter: Filter) => void;
 }
 
-const useAuthState = create((set) => ({
-  user: null,
-  loading: true,
-  setUser: (user: any) => set({ user }),
-  setLoading: (loading: Boolean) => set({ loading }),
-}));
+const useAuthState = create(
+  persist(
+    (set) => ({
+      user: null,
+      loading: true,
+      setUser: (user: any) => set({ user }),
+      setLoading: (loading: Boolean) => set({ loading }),
+    }),
+    {
+      name: "authState", // unique name
+      getStorage: () => localStorage, // (optional) by default, 'localStorage' is used
+    }
+  )
+);
 
 const useFilters = create<FilterStore>((set) => ({
   filters: {
