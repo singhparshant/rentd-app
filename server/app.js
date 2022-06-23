@@ -12,7 +12,7 @@ const userRouter = require('./routes/user.js');
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const User = require("./models/user");
-const cors = require('cors')
+const cors = require('cors');
 const app = express();
 
 //setup SwaggerUI documentation
@@ -42,7 +42,7 @@ mongoose.connect(connectionString, options, (err) => {
   if (err) console.log(err);
 })
 
-app.use(cors())
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

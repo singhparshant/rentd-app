@@ -11,6 +11,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useHistory } from "react-router-dom";
 import useAuthState from "../../../zustand/useAuthState";
 import toast from "react-hot-toast";
+import axiosInstance from "../../../api/axios";
 const theme = createTheme();
 
 export default function Login() {
@@ -19,12 +20,15 @@ export default function Login() {
   const [userData, setUserData] = useState({ email: "", password: "" });
   const fromRef = useRef<any>(null);
 
-  const handleSubmit = () => {
-    const valid = true;
-    if (valid) {
-      setUser({ name: "Anoir", role: "customer" });
+  const handleLogin = async () => {
+    try {
+      const response = await axiosInstance.post("/user/login", userData);
+      const user = await response.data;
+      setUser(user);
       history.push("/");
-    } else toast.error("invalid credentials");
+    } catch (error) {
+      toast.error("invalid credentials");
+    }
   };
 
   return (
@@ -44,12 +48,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Login
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ mt: 1 }}
-            ref={fromRef}
-          >
+          <Box component="form" sx={{ mt: 1 }} ref={fromRef}>
             <TextField
               margin="normal"
               type="email"
@@ -91,7 +90,7 @@ export default function Login() {
               <div
                 className="button"
                 style={{ width: "50px" }}
-                onClick={handleSubmit}
+                onClick={handleLogin}
               >
                 Sign In
               </div>
