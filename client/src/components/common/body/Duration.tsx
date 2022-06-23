@@ -2,6 +2,7 @@ import { InputLabel, MenuItem } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useState } from "react";
+import useFilters from "../../../zustand/useFilters";
 
 type Props = {};
 
@@ -18,20 +19,20 @@ const options: Ioption[] = [
 ];
 
 const Duration = (props: Props) => {
-  const [duration, setDuration] = useState("");
+  const filters = useFilters((state: any) => state.filters);
+  const setFilters = useFilters((state: any) => state.setFilters);
   const handleChange = (e: SelectChangeEvent) => {
-    console.log(e.target.value);
-
-    setDuration(e.target.value);
+    setFilters(e.target.name, e.target.value);
   };
+
   return (
     <FormControl variant="outlined" sx={{ width: "90%", margin: "10px" }}>
       <InputLabel id="test-select-label">Min. Duration</InputLabel>
       <Select
-        defaultValue={"1"}
-        value={duration}
+        value={filters.duration}
         label={"Min. Duration"}
         onChange={handleChange}
+        name="duration"
       >
         {options.map((option: Ioption, index) => {
           return (

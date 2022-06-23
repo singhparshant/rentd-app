@@ -1,5 +1,6 @@
 import { Slider } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useFilters from "../../../zustand/useFilters";
 
 const customMarks = [
   {
@@ -25,14 +26,18 @@ const customMarks = [
 ];
 
 const SliderFilter = () => {
-  const [price, setPrice] = useState<number>(100);
+  const filters = useFilters((state: any) => state.filters);
+  const setFilters = useFilters((state: any) => state.setFilters);
 
   //changing value:number is not working, so set it to any
-  const handleChange = (event: Event, value: any) => {
-    setPrice(value);
+  const handleChange = (event: any, value: any) => {
+    setFilters(event.target.name, value);
   };
 
   const getText = (value: number) => `${value}`;
+  useEffect(() => {
+    console.log("filters: ", filters);
+  }, [filters]);
 
   return (
     <div style={{ width: "85%", margin: "20px" }}>
@@ -40,12 +45,13 @@ const SliderFilter = () => {
         min={20}
         max={100}
         step={20}
-        defaultValue={100}
-        value={price}
+        defaultValue={1000000}
+        value={filters.maxPrice}
         onChange={handleChange}
         marks={customMarks}
         getAriaValueText={getText}
         valueLabelDisplay="auto"
+        name="maxPrice"
       />
     </div>
   );

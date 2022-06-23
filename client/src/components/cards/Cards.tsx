@@ -1,11 +1,5 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import useViewport from "../../hooks/useViewPort";
 
 type Props = {};
 
@@ -22,19 +16,21 @@ const images = [
 ];
 
 const Cards = (props: Props) => {
+  const { width } = useViewport();
+  const breakpoint = 650;
   return (
     <div>
       <Card
         style={{
-          display: "flex",
+          display: width > breakpoint ? "flex" : "block",
         }}
       >
-        {images.map((index) => {
+        {images.map((img, idx) => {
           return (
-            <div style={{ margin: 5, border: 20 }}>
+            <div style={{ margin: 5, border: 20 }} key={idx}>
               <CardMedia
                 component="img"
-                image={index.src}
+                image={img.src}
                 style={{ maxHeight: 200 }}
               />
               <CardContent>
@@ -42,12 +38,6 @@ const Cards = (props: Props) => {
                   Shoes for everyday wear. Great comfort
                 </Typography>
               </CardContent>
-              <div style={{ display: "flex" }}>
-                <Button>
-                  <AddShoppingCartIcon />
-                  Add to Cart
-                </Button>
-              </div>
             </div>
           );
         })}
