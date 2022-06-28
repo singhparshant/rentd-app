@@ -1,7 +1,9 @@
-import React from 'react'
+import React from "react";
+import useCart from "../../../zustand/useCart";
 
 export default function CartScreen() {
-  return (
-    <h1>Your Cart</h1>
-  )
+  const cart = useCart((state: any) => state.cart);
+
+  console.log("cart", cart);
+  return <h1>Your Cart</h1>;
 }

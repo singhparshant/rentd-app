@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt")
 const jwt = require('jsonwebtoken')
-
+const fs = require("fs")
 
 const list = async (req, res) => {
   try {
@@ -54,6 +54,13 @@ const logout = async (req, res) => {
   res.send("Successfully logged out!");
 }
 
+const test = async (req, res) => {
+  const base64 = req.body.codeOfConduct.replace(/^data:application\/pdf;base64,/, "");
+  fs.writeFile(`${__dirname}/../storage/applicationDocuments/code.pdf`, base64, 'base64', function (err) {
+    console.log(err);
+  });
+
+}
 
 const read = (req, res) => { }
 
@@ -87,4 +94,4 @@ const remove = async (req, res) => {
     });
 }
 
-module.exports = { list, create, read, update, remove, login, logout };
+module.exports = { list, create, read, update, remove, login, logout, test };
