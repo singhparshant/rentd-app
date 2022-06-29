@@ -2,7 +2,7 @@ const ShoppingCart = require("../models/shoppingCart");
 
 const list = async (req, res) => {
   try {
-    console.log("Hello");
+    //console.log("Hello");
     let shoppingCarts = await ShoppingCart.find();
     res.status(200).json({
       data: shoppingCarts,

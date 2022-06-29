@@ -41,3 +41,10 @@ export interface UserData {
   userName: string;
   role: String;
 }
+
+export interface Filter {
+  categories?: string[];
+  maxPrice?: Number;
+  reviewed?: boolean;
+  duration?: Number;
+}

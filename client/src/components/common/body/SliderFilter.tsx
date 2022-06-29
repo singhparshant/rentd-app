@@ -35,6 +35,9 @@ const SliderFilter = () => {
   };
 
   const getText = (value: number) => `${value}`;
+  useEffect(() => {
+    console.log("filters: ", filters);
+  }, [filters]);
 
   return (
     <div style={{ width: "85%", margin: "20px" }}>

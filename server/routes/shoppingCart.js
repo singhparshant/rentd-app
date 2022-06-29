@@ -10,9 +10,9 @@ router.post("/", shoppingCartController.create);
 
 router.get("/:id", shoppingCartController.read);
 
-router.post("/update/:id", shoppingCartController.update);
+router.put("/:id", shoppingCartController.update);
 
-router.post("/delete/:id", shoppingCartController.remove);
+router.delete("/:id", shoppingCartController.remove);
 
 
 module.exports = router;
