@@ -7,17 +7,6 @@ export interface AuthUser {
   role: string;
 }
 //TODO: make it persistent
-interface Filter {
-  categories: String[];
-  minPrice: Number;
-  reviewed: boolean;
-  minDuration: Number;
-}
-
-interface FilterStore {
-  filters: Filter;
-  setFilters: (newFilter: Filter) => void;
-}
 
 const useAuthState = create(
   persist(
@@ -33,16 +22,5 @@ const useAuthState = create(
     }
   )
 );
-
-const useFilters = create<FilterStore>((set) => ({
-  filters: {
-    categories: ["mobility", "furniture", "household"],
-    minPrice: Number.MAX_VALUE,
-    reviewed: false,
-    minDuration: 1,
-  },
-  setFilters: (newFilter: Filter) =>
-    set((state) => ({ filters: { ...state.filters, ...newFilter } })),
-}));
 
 export default useAuthState;

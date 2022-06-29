@@ -9,22 +9,19 @@ let productSchema = new Schema(
     monthlyPrice: Number,
     discount: Number,
     deposit: Number,
-    maxRentDuration: Number,
-    images: {
-      type: Buffer,
-      contentType: String
-    },
+    minDuration: Number,
     description: String,
     supplierId: {
-      type: Schema.Types.ObjectId, ref: "user"
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
     avgRating: Number,
     numberRatings: Number,
     category: {
       type: String,
-      index: true
+      index: true,
     },
-    productImages: [String]
+    productImages: [String],
   },
   { timestamps: true }
 );
