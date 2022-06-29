@@ -35,9 +35,6 @@ const SliderFilter = () => {
   };
 
   const getText = (value: number) => `${value}`;
-  useEffect(() => {
-    console.log("filters: ", filters);
-  }, [filters]);
 
   return (
     <div style={{ width: "85%", margin: "20px" }}>
@@ -46,12 +43,12 @@ const SliderFilter = () => {
         max={100}
         step={20}
         defaultValue={1000000}
-        value={filters.maxPrice}
+        value={filters.monthlyPrice}
         onChange={handleChange}
         marks={customMarks}
         getAriaValueText={getText}
         valueLabelDisplay="auto"
-        name="maxPrice"
+        name="monthlyPrice"
       />
     </div>
   );

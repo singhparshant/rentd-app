@@ -1,17 +1,15 @@
 import {
-  Select,
-  OutlinedInput,
   Box,
   MenuItem,
-  useTheme,
+  Select,
   SelectChangeEvent,
   Theme,
-  TextField,
+  useTheme,
 } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import useFilters from "../../../zustand/useFilters";
 import { Filter } from "../interfaces/Interfaces";
 
