@@ -46,12 +46,12 @@ const SliderFilter = () => {
         max={100}
         step={20}
         defaultValue={1000000}
-        value={filters.maxPrice}
+        value={filters.monthlyPrice}
         onChange={handleChange}
         marks={customMarks}
         getAriaValueText={getText}
         valueLabelDisplay="auto"
-        name="maxPrice"
+        name="monthlyPrice"
       />
     </div>
   );

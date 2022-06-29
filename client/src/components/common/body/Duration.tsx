@@ -29,10 +29,10 @@ const Duration = (props: Props) => {
     <FormControl variant="outlined" sx={{ width: "90%", margin: "10px" }}>
       <InputLabel id="test-select-label">Min. Duration</InputLabel>
       <Select
-        value={filters.duration}
+        value={filters.minDuration}
         label={"Min. Duration"}
         onChange={handleChange}
-        name="duration"
+        name="minDuration"
       >
         {options.map((option: Ioption, index) => {
           return (

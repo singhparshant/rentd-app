@@ -9,9 +9,9 @@ interface FilterStore {
 
 const useFilters = create<FilterStore>((set) => ({
   filters: {
-    categories: [],
-    duration: 1,
-    maxPrice: 1000000,
+    categories: ["Transport", "Electronics"],
+    minDuration: 1,
+    monthlyPrice: 1000000,
     reviewed: false,
   },
   setFilters: (name: any, value: any) =>
@@ -21,9 +21,9 @@ const useFilters = create<FilterStore>((set) => ({
   resetFilters: () =>
     set((state: any) => ({
       filters: {
-        categories: [],
-        duration: 1,
-        maxPrice: 1000000,
+        categories: ["Transport", "Electronics"],
+        minDuration: 1,
+        monthlyPrice: 1000000,
         reviewed: false,
       },
     })),
