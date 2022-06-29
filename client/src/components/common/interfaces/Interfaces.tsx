@@ -16,3 +16,10 @@ export interface Order {
   paymentMethod: String;
   Status: String;
 }
+
+export interface Filter {
+  categories?: string[];
+  maxPrice?: Number;
+  reviewed?: boolean;
+  duration?: Number;
+}

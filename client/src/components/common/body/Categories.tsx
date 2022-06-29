@@ -11,7 +11,9 @@ import {
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import useFilters from "../../../zustand/useFilters";
+import { Filter } from "../interfaces/Interfaces";
 
 const categories = ["Mobility", "Furniture", "Household"];
 
@@ -31,28 +33,30 @@ function getStyles(
 const Categories = () => {
   const theme = useTheme();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const filters = useFilters<Filter>((state: any) => state.filters);
+  const setFilters = useFilters((state: any) => state.setFilters);
 
   const handleChange = (
-    event: SelectChangeEvent<typeof selectedCategories>
+    event: SelectChangeEvent<typeof filters.categories>
   ) => {
     const {
       target: { value },
+      target: { name },
     } = event;
-    setSelectedCategories(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+
+    // setSelectedCategories(typeof value === "string" ? value.split(",") : value);
+    setFilters(name, value);
   };
+
   return (
     <FormControl sx={{ margin: 2, width: "90%" }}>
       <InputLabel id="demo-multiple-chip-label">Categories</InputLabel>
       <Select
-        // labelId="demo-multiple-chip-label"
+        name="categories"
         label={"Categories"}
         multiple
-        value={selectedCategories}
+        value={filters.categories}
         onChange={handleChange}
-        // input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
         renderValue={(selected) => (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
             {selected.map((value) => (
