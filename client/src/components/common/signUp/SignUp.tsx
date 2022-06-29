@@ -72,6 +72,7 @@ export default function SignUp() {
 
   const isValidForm = () => {
     let valid =
+      userData.address &&
       userData.username &&
       userData.password === userData.passwordConfirm &&
       validator.isEmail(userData.email);
@@ -121,7 +122,13 @@ export default function SignUp() {
 
   const handleCustomerSignup = () => {
     //create an account for the customer
-    axiosInstance.post("/users", {});
+    axiosInstance.post("/users", {
+      username: userData.username,
+      password: userData.password,
+      email: userData.email,
+      role: userData.role,
+      address: userData.address,
+    });
   };
   const handleSupplierSignup = () => {};
 
