@@ -1,9 +1,9 @@
 import * as React from "react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -20,20 +20,28 @@ import { ReactComponent as Tick } from "../../../assets/icons/tick.svg";
 const theme = createTheme();
 
 export default function SignUp() {
+  const history = useHistory();
   const [userData, setUserData] = useState<UserData>({
     username: "",
     email: "",
     password: "",
     passwordConfirm: "",
+    address: "",
     role: "customer",
     IBAN: "",
   });
+
   const [documents, setDocuments] = useState<any>({
     codeOfConduct: null,
     KYCDocs: [],
   });
 
-  console.log("documents", documents);
+  //auto scroll
+  useEffect(() => {
+    userData.role === "customer"
+      ? window.scrollTo({ top: 0, behavior: "smooth" })
+      : window.scroll({ top: document.body.scrollHeight, behavior: "smooth" });
+  }, [userData.role]);
 
   const uploadCodeOfConductRef = useRef<any>(null);
   const uploadKYCDocsRef = useRef<any>(null);
@@ -64,6 +72,7 @@ export default function SignUp() {
 
   const isValidForm = () => {
     let valid =
+      userData.username &&
       userData.password === userData.passwordConfirm &&
       validator.isEmail(userData.email);
     //make sure documents are uploaded
@@ -79,23 +88,42 @@ export default function SignUp() {
     if (!isValidForm()) {
       toast.error("Invalid data!");
     } else {
-      toast.success("Good job!");
+      const toastId = toast.loading("Loading");
+
+      try {
+        userData.role === "customer"
+          ? handleCustomerSignup()
+          : handleSupplierSignup();
+
+        toast.dismiss(toastId);
+        toast.success("Done!");
+        history.push("/login");
+      } catch (error) {
+        console.log(error);
+        toast.error("something went wrong!");
+      }
+
+      // const fileReader = new FileReader();
+      // let codeOfConductResult: any = "";
+
+      // fileReader.onload = async (fileLoadedEvent) => {
+      //   codeOfConductResult = fileLoadedEvent.target?.result;
+      //   // Print data in console
+      //   await axiosInstance.post("/user/test", {
+      //     codeOfConduct: codeOfConductResult,
+      //   });
+      //   console.log("uploaded!");
+      // };
+      // // Convert data to base64
+      // fileReader.readAsDataURL(documents.codeOfConduct);
     }
-
-    // const fileReader = new FileReader();
-    // let codeOfConductResult: any = "";
-
-    // fileReader.onload = async (fileLoadedEvent) => {
-    //   codeOfConductResult = fileLoadedEvent.target?.result;
-    //   // Print data in console
-    //   await axiosInstance.post("/user/test", {
-    //     codeOfConduct: codeOfConductResult,
-    //   });
-    //   console.log("uploaded!");
-    // };
-    // // Convert data to base64
-    // fileReader.readAsDataURL(documents.codeOfConduct);
   };
+
+  const handleCustomerSignup = () => {
+    //create an account for the customer
+    axiosInstance.post("/users", {});
+  };
+  const handleSupplierSignup = () => {};
 
   return (
     <ThemeProvider theme={theme}>
@@ -181,6 +209,19 @@ export default function SignUp() {
                   }
                 />
               </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="address"
+                  label="Address"
+                  name="address"
+                  value={userData.address}
+                  onChange={handleChange}
+                />
+              </Grid>
+
               <Grid item xs={12}>
                 <FormControl>
                   <FormLabel id="demo-radio-buttons-group-label">
@@ -221,7 +262,11 @@ export default function SignUp() {
                       error={
                         userData.IBAN !== "" && !validator.isIBAN(userData.IBAN)
                       }
-                      helperText={""}
+                      helperText={
+                        userData.IBAN !== "" &&
+                        !validator.isIBAN(userData.IBAN) &&
+                        "Invalid IBAN"
+                      }
                     />
                   </Grid>
                   <Grid
@@ -339,6 +384,7 @@ interface UserData {
   email: string;
   password: string;
   passwordConfirm: string;
+  address: string;
   IBAN: string;
   role: "customer" | "supplier";
 }
