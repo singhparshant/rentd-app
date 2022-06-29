@@ -4,25 +4,31 @@ let Schema = mongoose.Schema;
 let orderSchema = new Schema(
   {
     customerId: {
-        type: Schema.Types.ObjectId, ref: "user"
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
     amount: Number,
     monthlyPrice: Number,
-    orderItems:[{
-        productID:{
-            type: Schema.Types.ObjectId, ref: "product"
+    orderItems: [
+      {
+        productID: {
+          type: Schema.Types.ObjectId,
+          ref: "product",
         },
         quantity: Number,
-        rentalDuration: Number
-    }],
+        rentalDuration: Number,
+      },
+    ],
     paymentMethod: String,
     paymentID: {
-        type: Schema.Types.ObjectId, ref: "payment"
+      type: Schema.Types.ObjectId,
+      ref: "payment",
     },
     deliveryID: {
-        type: Schema.Types.ObjectId, ref: "delivery"
+      type: Schema.Types.ObjectId,
+      ref: "delivery",
     },
-    Status: String,
+    status: String,
   },
   { timestamps: true }
 );

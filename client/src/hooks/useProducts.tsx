@@ -1,17 +1,20 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../api/axios";
 import { getProductsPath } from "../api/requestPaths";
-import { Product } from "../components/common/interfaces/Interfaces";
+import { Filter } from "../components/common/interfaces/Interfaces";
 
-const useProducts = () => {
-  const [loading, setLoading] = useState<Boolean>(false);
-  const [data, setData] = useState<Product[]>([]);
+const useProducts = (filters: Filter) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<any>([]);
   const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response: Product[] = await axiosInstance.get(getProductsPath);
+        const response: any = await axiosInstance.post(
+          getProductsPath,
+          filters
+        );
         setData(response);
       } catch (error: any) {
         setError(error);
@@ -19,7 +22,7 @@ const useProducts = () => {
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [filters]);
   return { data, loading, error };
 };
 export default useProducts;
