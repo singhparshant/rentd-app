@@ -27,13 +27,17 @@ export default function Login() {
       setUser(user);
       history.push("/");
     } catch (error) {
-      toast.error("invalid credentials");
+      toast.error("please try again!");
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container
+        component="main"
+        maxWidth="xs"
+        sx={{ boxShadow: 5, paddingBottom: 5, marginTop: 10 }}
+      >
         <Box
           sx={{
             marginTop: 8,
@@ -89,10 +93,10 @@ export default function Login() {
             >
               <div
                 className="button"
-                style={{ width: "50px" }}
+                style={{ width: "50px", textAlign: "center" }}
                 onClick={handleLogin}
               >
-                Sign In
+                Login
               </div>
 
               <Link
