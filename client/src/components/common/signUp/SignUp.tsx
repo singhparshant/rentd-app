@@ -35,16 +35,20 @@ export default function SignUp() {
     codeOfConduct: null,
     KYCDocs: [],
   });
-
-  //auto scroll
-  useEffect(() => {
-    userData.role === "customer"
-      ? window.scrollTo({ top: 0, behavior: "smooth" })
-      : window.scroll({ top: document.body.scrollHeight, behavior: "smooth" });
-  }, [userData.role]);
+  const [codeOfConduct, setCodeOfConduct] = useState("");
 
   const uploadCodeOfConductRef = useRef<any>(null);
   const uploadKYCDocsRef = useRef<any>(null);
+
+  useEffect(() => {
+    const getCodeOfConductURL = async () => {
+      const response = await axiosInstance.get("/applications/codeOfConduct");
+      setCodeOfConduct(
+        "data:application/pdf;base64," + response.data.pdfContent
+      );
+    };
+    getCodeOfConductURL();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData((prev: UserData) => ({
@@ -130,7 +134,9 @@ export default function SignUp() {
       address: userData.address,
     });
   };
-  const handleSupplierSignup = () => {};
+  const handleSupplierSignup = () => {
+    //create an application for the supplier
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -154,6 +160,32 @@ export default function SignUp() {
             Sign up
           </Typography>
           <Box component="form" noValidate sx={{ mt: 3 }}>
+            <Grid item xs={12}>
+              <FormControl>
+                <FormLabel id="demo-radio-buttons-group-label">
+                  Join as
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  name="role"
+                  value={userData.role}
+                  onChange={handleChange}
+                >
+                  <FormControlLabel
+                    value="customer"
+                    control={<Radio />}
+                    label="Customer"
+                  />
+                  <FormControlLabel
+                    value="supplier"
+                    control={<Radio />}
+                    label="Supplier"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -185,37 +217,42 @@ export default function SignUp() {
                   }
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  value={userData.password}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="passwordConfirm"
-                  label="Confirm Password"
-                  type="password"
-                  id="passwordConfirm"
-                  autoComplete="new-password"
-                  value={userData.passwordConfirm}
-                  onChange={handleChange}
-                  error={userData.password !== userData.passwordConfirm}
-                  helperText={
-                    userData.password !== userData.passwordConfirm &&
-                    "passwords do not match"
-                  }
-                />
-              </Grid>
+              {userData.role === "customer" && (
+                <>
+                  {" "}
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      autoComplete="new-password"
+                      value={userData.password}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="passwordConfirm"
+                      label="Confirm Password"
+                      type="password"
+                      id="passwordConfirm"
+                      autoComplete="new-password"
+                      value={userData.passwordConfirm}
+                      onChange={handleChange}
+                      error={userData.password !== userData.passwordConfirm}
+                      helperText={
+                        userData.password !== userData.passwordConfirm &&
+                        "passwords do not match"
+                      }
+                    />
+                  </Grid>
+                </>
+              )}
 
               <Grid item xs={12}>
                 <TextField
@@ -227,32 +264,6 @@ export default function SignUp() {
                   value={userData.address}
                   onChange={handleChange}
                 />
-              </Grid>
-
-              <Grid item xs={12}>
-                <FormControl>
-                  <FormLabel id="demo-radio-buttons-group-label">
-                    Join as
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    name="role"
-                    value={userData.role}
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel
-                      value="customer"
-                      control={<Radio />}
-                      label="Customer"
-                    />
-                    <FormControlLabel
-                      value="supplier"
-                      control={<Radio />}
-                      label="Supplier"
-                    />
-                  </RadioGroup>
-                </FormControl>
               </Grid>
 
               {userData.role === "supplier" && (
@@ -297,11 +308,20 @@ export default function SignUp() {
                           marginLeft: 10,
                         }}
                       >
-                        <FileDownloadOutlinedIcon
-                          sx={{ marginRight: 1, cursor: "pointer" }}
-                          onClick={() => console.log("trigger download")}
-                          titleAccess="download"
-                        />
+                        <a
+                          href={codeOfConduct}
+                          download={"code of conduct.pdf"}
+                          target="_self"
+                          style={{
+                            color: "black",
+                            display: "flex",
+                          }}
+                        >
+                          <FileDownloadOutlinedIcon
+                            sx={{ marginRight: 1, cursor: "pointer" }}
+                            titleAccess="download"
+                          />
+                        </a>
 
                         <FileUploadOutlinedIcon
                           sx={{

@@ -11,8 +11,8 @@ const list = async (req, res) => {
     let categories = String(req.query.categories).split(',');
     categories = categories.map(element => element.toLocaleLowerCase())
     console.log(categories);
-    if(req.query.search){
-      var products =  await Product.aggregate([
+    if (req.query.search) {
+      var products = await Product.aggregate([
         {
           $addFields: {
             price: {
@@ -29,17 +29,20 @@ const list = async (req, res) => {
         {
           $match: {
             $and: [
-              { name: new RegExp(req.query.search, "i") }, 
-              { price: {
-                $lte: parseFloat(req.query.maxPrice)
-                }, 
+              { name: new RegExp(req.query.search, "i") },
+              {
+                price: {
+                  $lte: parseFloat(req.query.maxPrice)
+                },
               },
-              { maxDuration : {
-                $gte: parseInt(req.body.minDuration)
+              {
+                maxDuration: {
+                  $gte: parseInt(req.body.minDuration)
                 }
               },
-              { cat: { 
-                $in: categories
+              {
+                cat: {
+                  $in: categories
                 }
               }
             ]
@@ -93,14 +96,14 @@ const create = async (req, res) => {
   // handle request
   try {
     if (Array.isArray(req.body)) {
-      Product.insertMany(req.body, {ordered: false}
-        ).then(function(product){
-          res.status(200).json({
+      Product.insertMany(req.body, { ordered: false }
+      ).then(function (product) {
+        res.status(200).json({
           success: true,
-          data: product 
+          data: product
         })
       })
-      .catch(function(error){
+        .catch(function (error) {
           console.log(error);
         });
     } else {
@@ -141,7 +144,7 @@ const read = async (req, res) => {
       });
     }
     product.productImages = product.productImages.map(imgId => {
-      return fs.readFileSync(`${__dirname}/../storage/${imgId}`, 'base64');
+      return fs.readFileSync(`${__dirname}/../storage/productImages/${imgId}`, 'base64');
     })
 
     res.status(200).json(product);
