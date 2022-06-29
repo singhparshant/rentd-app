@@ -22,7 +22,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axiosInstance.post("/user/login", userData);
+      const response = await axiosInstance.post("/users/login", userData);
       const user = await response.data;
       setUser(user);
       history.push("/");

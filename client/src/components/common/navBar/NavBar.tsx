@@ -21,7 +21,7 @@ const NavBar = () => {
   const handleLogout = async () => {
     try {
       //delete jwt cookie from browser
-      await axiosInstance.get("/user/logout");
+      await axiosInstance.get("/users/logout");
       setUser(null);
       history.push("/");
     } catch (error) {
