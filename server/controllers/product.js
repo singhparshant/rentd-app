@@ -1,19 +1,69 @@
-//"use strict";
+//import paginate from 'jw-paginate';
+
+
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 
 const Product = require("../models/product");
 
 const list = async (req, res) => {
-  // handle request
   try {
-    let products = await Product.find();
-    res.status(200).json({
+    let categories = String(req.query.categories).split(',');
+    categories = categories.map(element => element.toLocaleLowerCase())
+    console.log(categories);
+    if(req.query.search){
+      var products =  await Product.aggregate([
+        {
+          $addFields: {
+            price: {
+              $toDecimal: "$monthlyPrice"
+            },
+            maxDuration: {
+              $toInt: "$maxRentDuration"
+            },
+            cat: {
+              $toLower: "$category"
+            }
+          }
+        },
+        {
+          $match: {
+            $and: [
+              { name: new RegExp(req.query.search, "i") }, 
+              { price: {
+                $lte: parseFloat(req.query.maxPrice)
+                }, 
+              },
+              { maxDuration : {
+                $gte: parseInt(req.body.minDuration)
+                }
+              },
+              { cat: { 
+                $in: categories
+                }
+              }
+            ]
+          }
+        }
+      ]);
+    }
+    else {
+      products = await Product.find()
+    }
+    // Server-side pagination logic
+    //const page = parseInt(req.query.page) || 1;
+    //const pageSize = 6;
+    //const pager = paginate(products.length, page, pageSize);
+    //const pageOfItems = products.slice(pager.startIndex, pager.endIndex + 1);
+
+    return res.status(200).json({
       data: products,
+      //pager: pager,
+      //pageOfItems: pageOfItems,
       success: true,
     });
   } catch (err) {
-    res.status(400).res.status(500).json({
+    return res.status(500).json({
       success: false,
       err: "Request failed",
       message: err.message
@@ -42,14 +92,27 @@ const create = async (req, res) => {
     });
   // handle request
   try {
-    // create product in db
-    let product = new Product(req.body);
-    product = await product.save();
-    // return created product
-    res.status(200).json({
-      success: true,
-      data: product
-    });
+    if (Array.isArray(req.body)) {
+      Product.insertMany(req.body, {ordered: false}
+        ).then(function(product){
+          res.status(200).json({
+          success: true,
+          data: product 
+        })
+      })
+      .catch(function(error){
+          console.log(error);
+        });
+    } else {
+      // create product in db
+      let product = new Product(req.body);
+      product = await product.save();
+      // return created product
+      res.status(200).json({
+        success: true,
+        data: product
+      });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json({
