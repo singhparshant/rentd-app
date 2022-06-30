@@ -15,22 +15,23 @@ const Cards = (props: Props) => {
   const { width } = useViewport();
   const filters = useFilters((state) => state.filters);
   const { data, loading, error } = useProducts(filters);
-  const breakpoint = 650;
+  const breakpoint = 550;
   return (
-    <div>
-      <Card
-        style={{
-          display: width > breakpoint ? "flex" : "block",
-        }}
-      >
-        {loading ? (
-          <h1>Wait bitch</h1>
-        ) : (
-          data &&
-          data.data &&
-          data.data.data &&
-          data.data.data.map((product: Product, idx: number) => {
-            return (
+    <div
+      style={{
+        display: width > breakpoint ? "flex" : "block",
+        flexWrap: "wrap",
+      }}
+    >
+      {loading ? (
+        <h1>Wait bitch</h1>
+      ) : (
+        data &&
+        data.data &&
+        data.data.data &&
+        data.data.data.map((product: Product, idx: number) => {
+          return (
+            <Card sx={{ margin: "8px", width: "350px" }}>
               <Link
                 to={{
                   pathname: `/products/${product._id}`,
@@ -43,7 +44,7 @@ const Cards = (props: Props) => {
                     component="img"
                     src={`data:image/png;base64,` + product.productImages[0]}
                     style={{ maxHeight: 200 }}
-                    alt="Loading"
+                    alt="Could not load image"
                   />
                   <CardContent>
                     <Typography variant="body2" color="text.primary">
@@ -53,10 +54,10 @@ const Cards = (props: Props) => {
                   </CardContent>
                 </div>
               </Link>
-            );
-          })
-        )}
-      </Card>
+            </Card>
+          );
+        })
+      )}
     </div>
   );
 };
