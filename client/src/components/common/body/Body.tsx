@@ -8,7 +8,7 @@ interface BodyProps {}
 
 const Body = (props: BodyProps) => {
   const { width } = useViewport();
-  const breakpoint = 650;
+  const breakpoint = 550;
 
   return (
     <div>
