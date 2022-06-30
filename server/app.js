@@ -15,6 +15,7 @@ const swaggerUi = require("swagger-ui-express");
 const User = require("./models/user");
 const cors = require("cors");
 const app = express();
+var bodyParser = require("body-parser");
 
 //setup SwaggerUI documentation
 const swaggerOptions = {
@@ -45,6 +46,7 @@ mongoose.connect(connectionString, options, (err) => {
 });
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(bodyParser.json({ limit: "5mb" }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
