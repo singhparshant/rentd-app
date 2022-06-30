@@ -1,10 +1,11 @@
-import { Button, Checkbox, FormControlLabel } from "@mui/material";
+import { Button } from "@mui/material";
 import Categories from "./Categories";
 import Duration from "./Duration";
 import SliderFilter from "./SliderFilter";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import useFilters from "../../../zustand/useFilters";
+import AvgRating from "./AvgRating";
 import "./sidebar.css";
 
 interface SidebarProps {}
@@ -14,9 +15,9 @@ const Sidebar = (props: SidebarProps) => {
   const setFilters = useFilters((state: any) => state.setFilters);
   const resetFilters = useFilters((state: any) => state.resetFilters);
 
-  const handleChange = (event: any) => {
-    setFilters(event.target.name, !filters.reviewed);
-  };
+  useEffect(() => {
+    console.log("Filters: ", filters);
+  }, [filters]);
 
   return (
     <div className="sidebar">
@@ -25,18 +26,7 @@ const Sidebar = (props: SidebarProps) => {
       </div>
       <Categories />
       <SliderFilter />
-      <FormControlLabel
-        sx={{ display: "flex", justifyContent: "center" }}
-        control={
-          <Checkbox
-            name="reviewed"
-            checked={filters.reviewed}
-            value={filters.reviewed}
-            onChange={handleChange}
-          />
-        }
-        label="Reviewed"
-      />
+      <AvgRating />
       <Duration />
       <br />
       <div className="resetButton">

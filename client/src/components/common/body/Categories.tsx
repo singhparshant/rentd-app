@@ -13,7 +13,7 @@ import { useState } from "react";
 import useFilters from "../../../zustand/useFilters";
 import { Filter } from "../interfaces/Interfaces";
 
-const categories = ["Mobility", "Furniture", "Household"];
+const categories = ["Mobility", "Furniture", "Household", "Sports"];
 
 function getStyles(
   category: string,
@@ -53,7 +53,7 @@ const Categories = () => {
         name="categories"
         label={"Categories"}
         multiple
-        value={filters.categories}
+        value={filters.categories || []}
         onChange={handleChange}
         renderValue={(selected) => (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>

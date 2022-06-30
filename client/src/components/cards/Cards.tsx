@@ -1,22 +1,20 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import useProducts from "../../hooks/useProducts";
 import useViewport from "../../hooks/useViewPort";
+import useFilters from "../../zustand/useFilters";
+import { Product } from "../common/interfaces/Interfaces";
 
 type Props = {};
-
-const images = [
-  {
-    src: "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=80",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=80",
-  },
-  {
-    src: "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/09c5ea6df1bd4be6baaaac5e003e7047_9366/Forum_Low_Shoes_White_FY7756_01_standard.jpg",
-  },
-];
+type imageDataType = {
+  _id: string;
+  source: string[];
+};
 
 const Cards = (props: Props) => {
   const { width } = useViewport();
+  const filters = useFilters((state) => state.filters);
+  const { data, loading, error } = useProducts(filters);
   const breakpoint = 650;
   return (
     <div>
@@ -25,22 +23,39 @@ const Cards = (props: Props) => {
           display: width > breakpoint ? "flex" : "block",
         }}
       >
-        {images.map((img, idx) => {
-          return (
-            <div style={{ margin: 5, border: 20 }} key={idx}>
-              <CardMedia
-                component="img"
-                image={img.src}
-                style={{ maxHeight: 200 }}
-              />
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  Shoes for everyday wear. Great comfort
-                </Typography>
-              </CardContent>
-            </div>
-          );
-        })}
+        {loading ? (
+          <h1>Wait bitch</h1>
+        ) : (
+          data &&
+          data.data &&
+          data.data.data &&
+          data.data.data.map((product: Product, idx: number) => {
+            return (
+              <Link
+                to={{
+                  pathname: `/products/${product._id}`,
+                  state: { fromProductsPage: product },
+                }}
+                key={idx}
+              >
+                <div style={{ margin: 5, border: 20 }}>
+                  <CardMedia
+                    component="img"
+                    src={`data:image/png;base64,` + product.productImages[0]}
+                    style={{ maxHeight: 200 }}
+                    alt="Loading"
+                  />
+                  <CardContent>
+                    <Typography variant="body2" color="text.primary">
+                      {product.monthlyPrice}€<br></br>
+                      {product.description}
+                    </Typography>
+                  </CardContent>
+                </div>
+              </Link>
+            );
+          })
+        )}
       </Card>
     </div>
   );

@@ -1,6 +1,5 @@
 //import paginate from 'jw-paginate';
 
-
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 
@@ -8,48 +7,47 @@ const Product = require("../models/product");
 
 const list = async (req, res) => {
   try {
-    let categories = String(req.query.categories).split(',');
-    categories = categories.map(element => element.toLocaleLowerCase())
-    console.log(categories);
-    if(req.query.search){
-      var products =  await Product.aggregate([
+    var products = await Product.find({
+      $and: [
         {
-          $addFields: {
-            price: {
-              $toDecimal: "$monthlyPrice"
-            },
-            maxDuration: {
-              $toInt: "$maxRentDuration"
-            },
-            cat: {
-              $toLower: "$category"
-            }
-          }
+          monthlyPrice: req.query.monthlyPrice && {
+            $lte: parseFloat(req.query.monthlyPrice),
+          },
         },
         {
-          $match: {
-            $and: [
-              { name: new RegExp(req.query.search, "i") }, 
-              { price: {
-                $lte: parseFloat(req.query.maxPrice)
-                }, 
-              },
-              { maxDuration : {
-                $gte: parseInt(req.body.minDuration)
-                }
-              },
-              { cat: { 
-                $in: categories
-                }
-              }
-            ]
-          }
+          minDuration: req.query.minDuration && {
+            $gte: parseInt(req.query.minDuration),
+          },
+        },
+        {
+          categories: req.query.categories && {
+            $in: req.query.categories,
+          },
+        },
+        {
+          avgRating: req.query.avgRating && {
+            $gte: req.query.avgRating,
+          },
+        },
+      ],
+    });
+
+    products.map((product) => {
+      product.productImages = product.productImages.map((imgId) => {
+        try {
+          return fs.readFileSync(
+            `${__dirname}/../storage/productImages/${imgId}`,
+            "base64"
+          );
+        } catch (error) {
+          console.log(error);
+          return "";
         }
-      ]);
-    }
-    else {
-      products = await Product.find()
-    }
+      });
+    });
+
+    console.log("products: ", products);
+
     // Server-side pagination logic
     //const page = parseInt(req.query.page) || 1;
     //const pageSize = 6;
@@ -66,15 +64,14 @@ const list = async (req, res) => {
     return res.status(500).json({
       success: false,
       err: "Request failed",
-      message: err.message
+      message: err.message,
     });
   }
-}
+};
 
 const create = async (req, res) => {
   const token = req.cookies["jwt"];
-  if (!token)
-    return res.status(403).send("You are not logged in.")
+  if (!token) return res.status(403).send("You are not logged in.");
   try {
     const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     if (!payload.role === "supplier")
@@ -93,14 +90,14 @@ const create = async (req, res) => {
   // handle request
   try {
     if (Array.isArray(req.body)) {
-      Product.insertMany(req.body, {ordered: false}
-        ).then(function(product){
+      Product.insertMany(req.body, { ordered: false })
+        .then(function (product) {
           res.status(200).json({
-          success: true,
-          data: product 
+            success: true,
+            data: product,
+          });
         })
-      })
-      .catch(function(error){
+        .catch(function (error) {
           console.log(error);
         });
     } else {
@@ -110,41 +107,9 @@ const create = async (req, res) => {
       // return created product
       res.status(200).json({
         success: true,
-        data: product
+        data: product,
       });
     }
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      success: false,
-      err: "Internal server error",
-      message: err.message,
-    });
-  }
-}
-
-const read = async (req, res) => {
-  if (!req.params.id)
-    return res.status(400).json({
-      success: false,
-      err: "Bad request",
-      message: "The request parameter is absent",
-    });
-
-  try {
-    let product = await Product.findById(req.params.id);
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        err: "Not found",
-        message: "Product not found",
-      });
-    }
-    product.productImages = product.productImages.map(imgId => {
-      return fs.readFileSync(`${__dirname}/../storage/${imgId}`, 'base64');
-    })
-
-    res.status(200).json(product);
   } catch (err) {
     console.log(err);
     return res.status(500).json({
@@ -156,61 +121,63 @@ const read = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  let productId = req.params.id
-  let update = req.body
+  let productId = req.params.id;
+  let update = req.body;
   Product.findByIdAndUpdate(productId, { $set: update }, { new: true })
-    .then(data => {
+    .then((data) => {
       if (!data) {
         return res.status(404).json({
           success: false,
-          message: "Product not found with id " + req.params.id
+          message: "Product not found with id " + req.params.id,
         });
       }
       res.status(200).json({
         success: true,
         data: data,
-        message: "Product successfully updated"
+        message: "Product successfully updated",
       });
-    }).catch(err => {
-      if (err.kind === 'ObjectId') {
+    })
+    .catch((err) => {
+      if (err.kind === "ObjectId") {
         return res.status(404).json({
           success: false,
-          message: "Product not found with id " + req.params.id
+          message: "Product not found with id " + req.params.id,
         });
       }
       return res.status(500).send({
         success: false,
-        message: "Error updating product with id " + req.params.id
+        message: "Error updating product with id " + req.params.id,
       });
     });
-}
+};
 
 const remove = async (req, res) => {
   Product.findByIdAndDelete(req.params.id)
-    .then(data => {
+    .then((data) => {
       if (!data) {
         return res.status(404).json({
           success: false,
-          message: "Product not found with id " + req.params.id
+          message: "Product not found with id " + req.params.id,
         });
       }
       res.status(200).json({
         success: true,
         data: data,
-        message: "Product successfully deleted!"
+        message: "Product successfully deleted!",
       });
-    }).catch(err => {
-      if (err.kind === 'ObjectId' || err.name === 'NotFound') {
+    })
+    .catch((err) => {
+      if (err.kind === "ObjectId" || err.name === "NotFound") {
         return res.status(404).send({
           success: false,
-          message: "Product not found with id " + req.params.id
+          message: "Product not found with id " + req.params.id,
         });
       }
       return res.status(500).send({
         success: false,
-        message: "Could not delete product with id " + req.params.id
+        message: "Could not delete product with id " + req.params.id,
       });
     });
-}
+};
 
-module.exports = { list, create, read, update, remove };
+module.exports = { list, create, update, remove };

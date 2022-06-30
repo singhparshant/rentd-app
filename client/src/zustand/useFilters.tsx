@@ -8,24 +8,14 @@ interface FilterStore {
 }
 
 const useFilters = create<FilterStore>((set) => ({
-  filters: {
-    categories: ["Transport", "Electronics"],
-    minDuration: 1,
-    monthlyPrice: 1000000,
-    reviewed: false,
-  },
+  filters: {},
   setFilters: (name: any, value: any) =>
     set((state: any) => ({
       filters: { ...state.filters, [name]: value },
     })),
   resetFilters: () =>
     set((state: any) => ({
-      filters: {
-        categories: ["Transport", "Electronics"],
-        minDuration: 1,
-        monthlyPrice: 1000000,
-        reviewed: false,
-      },
+      filters: {},
     })),
 }));
 
