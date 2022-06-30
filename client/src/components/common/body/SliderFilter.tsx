@@ -1,26 +1,25 @@
 import { Slider } from "@mui/material";
-import { useEffect, useState } from "react";
 import useFilters from "../../../zustand/useFilters";
 
 const customMarks = [
   {
-    value: 20,
-    label: "€20",
+    value: 100,
+    label: "€100",
   },
   {
-    value: 40,
-    label: "€40",
+    value: 200,
+    label: "€200",
   },
   {
-    value: 60,
-    label: "€60",
+    value: 300,
+    label: "€300",
   },
   {
-    value: 80,
-    label: "€80",
+    value: 400,
+    label: "€400",
   },
   {
-    value: 1000000,
+    value: 500,
     label: "All",
   },
 ];
@@ -35,18 +34,14 @@ const SliderFilter = () => {
   };
 
   const getText = (value: number) => `${value}`;
-  useEffect(() => {
-    console.log("filters: ", filters);
-  }, [filters]);
 
   return (
     <div style={{ width: "85%", margin: "20px" }}>
       <Slider
-        min={20}
-        max={100}
-        step={20}
-        defaultValue={1000000}
-        value={filters.monthlyPrice}
+        min={100}
+        max={500}
+        step={100}
+        value={filters.monthlyPrice || null}
         onChange={handleChange}
         marks={customMarks}
         getAriaValueText={getText}

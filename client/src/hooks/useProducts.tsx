@@ -11,10 +11,9 @@ const useProducts = (filters: Filter) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response: any = await axiosInstance.post(
-          getProductsPath,
-          filters
-        );
+        const response: any = await axiosInstance.get(getProductsPath, {
+          params: filters,
+        });
         setData(response);
       } catch (error: any) {
         setError(error);

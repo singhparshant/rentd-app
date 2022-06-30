@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import useViewport from "../../../hooks/useViewPort";
 import Cards from "../../cards/Cards";
-import Sidebar from "./Sidebar";
 import "./body.css";
 import MobileComponent from "./MobileComponent";
-import useViewport from "../../../hooks/useViewPort";
+import Sidebar from "./Sidebar";
 
 interface BodyProps {}
 
