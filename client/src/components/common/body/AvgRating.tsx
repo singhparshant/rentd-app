@@ -1,5 +1,6 @@
-import { InputLabel, MenuItem } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import useFilters from "../../../zustand/useFilters";
 
@@ -11,13 +12,13 @@ interface Ioption {
 }
 
 const options: Ioption[] = [
-  { label: "1 month", value: 1 },
-  { label: "2 months", value: 2 },
-  { label: "3 months", value: 3 },
-  { label: "4 months", value: 4 },
+  { label: ">=1", value: 1 },
+  { label: ">=2", value: 2 },
+  { label: ">=3", value: 3 },
+  { label: ">=4", value: 4 },
 ];
 
-const Duration = (props: Props) => {
+const AvgRating = (props: Props) => {
   const filters = useFilters((state: any) => state.filters);
   const setFilters = useFilters((state: any) => state.setFilters);
   const handleChange = (e: SelectChangeEvent) => {
@@ -26,12 +27,12 @@ const Duration = (props: Props) => {
 
   return (
     <FormControl variant="outlined" sx={{ width: "90%", margin: "10px" }}>
-      <InputLabel id="test-select-label">Min. Duration</InputLabel>
+      <InputLabel id="test-select-label">Avg. Rating</InputLabel>
       <Select
-        value={filters.minDuration || null}
-        label={"Min. Duration"}
+        value={filters.avgRating || null}
+        label={"Avg. Rating"}
         onChange={handleChange}
-        name="minDuration"
+        name="avgRating"
       >
         {options.map((option: Ioption, index) => {
           return (
@@ -45,4 +46,4 @@ const Duration = (props: Props) => {
   );
 };
 
-export default Duration;
+export default AvgRating;

@@ -33,7 +33,7 @@ export interface Order {
 export interface Filter {
   categories?: string[];
   monthlyPrice?: number;
-  reviewed?: boolean;
+  avgRating?: number;
   minDuration?: number;
 }
 
