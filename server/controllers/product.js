@@ -20,7 +20,7 @@ const list = async (req, res) => {
           },
         },
         {
-          categories: req.query.categories && {
+          category: req.query.categories && {
             $in: req.query.categories,
           },
         },
