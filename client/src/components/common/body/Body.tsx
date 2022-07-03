@@ -1,5 +1,5 @@
 import useViewport from "../../../hooks/useViewPort";
-import Cards from "../../cards/Cards";
+import ProductsOverView from "../../cards/ProductsOverView";
 import "./body.css";
 import MobileComponent from "./MobileComponent";
 import Sidebar from "./Sidebar";
@@ -18,7 +18,7 @@ const Body = (props: BodyProps) => {
             <Sidebar />
           </div>
           <div className="productsContainer">
-            <Cards />
+            <ProductsOverView />
           </div>
         </div>
       ) : (
