@@ -1,0 +1,28 @@
+.productdetailsScreen{
+    display: flex;
+    flex: 1 1 ratio;
+    margin: 20px;
+}
+
+.carouselContainer{
+    border: 2px solid black;
+    flex: 1 1 auto;
+    height: 300px;
+    margin: 5px;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.detailsContainer{
+    flex: 1 1 auto;
+    padding: 3px;
+    border-radius: 5px;
+    border: 2px solid black;
+    margin: 5px;
+}
+
+.functionalitiesContainer{
+    flex: 1 1 auto;
+    margin: 5px;
+    padding: 3px;
+}
