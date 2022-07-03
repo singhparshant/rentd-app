@@ -6,6 +6,7 @@ import SliderFilter from "./SliderFilter";
 import { useEffect } from "react";
 import useFilters from "../../../zustand/useFilters";
 import AvgRating from "./AvgRating";
+import ProductsPerPage from "./ProductsPerPage";
 import "./sidebar.css";
 
 interface SidebarProps {}
@@ -28,6 +29,7 @@ const Sidebar = (props: SidebarProps) => {
       <SliderFilter />
       <AvgRating />
       <Duration />
+      <ProductsPerPage/>
       <br />
       <div className="resetButton">
         <Button

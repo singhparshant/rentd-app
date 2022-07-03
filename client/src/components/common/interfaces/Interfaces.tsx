@@ -35,6 +35,8 @@ export interface Filter {
   monthlyPrice?: number;
   avgRating?: number;
   minDuration?: number;
+  page?: number;
+  limit?: number;
 }
 
 export interface UserData {
@@ -47,4 +49,6 @@ export interface Filter {
   maxPrice?: Number;
   reviewed?: boolean;
   duration?: Number;
+  page?: number;
+  limit?: number;
 }
