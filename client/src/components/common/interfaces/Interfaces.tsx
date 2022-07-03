@@ -51,4 +51,5 @@ export interface Filter {
   duration?: Number;
   page?: number;
   limit?: number;
+  searchString?: string;
 }
