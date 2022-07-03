@@ -35,7 +35,7 @@ export default function SignUp() {
     codeOfConduct: null,
     KYCDocs: [],
   });
-  const [codeOfConduct, setCodeOfConduct] = useState("");
+  const [codeOfConductDownload, setCodeOfConductDownload] = useState("");
 
   const uploadCodeOfConductRef = useRef<any>(null);
   const uploadKYCDocsRef = useRef<any>(null);
@@ -43,12 +43,14 @@ export default function SignUp() {
   useEffect(() => {
     const getCodeOfConductURL = async () => {
       const response = await axiosInstance.get("/applications/codeOfConduct");
-      setCodeOfConduct(
+      setCodeOfConductDownload(
         "data:application/pdf;base64," + response.data.pdfContent
       );
     };
     getCodeOfConductURL();
   }, []);
+
+  console.log("code of conduct", documents.codeOfConduct);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData((prev: UserData) => ({
@@ -67,10 +69,14 @@ export default function SignUp() {
         codeOfConduct: e.target.files?.[0],
       }));
     } else {
-      setDocuments((prev: any) => ({
-        ...prev,
-        KYCDocs: e.target.files,
-      }));
+      const KYCDocs = [] as any[];
+      if (e.target.files) {
+        Object.values(e.target.files).forEach((file) => KYCDocs.push(file));
+        setDocuments((prev: any) => ({
+          ...prev,
+          KYCDocs,
+        }));
+      }
     }
   };
 
@@ -107,20 +113,6 @@ export default function SignUp() {
         console.log(error);
         toast.error("something went wrong!");
       }
-
-      // const fileReader = new FileReader();
-      // let codeOfConductResult: any = "";
-
-      // fileReader.onload = async (fileLoadedEvent) => {
-      //   codeOfConductResult = fileLoadedEvent.target?.result;
-      //   // Print data in console
-      //   await axiosInstance.post("/user/test", {
-      //     codeOfConduct: codeOfConductResult,
-      //   });
-      //   console.log("uploaded!");
-      // };
-      // // Convert data to base64
-      // fileReader.readAsDataURL(documents.codeOfConduct);
     }
   };
 
@@ -134,8 +126,39 @@ export default function SignUp() {
       address: userData.address,
     });
   };
+
   const handleSupplierSignup = () => {
     //create an application for the supplier
+    const application = {
+      email: userData.email,
+      username: userData.username,
+      role: userData.role,
+      address: userData.address,
+      iban: userData.IBAN,
+      password: userData.password,
+      codeOfConduct: "",
+      KYCDocs: [] as string[],
+    };
+
+    //read code of conduct
+    const fileReader = new FileReader();
+    fileReader.onload = async (fileLoadedEvent) => {
+      const codeOfConduct = fileLoadedEvent.target?.result as string;
+      application.codeOfConduct = codeOfConduct;
+    };
+    fileReader.readAsDataURL(documents.codeOfConduct);
+
+    //read kyc docs
+    documents.KYCDocs.forEach((doc: any) => {
+      const fileReader = new FileReader();
+      fileReader.onload = async (fileLoadedEvent) => {
+        const kycDoc = fileLoadedEvent.target?.result as string;
+        application.KYCDocs.push(kycDoc);
+      };
+      fileReader.readAsDataURL(doc);
+    });
+
+    console.log("application", application);
   };
 
   return (
@@ -309,7 +332,7 @@ export default function SignUp() {
                         }}
                       >
                         <a
-                          href={codeOfConduct}
+                          href={codeOfConductDownload}
                           download={"code of conduct.pdf"}
                           target="_self"
                           style={{
