@@ -11,8 +11,8 @@ const list = async (req, res) => {
     var page = req.query.page || 1;
     var limit = parseInt(req.query.limit) || 10;
     var skipIndex = (page - 1) * limit;
-    var productCount = await Product.count()
-    var totalPages = Math.ceil(productCount/limit);
+    var productCount = await Product.count();
+    var totalPages = Math.ceil(productCount / limit);
 
     var products = await Product.find({
       $and: [
@@ -38,8 +38,8 @@ const list = async (req, res) => {
         },
       ],
     })
-    .limit(limit)
-    .skip(skipIndex);
+      .limit(limit)
+      .skip(skipIndex);
 
     products.map((product) => {
       product.productImages = product.productImages.map((imgId) => {
@@ -62,7 +62,7 @@ const list = async (req, res) => {
       paging: {
         total: productCount,
         page: page,
-        pages: totalPages
+        pages: totalPages,
       },
     });
   } catch (err) {

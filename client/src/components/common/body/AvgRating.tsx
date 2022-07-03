@@ -12,10 +12,10 @@ interface Ioption {
 }
 
 const options: Ioption[] = [
-  { label: ">=1", value: 1 },
-  { label: ">=2", value: 2 },
-  { label: ">=3", value: 3 },
-  { label: ">=4", value: 4 },
+  { label: "🌟", value: 1 },
+  { label: "🌟🌟", value: 2 },
+  { label: "🌟🌟🌟", value: 3 },
+  { label: "🌟🌟🌟🌟", value: 4 },
 ];
 
 const AvgRating = (props: Props) => {
@@ -27,10 +27,10 @@ const AvgRating = (props: Props) => {
 
   return (
     <FormControl variant="outlined" sx={{ width: "90%", margin: "10px" }}>
-      <InputLabel id="test-select-label">Avg. Rating</InputLabel>
+      <InputLabel id="test-select-label">Min. Avg. Rating</InputLabel>
       <Select
         value={filters.avgRating || null}
-        label={"Avg. Rating"}
+        label={"Min. Avg. Rating"}
         onChange={handleChange}
         name="avgRating"
       >

@@ -1,7 +1,7 @@
 import Drawer from "@material-ui/core/Drawer";
 import { Button } from "@mui/material";
 import { useState } from "react";
-import Cards from "../../cards/Cards";
+import ProductsOverView from "../../cards/ProductsOverView";
 import Sidebar from "./Sidebar";
 
 type Props = {};
@@ -16,7 +16,7 @@ const MobileComponent = (props: Props) => {
       <Button variant="contained" onClick={toggleDrawer}>
         Filters
       </Button>
-      <Cards />
+      <ProductsOverView />
       <Drawer
         anchor={"left"}
         onClose={toggleDrawer}
