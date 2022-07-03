@@ -2,6 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt")
 const jwt = require('jsonwebtoken')
 const fs = require("fs")
+const { v4: uuid } = require('uuid');
 
 const list = async (req, res) => {
   try {
@@ -56,7 +57,7 @@ const logout = async (req, res) => {
 
 const test = async (req, res) => {
   const base64 = req.body.codeOfConduct.replace(/^data:application\/pdf;base64,/, "");
-  fs.writeFile(`${__dirname}/../storage/applicationDocuments/code.pdf`, base64, 'base64', function (err) {
+  fs.writeFile(`${__dirname}/../storage/applicationDocuments/${uuid()}.pdf`, base64, 'base64', function (err) {
     console.log(err);
   });
 

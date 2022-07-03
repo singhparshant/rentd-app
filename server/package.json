@@ -14,13 +14,14 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "jw-paginate": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
+    "jw-paginate": "^1.0.4",
     "mongoose": "^6.3.5",
     "morgan": "~1.9.1",
     "swagger": "^0.7.5",
     "swagger-jsdoc": "^6.2.1",
-    "swagger-ui-express": "^4.4.0"
+    "swagger-ui-express": "^4.4.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"

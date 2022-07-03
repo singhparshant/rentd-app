@@ -8,7 +8,7 @@ let applicationSchema = new Schema(
     address: String,
     IBAN: String,
     codeOfConduct: String,
-    KYCdocs: [String],
+    KYCDocs: [String],
     status: {
       type: String,
       index: true

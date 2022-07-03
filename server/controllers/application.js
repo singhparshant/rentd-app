@@ -1,6 +1,8 @@
 const Application = require("../models/application");
 const fs = require("fs");
+const { v4: uuid } = require('uuid');
 
+//TODO: convert files to base64
 const list = async (req, res) => {
     try {
         let applications = await Application.find();
@@ -18,6 +20,33 @@ const list = async (req, res) => {
 
 const create = async (req, res) => {
     try {
+        //store file names in db:
+        codeOfConduct = req.body.codeOfConduct;
+        kycDocs = req.body.KYCDocs;
+        //random file names to store in db
+        const codeOfConductFileName = uuid();
+        const kycFileNames = req.body.KYCDocs.map(_ => uuid());
+
+        req.body.codeOfConduct = codeOfConductFileName;
+        req.body.KYCDocs = kycFileNames;
+
+        //sanitize input
+        codeOfConduct = codeOfConduct.replace(/^data:application\/pdf;base64,/, "");
+        for (let i = 0; i < kycDocs.length; i++) {
+            kycDocs[i] = kycDocs[i].replace(/^data:application\/pdf;base64,/, "");
+        }
+
+        //store files in storage/applicationDocuments
+        fs.writeFile(`${__dirname}/../storage/applicationDocuments/${codeOfConductFileName}.pdf`, codeOfConduct, 'base64', function (err) {
+            console.log(err);
+        });
+
+        for (let i = 0; i < kycDocs.length; i++) {
+            fs.writeFile(`${__dirname}/../storage/applicationDocuments/${kycFileNames[i]}.pdf`, kycDocs[i], 'base64', function (err) {
+                console.log(err);
+            });
+        }
+
         let application = new Application(req.body);
         application = await application.save();
         res.status(200).json({
@@ -29,6 +58,7 @@ const create = async (req, res) => {
             message: err.message,
             success: false
         });
+        console.log("err", err)
     }
 }
 
