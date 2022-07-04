@@ -3,8 +3,8 @@ body {
 }
 
 .button {
-  background-color: #2b0245;
-  color: white;
+  background-color: #ffb93f;
+  color: black;
   padding: 15px;
   border-radius: 10px;
   cursor: pointer;
@@ -13,5 +13,5 @@ body {
 
 .active,
 .button:hover {
-  background-color: #6f4689;
+  opacity: 60%;
 }

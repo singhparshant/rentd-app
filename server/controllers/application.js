@@ -91,7 +91,8 @@ const read = async (req, res) => {
 }
 
 const updateStatus = async (req, res) => {
-    if (!req.query.status)
+    const { status } = req.query;
+    if (!status)
         return res.status(400).json({
             success: false,
             err: "Bad request",
@@ -106,8 +107,14 @@ const updateStatus = async (req, res) => {
                 message: "Application not found",
             });
         }
-        application.status = req.query.status;
+        application.status = status;
         await application.save();
+        //TODO: trigger email informing supplier 
+        if (status === "accepted") {
+            //create user, send email with credentials
+        } else {
+            //send rejection email
+        }
         res.status(200).json(application);
     } catch (err) {
         console.log(err);

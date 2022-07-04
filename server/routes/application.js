@@ -11,7 +11,7 @@ router.get("/:id", applicationController.read);
 
 router.post("/", applicationController.create);
 
-router.post("/updateStatus", applicationController.updateStatus);
+router.post("/updateStatus/:id", applicationController.updateStatus);
 
 
 

@@ -17,6 +17,9 @@ import axiosInstance from "../../../api/axios";
 import toast from "react-hot-toast";
 import validator from "validator";
 import { ReactComponent as Tick } from "../../../assets/icons/tick.svg";
+import { readFileContent } from "../../../utils/functions";
+import { AxiosError } from "axios";
+import { Application } from "../interfaces/Interfaces";
 const theme = createTheme();
 
 export default function SignUp() {
@@ -50,8 +53,6 @@ export default function SignUp() {
     getCodeOfConductURL();
   }, []);
 
-  console.log("code of conduct", documents.codeOfConduct);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData((prev: UserData) => ({
       ...prev,
@@ -84,7 +85,6 @@ export default function SignUp() {
     let valid =
       userData.address &&
       userData.username &&
-      userData.password === userData.passwordConfirm &&
       validator.isEmail(userData.email);
     //make sure documents are uploaded
     if (userData.role === "supplier")
@@ -92,10 +92,12 @@ export default function SignUp() {
         documents.codeOfConduct &&
         documents.KYCDocs.length > 0 &&
         validator.isIBAN(userData.IBAN);
+    if (userData.role === "customer")
+      valid &&= userData.password === userData.passwordConfirm;
     return valid;
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!isValidForm()) {
       toast.error("Invalid data!");
     } else {
@@ -103,62 +105,70 @@ export default function SignUp() {
 
       try {
         userData.role === "customer"
-          ? handleCustomerSignup()
-          : handleSupplierSignup();
-
-        toast.dismiss(toastId);
-        toast.success("Done!");
-        history.push("/login");
-      } catch (error) {
+          ? handleCustomerSignup(toastId)
+          : handleSupplierSignup(toastId);
+      } catch (error: any) {
         console.log(error);
-        toast.error("something went wrong!");
+        toast.error(error.message);
       }
     }
   };
 
-  const handleCustomerSignup = () => {
+  const handleCustomerSignup = (toastId: string) => {
     //create an account for the customer
-    axiosInstance.post("/users", {
-      username: userData.username,
-      password: userData.password,
-      email: userData.email,
-      role: userData.role,
-      address: userData.address,
-    });
+    axiosInstance
+      .post("/users", {
+        username: userData.username,
+        password: userData.password,
+        email: userData.email,
+        role: userData.role,
+        address: userData.address,
+      })
+      .then(() => {
+        toast.dismiss(toastId);
+        toast.success("Done!");
+        history.push("/login");
+      })
+      .catch(() => {
+        toast.dismiss(toastId);
+        toast.error("Something went wrong!");
+      });
   };
 
-  const handleSupplierSignup = () => {
+  const handleSupplierSignup = async (toastId: string) => {
     //create an application for the supplier
-    const application = {
+    const application: Application = {
       email: userData.email,
       username: userData.username,
       role: userData.role,
       address: userData.address,
       iban: userData.IBAN,
-      password: userData.password,
       codeOfConduct: "",
-      KYCDocs: [] as string[],
+      status: "pending",
+      KYCDocs: [],
     };
 
     //read code of conduct
-    const fileReader = new FileReader();
-    fileReader.onload = async (fileLoadedEvent) => {
-      const codeOfConduct = fileLoadedEvent.target?.result as string;
-      application.codeOfConduct = codeOfConduct;
-    };
-    fileReader.readAsDataURL(documents.codeOfConduct);
+    const codeOfConduct = await readFileContent(documents.codeOfConduct);
+    application.codeOfConduct = codeOfConduct;
 
     //read kyc docs
-    documents.KYCDocs.forEach((doc: any) => {
-      const fileReader = new FileReader();
-      fileReader.onload = async (fileLoadedEvent) => {
-        const kycDoc = fileLoadedEvent.target?.result as string;
-        application.KYCDocs.push(kycDoc);
-      };
-      fileReader.readAsDataURL(doc);
-    });
-
-    console.log("application", application);
+    for (let i = 0; i < documents.KYCDocs.length; i++) {
+      const kycDoc = await readFileContent(documents.KYCDocs[i]);
+      application.KYCDocs.push(kycDoc);
+    }
+    axiosInstance
+      .post("/applications", application)
+      .then(() => {
+        toast.dismiss(toastId);
+        toast.success("Done!");
+        history.push("/login");
+      })
+      .catch((e: AxiosError) => {
+        toast.dismiss(toastId);
+        if (e.response?.status === 413) toast.error("File size too large!");
+        else toast.error("Something went wrong!");
+      });
   };
 
   return (

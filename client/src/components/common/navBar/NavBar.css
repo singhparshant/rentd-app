@@ -2,23 +2,22 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(
-    90deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(254, 185, 63, 1) 13%,
-    rgba(254, 185, 63, 1) 69%,
-    rgba(43, 2, 69, 1) 100%
-  );
-
   height: 70px;
-  color: #2b0245;
+  background-color: #2b0245;
+  opacity: 85%;
 }
 
 .logo {
-  height: 70px;
+  height: 65px;
   cursor: pointer;
+  border-width: 2px;
+  border-radius: 10px;
+  margin-top: 4px;
+  border-style: solid;
+  border-color: #ffb93f;
 }
 .greeting {
   font-size: 20px;
   margin-right: 50px;
+  color: white;
 }
