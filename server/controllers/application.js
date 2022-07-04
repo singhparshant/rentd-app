@@ -1,6 +1,7 @@
 const Application = require("../models/application");
 const fs = require("fs");
 const { v4: uuid } = require('uuid');
+const { sendApplicationEmail } = require("../utils/applicationEmail");
 
 //TODO: convert files to base64
 const list = async (req, res) => {
@@ -110,11 +111,7 @@ const updateStatus = async (req, res) => {
         application.status = status;
         await application.save();
         //TODO: trigger email informing supplier 
-        if (status === "accepted") {
-            //create user, send email with credentials
-        } else {
-            //send rejection email
-        }
+        await sendApplicationEmail(application, status);
         res.status(200).json(application);
     } catch (err) {
         console.log(err);
@@ -145,5 +142,8 @@ const getCodeOfConduct = (req, res) => {
         });
     }
 }
+
+
+
 
 module.exports = { list, create, read, remove, updateStatus, getCodeOfConduct };

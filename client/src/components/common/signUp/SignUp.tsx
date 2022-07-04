@@ -161,8 +161,7 @@ export default function SignUp() {
       .post("/applications", application)
       .then(() => {
         toast.dismiss(toastId);
-        toast.success("Done!");
-        history.push("/login");
+        toast.success("successfully submitted!");
       })
       .catch((e: AxiosError) => {
         toast.dismiss(toastId);

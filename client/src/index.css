@@ -5,13 +5,15 @@ body {
 .button {
   background-color: #ffb93f;
   color: black;
-  padding: 15px;
+  padding: 12px;
   border-radius: 10px;
   cursor: pointer;
   margin: 10px;
+  border-bottom: #ffb93f solid 5px;
 }
 
-.active,
-.button:hover {
-  opacity: 60%;
+.active {
+  border-bottom: white;
+  border-bottom-width: 5px;
+  border-bottom-style: solid;
 }
