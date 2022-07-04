@@ -53,3 +53,14 @@ export interface Filter {
   limit?: number;
   searchString?: string;
 }
+
+export interface Application {
+  email: string;
+  username: string;
+  role: "customer" | "supplier";
+  address: string;
+  iban: string;
+  codeOfConduct: string;
+  status: "pending" | "accepted" | "rejected";
+  KYCDocs: string[];
+}

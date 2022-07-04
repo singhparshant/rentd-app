@@ -6,10 +6,11 @@ const logger = require("morgan");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const connectionString = process.env.ATLAS_UIR;
-const productsRouter = require("./routes/products.js");
-const ordersRouter = require("./routes/orders.js");
-const shoppingCartRouter = require("./routes/shoppingCart.js");
-const userRouter = require("./routes/user.js");
+const productsRouter = require('./routes/products.js');
+const ordersRouter = require('./routes/orders.js');
+const shoppingCartRouter = require('./routes/shoppingCart.js');
+const userRouter = require('./routes/user.js');
+const applicationRouter = require('./routes/application.js');
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const User = require("./models/user");
@@ -58,6 +59,7 @@ app.use("/products", productsRouter);
 app.use("/orders", ordersRouter);
 app.use("/shoppingCarts", shoppingCartRouter);
 app.use("/users", userRouter);
+app.use("/applications", applicationRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -5,7 +5,7 @@ let userSchema = new Schema(
   {
     role: {
       type: String,
-      index: true
+      index: true,
     },
     email: {
       type: String,
@@ -19,6 +19,7 @@ let userSchema = new Schema(
     address: {
       type: String
     },
+    //only needed for supplier
     IBAN: {
       type: String,
     }

@@ -3,20 +3,15 @@ let Schema = mongoose.Schema;
 
 let applicationSchema = new Schema(
   {
-    supplierId: {
-        type: Schema.Types.ObjectId, ref: "user"
-    },
-    codeOfConduct: {
-        type: Buffer, 
-        contentType: String
-    },
-    KYCdocs: [{
-        type: Buffer, 
-        contentType: String
-    }],
+    email: String,
+    username: String,
+    address: String,
+    IBAN: String,
+    codeOfConduct: String,
+    KYCDocs: [String],
     status: {
-        type:String, 
-        index:true
+      type: String,
+      index: true
     }
   },
   { timestamps: true }

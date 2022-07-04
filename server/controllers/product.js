@@ -114,6 +114,39 @@ const create = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
+      success: false,
+      err: "Internal server error",
+      message: err.message,
+    });
+  }
+}
+
+const read = async (req, res) => {
+  if (!req.params.id)
+    return res.status(400).json({
+      success: false,
+      err: "Bad request",
+      message: "The request parameter is absent",
+    });
+
+  try {
+    let product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        err: "Not found",
+        message: "Product not found",
+      });
+    }
+    product.productImages = product.productImages.map(imgId => {
+      return fs.readFileSync(`${__dirname}/../storage/productImages/${imgId}`, 'base64');
+    })
+
+    res.status(200).json(product);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
       err: "Internal server error",
       message: err.message,
     });
