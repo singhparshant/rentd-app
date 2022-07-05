@@ -16,7 +16,7 @@ export default function Cart() {
         viewBox="0 0 24 24"
         stroke="currentColor"
         strokeWidth="2"
-        color="#2b0245"
+        color="white"
       >
         <path
           stroke-linecap="round"
