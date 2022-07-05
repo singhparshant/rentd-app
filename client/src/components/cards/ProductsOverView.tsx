@@ -1,12 +1,17 @@
-import { Card, CardContent, CardMedia, Pagination, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Pagination,
+  Typography,
+} from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/system";
 import { Link } from "react-router-dom";
 import useProducts from "../../hooks/useProducts";
 import useViewport from "../../hooks/useViewPort";
 import useFilters from "../../zustand/useFilters";
 import { Product } from "../common/interfaces/Interfaces";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
 
 type Props = {};
 type imageDataType = {
@@ -75,7 +80,13 @@ const Cards = (props: Props) => {
         )}
       </div>
       <Box justifyContent={"center"} alignItems="center" display={"flex"}>
-        <Pagination count={pages} defaultPage={1} onChange={handlePageClick} size="large" color="primary"/>
+        <Pagination
+          count={pages}
+          defaultPage={1}
+          onChange={handlePageClick}
+          size="large"
+          color="primary"
+        />
       </Box>
     </>
   );

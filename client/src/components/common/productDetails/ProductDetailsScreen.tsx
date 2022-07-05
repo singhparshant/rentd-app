@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import Carousel1 from "react-material-ui-carousel";
-import Carousel2 from "react-multi-carousel";
+// import Carousel2 from "react-multi-carousel";
 import Typography from "@material-ui/core/Typography";
 import { Link, useLocation, useParams } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
@@ -119,9 +119,11 @@ export default function ProductDetailsScreen() {
         <br />
         <Typography variant="h5" style={{ color: "green" }}>
           €{product.monthlyPrice}/month &nbsp;&nbsp;{" "}
-          {[...Array(Math.ceil(product.avgRating))].map((el, idx) => (
-            <span>🌟</span>
-          ))}
+          {[...Array(Math.ceil(product.avgRating ? product.avgRating : 0))].map(
+            (el, idx) => (
+              <span>🌟</span>
+            )
+          )}
         </Typography>
         <hr />
         <Typography variant="body1">{product.description}</Typography>
