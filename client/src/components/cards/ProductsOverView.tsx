@@ -5,6 +5,8 @@ import useProducts from "../../hooks/useProducts";
 import useViewport from "../../hooks/useViewPort";
 import useFilters from "../../zustand/useFilters";
 import { Product } from "../common/interfaces/Interfaces";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 type Props = {};
 type imageDataType = {
@@ -33,7 +35,9 @@ const Cards = (props: Props) => {
         }}
       >
         {loading ? (
-          <h1>Wait bitch</h1>
+          <CircularProgress
+            sx={{ marginLeft: "50%", marginTop: "20px", marginBottom: "20px" }}
+          />
         ) : (
           data &&
           data.data &&
@@ -46,6 +50,7 @@ const Cards = (props: Props) => {
                     pathname: `/products/${product._id}`,
                     state: { fromProductsPage: product },
                   }}
+                  style={{ textDecoration: "none" }}
                   key={idx}
                 >
                   <div style={{ margin: 5, border: 20 }}>
@@ -57,8 +62,9 @@ const Cards = (props: Props) => {
                     />
                     <CardContent>
                       <Typography variant="body2" color="text.primary">
-                        {product.monthlyPrice}€<br></br>
-                        {product.description}
+                        €{product.monthlyPrice}
+                        <br></br>
+                        {product.name}
                       </Typography>
                     </CardContent>
                   </div>

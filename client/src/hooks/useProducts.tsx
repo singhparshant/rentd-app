@@ -10,13 +10,14 @@ const useProducts = (filters: Filter) => {
   const [pages, setPages] = useState(0);
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
       try {
         const response: any = await axiosInstance.get(getProductsPath, {
           params: filters,
         });
         setData(response);
-        setPages(response.data.paging.pages)
+        setPages(response.data.paging.pages);
       } catch (error: any) {
         setError(error);
       }
