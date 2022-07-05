@@ -2,7 +2,7 @@ export interface Product {
   _id: string;
   supplierId: string;
   name: string;
-  monthlyPrice: string;
+  monthlyPrice: number;
   discount: number;
   deposit: number;
   minDuration: number;
@@ -28,15 +28,6 @@ export interface Order {
   paymentID: string;
   deliveryID: string;
   status: String;
-}
-
-export interface Filter {
-  categories?: string[];
-  monthlyPrice?: number;
-  avgRating?: number;
-  minDuration?: number;
-  page?: number;
-  limit?: number;
 }
 
 export interface UserData {
