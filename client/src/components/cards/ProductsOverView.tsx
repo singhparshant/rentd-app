@@ -1,4 +1,11 @@
-import { Card, CardContent, CardMedia, Pagination, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Pagination,
+  Typography,
+} from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/system";
 import { Link } from "react-router-dom";
 import useProducts from "../../hooks/useProducts";
@@ -33,7 +40,9 @@ const Cards = (props: Props) => {
         }}
       >
         {loading ? (
-          <h1>Wait bitch</h1>
+          <CircularProgress
+            sx={{ marginLeft: "50%", marginTop: "20px", marginBottom: "20px" }}
+          />
         ) : (
           data &&
           data.data &&
@@ -46,6 +55,7 @@ const Cards = (props: Props) => {
                     pathname: `/products/${product._id}`,
                     state: { fromProductsPage: product },
                   }}
+                  style={{ textDecoration: "none" }}
                   key={idx}
                 >
                   <div style={{ margin: 5, border: 20 }}>
@@ -57,8 +67,9 @@ const Cards = (props: Props) => {
                     />
                     <CardContent>
                       <Typography variant="body2" color="text.primary">
-                        {product.monthlyPrice}€<br></br>
-                        {product.description}
+                        €{product.monthlyPrice}
+                        <br></br>
+                        {product.name}
                       </Typography>
                     </CardContent>
                   </div>
@@ -69,7 +80,13 @@ const Cards = (props: Props) => {
         )}
       </div>
       <Box justifyContent={"center"} alignItems="center" display={"flex"}>
-        <Pagination count={pages} defaultPage={1} onChange={handlePageClick} size="large" color="primary"/>
+        <Pagination
+          count={pages}
+          defaultPage={1}
+          onChange={handlePageClick}
+          size="large"
+          color="primary"
+        />
       </Box>
     </>
   );

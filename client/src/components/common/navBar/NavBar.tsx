@@ -37,6 +37,9 @@ const NavBar = () => {
     return <AdminNavBar user={user} onLogout={handleLogout} />;
   return <></>;
 };
+
+// const handlSearchChange = ()
+
 const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
   const location = useLocation();
   const filter = createFilterOptions<any>();
@@ -49,6 +52,7 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
       </Link>
       <React.Fragment>
         <Autocomplete
+          // onChange={handlSearchChange}
           style={{ backgroundColor: "white", borderRadius: 7 }}
           value={value}
           onChange={(event: any, newValue: any) => {

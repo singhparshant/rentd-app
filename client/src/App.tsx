@@ -56,7 +56,7 @@ const App = () => {
           <Toaster />
           <NavBar />
           <Switch>{routes()}</Switch>
-          <Footer />
+          {/* <Footer /> */}
         </Router>
       </ErrorBoundary>
     </div>
