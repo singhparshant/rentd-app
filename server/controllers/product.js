@@ -35,10 +35,8 @@ const list = async (req, res) => {
           },
         },
       ],
-    }
-    var products = await Product.find(queryObject)
-      .skip(skipIndex)
-      .limit(limit);
+    };
+    var products = await Product.find(queryObject).skip(skipIndex).limit(limit);
     var productCount = await Product.find(queryObject).count();
     var totalPages = Math.ceil(productCount / limit);
 
@@ -118,7 +116,7 @@ const create = async (req, res) => {
       message: err.message,
     });
   }
-}
+};
 
 const read = async (req, res) => {
   if (!req.params.id)
@@ -137,9 +135,12 @@ const read = async (req, res) => {
         message: "Product not found",
       });
     }
-    product.productImages = product.productImages.map(imgId => {
-      return fs.readFileSync(`${__dirname}/../storage/productImages/${imgId}`, 'base64');
-    })
+    product.productImages = product.productImages.map((imgId) => {
+      return fs.readFileSync(
+        `${__dirname}/../storage/productImages/${imgId}`,
+        "base64"
+      );
+    });
 
     res.status(200).json(product);
   } catch (err) {

@@ -1,15 +1,16 @@
 export interface Product {
-
-  name: String;
-  monthlyPrice: Number;
-  discount: Number;
-  deposit: Number;
-  maxRentDuration: Number;
-  description: String;
-  avgRating: Number;
-  numberRatings: Number;
-  category: String;
-  images: String
+  _id: string;
+  supplierId: string;
+  name: string;
+  monthlyPrice: number;
+  discount: number;
+  deposit: number;
+  minDuration: number;
+  description: string;
+  avgRating: number;
+  numberRatings: number;
+  category: string;
+  productImages: string[];
 }
 
 export interface Order {
@@ -17,16 +18,12 @@ export interface Order {
   customer: Customer;
   totalAmount: number;
   monthlyPrice: number;
-  orderItems: OrderItem[]
+  orderItems: OrderItem[];
   paymentMethod: String;
   paymentId: Object;
   deliveryID: Object;
   Status: String;
 }
-
-
-
-
 export interface Filter {
   categories?: string[];
   monthlyPrice?: number;
@@ -61,12 +58,10 @@ export interface Application {
   status: "pending" | "accepted" | "rejected";
   KYCDocs: string[];
 }
-export interface Customer {
-
-}
+export interface Customer {}
 
 export interface OrderItem {
-  id: number, 
+  id: number;
   product: Product;
   quantity: number;
   rentalDuration: number;

@@ -1,28 +1,35 @@
 .productdetailsScreen{
     display: flex;
-    flex: 1 1 ratio;
+    /* flex: 1  1 ; */
     margin: 20px;
 }
 
 .carouselContainer{
-    border: 2px solid black;
-    flex: 1 1 auto;
-    height: 300px;
+    /* border: 2px solid black; */
+    flex-grow: 1.5;
+    flex-basis: 0;
+    height: 400px;
     margin: 5px;
     padding: 3px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
+    justify-content: center;
+    align-items: center;
 }
 
 .detailsContainer{
-    flex: 1 1 auto;
-    padding: 3px;
-    border-radius: 5px;
-    border: 2px solid black;
+    flex-grow: 2;
+    flex-basis: 0;
+    padding: 5px;
     margin: 5px;
 }
 
 .functionalitiesContainer{
-    flex: 1 1 auto;
+    flex-grow: 1;
+    flex-basis: 0;
     margin: 5px;
     padding: 3px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid gray;
 }
