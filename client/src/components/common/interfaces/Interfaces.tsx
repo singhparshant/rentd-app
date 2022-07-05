@@ -1,34 +1,31 @@
 export interface Product {
-  _id: string;
-  supplierId: string;
-  name: string;
-  monthlyPrice: string;
-  discount: number;
-  deposit: number;
-  minDuration: number;
-  description: string;
-  avgRating: number;
-  numberRatings: number;
-  category: string;
-  productImages: string[];
-}
 
-export interface OrderItemType {
-  productId: string;
-  quantity: number;
-  rentalDuration: number;
+  name: String;
+  monthlyPrice: Number;
+  discount: Number;
+  deposit: Number;
+  maxRentDuration: Number;
+  description: String;
+  avgRating: Number;
+  numberRatings: Number;
+  category: String;
+  images: String
 }
 
 export interface Order {
-  customerId: string;
-  amount: number;
+  _id: string;
+  customer: Customer;
+  totalAmount: number;
   monthlyPrice: number;
-  orderItems: OrderItemType[];
-  paymentMethod: string;
-  paymentID: string;
-  deliveryID: string;
-  status: String;
+  orderItems: OrderItem[]
+  paymentMethod: String;
+  paymentId: Object;
+  deliveryID: Object;
+  Status: String;
 }
+
+
+
 
 export interface Filter {
   categories?: string[];
@@ -63,4 +60,14 @@ export interface Application {
   codeOfConduct: string;
   status: "pending" | "accepted" | "rejected";
   KYCDocs: string[];
+}
+export interface Customer {
+
+}
+
+export interface OrderItem {
+  id: number, 
+  product: Product;
+  quantity: number;
+  rentalDuration: number;
 }
