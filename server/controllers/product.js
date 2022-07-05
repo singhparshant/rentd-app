@@ -9,12 +9,10 @@ const list = async (req, res) => {
   try {
     // Server-side pagination logic
     var page = req.query.page || 1;
-    var limit = parseInt(req.query.limit) || 10;
+    var limit = parseInt(req.query.limit) || 4;
     var skipIndex = (page - 1) * limit;
-    var productCount = await Product.count();
-    var totalPages = Math.ceil(productCount / limit);
 
-    var products = await Product.find({
+    const queryObject = {
       $and: [
         {
           monthlyPrice: req.query.monthlyPrice && {
@@ -37,9 +35,12 @@ const list = async (req, res) => {
           },
         },
       ],
-    })
-      .limit(limit)
-      .skip(skipIndex);
+    }
+    var products = await Product.find(queryObject)
+      .skip(skipIndex)
+      .limit(limit);
+    var productCount = await Product.find(queryObject).count();
+    var totalPages = Math.ceil(productCount / limit);
 
     products.map((product) => {
       product.productImages = product.productImages.map((imgId) => {
@@ -54,8 +55,6 @@ const list = async (req, res) => {
         }
       });
     });
-
-    //console.log("products: ", products);
 
     return res.status(200).json({
       data: products,
