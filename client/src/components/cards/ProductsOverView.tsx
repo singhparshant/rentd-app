@@ -1,5 +1,5 @@
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import ReactPaginate from "react-paginate";
+import { Card, CardContent, CardMedia, Pagination, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import { Link } from "react-router-dom";
 import useProducts from "../../hooks/useProducts";
 import useViewport from "../../hooks/useViewPort";
@@ -18,13 +18,11 @@ const Cards = (props: Props) => {
   const setFilters = useFilters((state: any) => state.setFilters);
   const breakpoint = 550;
 
-  const handlePageClick = (d: any) => {
-    var page = d.selected + 1;
-    setFilters("page", page);
-    //console.log("F", filters.page)
-  };
-
   const { data, loading, error, pages } = useProducts(filters);
+
+  const handlePageClick = (d: any, page: any) => {
+    setFilters("page", page);
+  };
 
   return (
     <>
@@ -70,26 +68,9 @@ const Cards = (props: Props) => {
           })
         )}
       </div>
-      <ReactPaginate
-        previousLabel={"< previous"}
-        nextLabel={"next >"}
-        breakLabel={"..."}
-        pageCount={pages}
-        //marginPagesDisplayed={5}
-        //pageRangeDisplayed={6}
-        onPageChange={handlePageClick}
-        containerClassName={"pagination justify-content-center"}
-        pageClassName={"page-item"}
-        pageLinkClassName={"page-link"}
-        previousClassName={"page-item"}
-        previousLinkClassName={"page-link"}
-        nextClassName={"page-item"}
-        nextLinkClassName={"page-link"}
-        breakClassName={"page-item"}
-        breakLinkClassName={"page-link"}
-        activeClassName={"active"}
-        initialPage={0}
-      />
+      <Box justifyContent={"center"} alignItems="center" display={"flex"}>
+        <Pagination count={pages} defaultPage={1} onChange={handlePageClick} size="large" color="primary"/>
+      </Box>
     </>
   );
 };
