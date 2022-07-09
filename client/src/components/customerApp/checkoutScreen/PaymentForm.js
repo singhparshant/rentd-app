@@ -9,6 +9,7 @@ import Divider from "@mui/material/Divider";
 import { styled } from '@mui/material/styles';
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
+import "./checkout.css";
 
 const CARD_OPTIONS = {
 	iconStyle: "solid",
