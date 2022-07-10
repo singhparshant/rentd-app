@@ -1,8 +1,5 @@
 import {
   Button,
-  Card,
-  CardContent,
-  CardMedia,
   FormControl,
   InputLabel,
   MenuItem,
@@ -12,7 +9,7 @@ import { useEffect, useState } from "react";
 import Carousel1 from "react-material-ui-carousel";
 // import Carousel2 from "react-multi-carousel";
 import Typography from "@material-ui/core/Typography";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
 import { getProductsPath } from "../../../api/requestPaths";
 import useViewport from "../../../hooks/useViewPort";
@@ -108,7 +105,7 @@ export default function ProductDetailsScreen() {
                   borderRadius: "7px",
                 }}
                 key={idx}
-                alt="Could not load image"
+                alt="Could not load."
               />
             );
           })}
