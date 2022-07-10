@@ -25,8 +25,8 @@ const create = async (req, res) => {
         codeOfConduct = req.body.codeOfConduct;
         kycDocs = req.body.KYCDocs;
         //random file names to store in db
-        const codeOfConductFileName = uuid();
-        const kycFileNames = req.body.KYCDocs.map(_ => uuid());
+        const codeOfConductFileName = uuid() + ".pdf";
+        const kycFileNames = req.body.KYCDocs.map(_ => uuid() + ".pdf");
 
         req.body.codeOfConduct = codeOfConductFileName;
         req.body.KYCDocs = kycFileNames;
@@ -38,12 +38,12 @@ const create = async (req, res) => {
         }
 
         //store files in storage/applicationDocuments
-        fs.writeFile(`${__dirname}/../storage/applicationDocuments/${codeOfConductFileName}.pdf`, codeOfConduct, 'base64', function (err) {
+        fs.writeFile(`${__dirname}/../storage/applicationDocuments/${codeOfConductFileName}`, codeOfConduct, 'base64', function (err) {
             console.log(err);
         });
 
         for (let i = 0; i < kycDocs.length; i++) {
-            fs.writeFile(`${__dirname}/../storage/applicationDocuments/${kycFileNames[i]}.pdf`, kycDocs[i], 'base64', function (err) {
+            fs.writeFile(`${__dirname}/../storage/applicationDocuments/${kycFileNames[i]}`, kycDocs[i], 'base64', function (err) {
                 console.log(err);
             });
         }

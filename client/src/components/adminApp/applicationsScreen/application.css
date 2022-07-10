@@ -1,0 +1,32 @@
+.applicationCardsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  width: 100%;
+}
+
+.applicationCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: solid 2px #2b0245;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 10vh;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.applicationCard:hover {
+  transform: scale3d(1.02, 1.02, 1);
+  transition: transform 0.15s ease-in-out;
+}
+
+.applicationImage {
+  height: 8vh;
+  border-radius: 15px;
+}

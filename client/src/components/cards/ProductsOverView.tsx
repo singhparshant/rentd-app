@@ -42,7 +42,12 @@ const Cards = (props: Props) => {
       >
         {loading ? (
           <CircularProgress
-            sx={{ marginLeft: "50%", marginTop: "20px", marginBottom: "20px" }}
+            sx={{
+              marginLeft: "50%",
+              marginTop: "20px",
+              marginBottom: "20px",
+              color: "#2b0245",
+            }}
           />
         ) : (
           data &&

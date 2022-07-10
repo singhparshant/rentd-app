@@ -142,7 +142,7 @@ export default function SignUp() {
       username: userData.username,
       role: userData.role,
       address: userData.address,
-      iban: userData.IBAN,
+      IBAN: userData.IBAN,
       codeOfConduct: "",
       status: "pending",
       KYCDocs: [],
