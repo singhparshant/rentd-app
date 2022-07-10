@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import Categories from "./Categories";
 import Duration from "./Duration";
 import SliderFilter from "./SliderFilter";
@@ -29,16 +28,16 @@ const Sidebar = (props: SidebarProps) => {
       <SliderFilter />
       <AvgRating />
       <Duration />
-      <ProductsPerPage/>
+      <ProductsPerPage />
       <br />
       <div className="resetButton">
-        <Button
-          sx={{ margin: "20px" }}
-          variant="contained"
+        <div
+          className="button"
           onClick={resetFilters}
+          style={{ margin: "10px" }}
         >
           Reset Filters
-        </Button>
+        </div>
       </div>
     </div>
   );

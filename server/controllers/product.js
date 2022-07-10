@@ -34,6 +34,22 @@ const list = async (req, res) => {
             $gte: req.query.avgRating,
           },
         },
+        {
+          $or: [
+            {
+              name: req.query.searchString && {
+                $regex: req.query.searchString,
+                $options: "i",
+              },
+            },
+            {
+              description: req.query.searchString && {
+                $regex: req.query.searchString,
+                $options: "i",
+              },
+            },
+          ],
+        },
       ],
     };
     var products = await Product.find(queryObject).skip(skipIndex).limit(limit);
