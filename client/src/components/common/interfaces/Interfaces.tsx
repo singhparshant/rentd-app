@@ -24,15 +24,6 @@ export interface Order {
   deliveryID: Object;
   Status: String;
 }
-export interface Filter {
-  categories?: string[];
-  monthlyPrice?: number;
-  avgRating?: number;
-  minDuration?: number;
-  page?: number;
-  limit?: number;
-}
-
 export interface UserData {
   userName: string;
   role: String;
@@ -40,9 +31,9 @@ export interface UserData {
 
 export interface Filter {
   categories?: string[];
-  maxPrice?: Number;
-  reviewed?: boolean;
-  duration?: Number;
+  monthlyPrice?: number;
+  avgRating?: number;
+  minDuration?: number;
   page?: number;
   limit?: number;
   searchString?: string;

@@ -1,5 +1,5 @@
 import Drawer from "@material-ui/core/Drawer";
-import { Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useState } from "react";
 import ProductsOverView from "../../cards/ProductsOverView";
 import Sidebar from "./Sidebar";
@@ -7,15 +7,19 @@ import Sidebar from "./Sidebar";
 type Props = {};
 
 const MobileComponent = (props: Props) => {
-  const [drawerStatus, setDrawerStatus] = useState(false);
+  const [drawerStatus, setDrawerStatus] = useState(true);
   const toggleDrawer = () => {
-    setDrawerStatus(!drawerStatus);
+    // setDrawerStatus(!drawerStatus);
   };
   return (
     <div>
-      <Button variant="contained" onClick={toggleDrawer}>
-        Filters
-      </Button>
+      <div
+        className="button"
+        onClick={toggleDrawer}
+        style={{ width: "min-content", position: "relative", left: "40%" }}
+      >
+        <Typography> Filters</Typography>
+      </div>
       <ProductsOverView />
       <Drawer
         anchor={"left"}
