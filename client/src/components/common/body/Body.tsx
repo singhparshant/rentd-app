@@ -1,12 +1,10 @@
 import useViewport from "../../../hooks/useViewPort";
-import ProductsOverView from "../../cards/ProductsOverView";
 import "./body.css";
+import ProductsOverview from "../../productsOverview/ProductsOverview";
 import MobileComponent from "./MobileComponent";
 import Sidebar from "./Sidebar";
 
-interface BodyProps {}
-
-const Body = (props: BodyProps) => {
+const Body = () => {
   const { width } = useViewport();
   const breakpoint = 550;
 
@@ -18,7 +16,7 @@ const Body = (props: BodyProps) => {
             <Sidebar />
           </div>
           <div className="productsContainer">
-            <ProductsOverView />
+            <ProductsOverview />
           </div>
         </div>
       ) : (
