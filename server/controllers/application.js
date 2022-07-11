@@ -3,10 +3,36 @@ const fs = require("fs");
 const { v4: uuid } = require('uuid');
 const { sendApplicationEmail } = require("../utils/applicationEmail");
 
-//TODO: convert files to base64
+//return all applications (possibly filtering by status as query paramerter)
 const list = async (req, res) => {
+
     try {
-        let applications = await Application.find();
+        const filter = (req.query.status) ? { status: req.query.status } : {};
+
+        let applications = await Application.find(filter);
+
+        applications.forEach((application) => {
+            //convert files referenced by id to base64
+            try {
+                application.codeOfConduct = fs.readFileSync(
+                    `${__dirname}/../storage/applicationDocuments/${application.codeOfConduct}`,
+                    "base64"
+                );
+
+                application.KYCDocs = application.KYCDocs.map((kycDocId) => {
+
+                    return fs.readFileSync(
+                        `${__dirname}/../storage/applicationDocuments/${kycDocId}`,
+                        "base64"
+                    );
+                })
+            }
+            catch (error) {
+                console.log(error);
+                return "";
+            }
+        })
+
         res.status(200).json({
             data: applications,
             success: true

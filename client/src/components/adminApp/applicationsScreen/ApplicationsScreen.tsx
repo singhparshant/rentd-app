@@ -4,7 +4,7 @@ import { useApplications } from "../../../hooks/useApplications";
 import ApplicationsOverview from "./ApplicationsOverview";
 
 export default function ApplicationsScreen() {
-  const { applications, loading, error } = useApplications();
+  const { applications, loading, error } = useApplications("pending");
 
   console.log("applications", applications);
 

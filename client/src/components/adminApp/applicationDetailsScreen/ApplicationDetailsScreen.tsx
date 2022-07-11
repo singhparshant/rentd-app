@@ -1,15 +1,31 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { parseDate } from "../../../utils/functions";
 import { Application } from "../../common/interfaces/Interfaces";
 import "./applicationDetails.css";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import acceptIcon from "../../../assets/accept.png";
 import rejectIcon from "../../../assets/reject.png";
+import axiosInstance from "../../../api/axios";
+import toast from "react-hot-toast";
 
 export default function ApplicationDetailsScreen() {
   const location = useLocation();
+  const history = useHistory();
   const application: Application = location.state as Application;
+
+  const handleStatusUpdate = (status: string) => {
+    axiosInstance
+      .post(`/applications/updateStatus/${application._id}?status=${status}`)
+      .then(() => {
+        toast.success("status updated!");
+        history.push("/applications");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("something went wrong!");
+      });
+  };
 
   return (
     <div className="applicationDetailsContainer">
@@ -53,21 +69,32 @@ export default function ApplicationDetailsScreen() {
               }}
             >
               File {index + 1}
-              <FileDownloadOutlinedIcon
-                sx={{ marginLeft: 1, cursor: "pointer" }}
-                titleAccess="download"
-              />
+              <a
+                href={"data:application/pdf;base64," + doc}
+                download={`File ${index + 1}.pdf`}
+                target="_self"
+                style={{
+                  color: "black",
+                  display: "flex",
+                }}
+              >
+                {" "}
+                <FileDownloadOutlinedIcon
+                  sx={{ marginLeft: 1, cursor: "pointer" }}
+                  titleAccess="download"
+                />
+              </a>
             </span>
           ))}
         </div>
       </div>
 
       <div className="buttons">
-        <div className="button">
+        <div className="button" onClick={() => handleStatusUpdate("accepted")}>
           <img src={acceptIcon} alt="" className="icon" />
           Accept
         </div>
-        <div className="button">
+        <div className="button" onClick={() => handleStatusUpdate("rejected")}>
           <img src={rejectIcon} alt="" className="icon" />
           Reject
         </div>

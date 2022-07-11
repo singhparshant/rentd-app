@@ -24,18 +24,20 @@ export default function ApplicationsOverview({
           style={{ textDecoration: "none", width: "80%", color: "black" }}
         >
           <div key={index} className="applicationCard">
-            <p className="applicationTitle">Application {index + 1}</p>
+            <p>Application {index + 1}</p>
+
             <div>
-              <p className="applicationTitle">
-                <b>applicant:</b> {application.email}
-              </p>
+              <div style={{ paddingBottom: 5 }}>
+                <b>email:</b> {application.email}
+              </div>
               {application.createdAt && (
-                <div className="applicationTitle">
+                <span>
                   <b>created at: </b>
                   {parseDate(new Date(application.createdAt))}
-                </div>
+                </span>
               )}
             </div>
+
             <img className="applicationImage" src={applicationImage} alt="" />
           </div>
         </Link>
