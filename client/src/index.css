@@ -1,19 +1,21 @@
 body {
-	margin: 0;
-  }
-  
+  margin: 0;
+}
+
 .button {
-background-color: #ffb93f;
-color: black;
-padding: 12px;
-border-radius: 10px;
-cursor: pointer;
-margin: 10px;
-border-bottom: #ffb93f solid 5px;
+  display: flex;
+  align-items: center;
+  background-color: #ffb93f;
+  color: black;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 10px;
+  border-bottom: #ffb93f solid 5px;
 }
 
 .active {
-border-bottom: white;
-border-bottom-width: 5px;
-border-bottom-style: solid;
+  border-bottom: white;
+  border-bottom-width: 5px;
+  border-bottom-style: solid;
 }

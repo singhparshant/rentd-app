@@ -3,10 +3,36 @@ const fs = require("fs");
 const { v4: uuid } = require('uuid');
 const { sendApplicationEmail } = require("../utils/applicationEmail");
 
-//TODO: convert files to base64
+//return all applications (possibly filtering by status as query paramerter)
 const list = async (req, res) => {
+
     try {
-        let applications = await Application.find();
+        const filter = (req.query.status) ? { status: req.query.status } : {};
+
+        let applications = await Application.find(filter);
+
+        applications.forEach((application) => {
+            //convert files referenced by id to base64
+            try {
+                application.codeOfConduct = fs.readFileSync(
+                    `${__dirname}/../storage/applicationDocuments/${application.codeOfConduct}`,
+                    "base64"
+                );
+
+                application.KYCDocs = application.KYCDocs.map((kycDocId) => {
+
+                    return fs.readFileSync(
+                        `${__dirname}/../storage/applicationDocuments/${kycDocId}`,
+                        "base64"
+                    );
+                })
+            }
+            catch (error) {
+                console.log(error);
+                return "";
+            }
+        })
+
         res.status(200).json({
             data: applications,
             success: true
@@ -25,8 +51,8 @@ const create = async (req, res) => {
         codeOfConduct = req.body.codeOfConduct;
         kycDocs = req.body.KYCDocs;
         //random file names to store in db
-        const codeOfConductFileName = uuid();
-        const kycFileNames = req.body.KYCDocs.map(_ => uuid());
+        const codeOfConductFileName = uuid() + ".pdf";
+        const kycFileNames = req.body.KYCDocs.map(_ => uuid() + ".pdf");
 
         req.body.codeOfConduct = codeOfConductFileName;
         req.body.KYCDocs = kycFileNames;
@@ -38,12 +64,12 @@ const create = async (req, res) => {
         }
 
         //store files in storage/applicationDocuments
-        fs.writeFile(`${__dirname}/../storage/applicationDocuments/${codeOfConductFileName}.pdf`, codeOfConduct, 'base64', function (err) {
+        fs.writeFile(`${__dirname}/../storage/applicationDocuments/${codeOfConductFileName}`, codeOfConduct, 'base64', function (err) {
             console.log(err);
         });
 
         for (let i = 0; i < kycDocs.length; i++) {
-            fs.writeFile(`${__dirname}/../storage/applicationDocuments/${kycFileNames[i]}.pdf`, kycDocs[i], 'base64', function (err) {
+            fs.writeFile(`${__dirname}/../storage/applicationDocuments/${kycFileNames[i]}`, kycDocs[i], 'base64', function (err) {
                 console.log(err);
             });
         }
