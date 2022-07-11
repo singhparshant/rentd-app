@@ -53,10 +53,20 @@ export default function ApplicationDetailsScreen() {
         <div>
           <div style={{ display: "flex" }}>
             <span className="label"> Code of conduct</span>
-            <FileDownloadOutlinedIcon
-              sx={{ marginLeft: 1, cursor: "pointer" }}
-              titleAccess="download"
-            />
+            <a
+              href={"data:application/pdf;base64," + application.codeOfConduct}
+              download={`code of conduct.pdf`}
+              target="_self"
+              style={{
+                color: "black",
+                display: "flex",
+              }}
+            >
+              <FileDownloadOutlinedIcon
+                sx={{ marginLeft: 1, cursor: "pointer" }}
+                titleAccess="download"
+              />
+            </a>
           </div>
           <p className="label">KYC Docs:</p>
           {application.KYCDocs.map((doc, index) => (
@@ -78,7 +88,6 @@ export default function ApplicationDetailsScreen() {
                   display: "flex",
                 }}
               >
-                {" "}
                 <FileDownloadOutlinedIcon
                   sx={{ marginLeft: 1, cursor: "pointer" }}
                   titleAccess="download"

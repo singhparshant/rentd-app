@@ -15,33 +15,45 @@ export default function ApplicationsOverview({
   return (
     <div className="applicationCardsContainer">
       <h1>Pending Applications</h1>
-      {applications.map((application, index) => (
-        <Link
-          to={{
-            pathname: `/applications/${application._id}`,
-            state: application,
-          }}
-          style={{ textDecoration: "none", width: "80%", color: "black" }}
-        >
-          <div key={index} className="applicationCard">
-            <p>Application {index + 1}</p>
+      {applications.length > 0 ? (
+        <>
+          {applications.map((application, index) => (
+            <Link
+              to={{
+                pathname: `/applications/${application._id}`,
+                state: application,
+              }}
+              style={{ textDecoration: "none", width: "80%", color: "black" }}
+            >
+              <div key={index} className="applicationCard">
+                <p>Application {index + 1}</p>
 
-            <div>
-              <div style={{ paddingBottom: 5 }}>
-                <b>email:</b> {application.email}
+                <div>
+                  <div style={{ paddingBottom: 5 }}>
+                    <b>email:</b> {application.email}
+                  </div>
+                  {application.createdAt && (
+                    <span>
+                      <b>created at: </b>
+                      {parseDate(new Date(application.createdAt))}
+                    </span>
+                  )}
+                </div>
+
+                <img
+                  className="applicationImage"
+                  src={applicationImage}
+                  alt=""
+                />
               </div>
-              {application.createdAt && (
-                <span>
-                  <b>created at: </b>
-                  {parseDate(new Date(application.createdAt))}
-                </span>
-              )}
-            </div>
-
-            <img className="applicationImage" src={applicationImage} alt="" />
-          </div>
-        </Link>
-      ))}
+            </Link>
+          ))}
+        </>
+      ) : (
+        <div style={{ fontSize: 20 }}>
+          currently, you don't have any pending applications
+        </div>
+      )}
     </div>
   );
 }
