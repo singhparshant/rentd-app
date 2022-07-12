@@ -87,6 +87,7 @@ const list = async (req, res) => {
 };
 
 const create = async (req, res) => {
+  console.log("IM IN CREATE PA")
   const token = req.cookies["jwt"];
   if (!token) return res.status(403).send("You are not logged in.");
   try {
@@ -106,6 +107,7 @@ const create = async (req, res) => {
 
   try {
     if (Array.isArray(req.body)) {
+      console.log("IM IN line 94 PA")
       Product.insertMany(req.body, { ordered: false })
         .then(function (product) {
           res.status(200).json({
@@ -117,6 +119,7 @@ const create = async (req, res) => {
           console.log(error);
         });
     } else {
+      console.log("IM IN line 106 PA")
       let product = new Product(req.body);
       product = await product.save();
       res.status(200).json({
