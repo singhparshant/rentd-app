@@ -1,7 +1,7 @@
 import { IconType } from "react-icons";
 
 export interface Product {
-  _id: string;
+  _id?: number;
   supplierId: string;
   name: string;
   monthlyPrice: number;
@@ -26,15 +26,6 @@ export interface Order {
   deliveryID: Object;
   Status: String;
 }
-export interface Filter {
-  categories?: string[];
-  monthlyPrice?: number;
-  avgRating?: number;
-  minDuration?: number;
-  page?: number;
-  limit?: number;
-}
-
 export interface UserData {
   userName: string;
   role: String;
@@ -42,23 +33,25 @@ export interface UserData {
 
 export interface Filter {
   categories?: string[];
-  maxPrice?: Number;
-  reviewed?: boolean;
-  duration?: Number;
+  monthlyPrice?: number;
+  avgRating?: number;
+  minDuration?: number;
   page?: number;
   limit?: number;
   searchString?: string;
 }
 
 export interface Application {
+  _id?: string;
   email: string;
   username: string;
   role: "customer" | "supplier";
   address: string;
-  iban: string;
+  IBAN: string;
   codeOfConduct: string;
   status: "pending" | "accepted" | "rejected";
   KYCDocs: string[];
+  createdAt?: string;
 }
 export interface Customer {}
 

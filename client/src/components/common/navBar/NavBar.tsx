@@ -1,12 +1,13 @@
-import React from "react";
-import "./NavBar.css";
-import logo from "../../../assets/logo.png";
-import { Link, useHistory, useLocation } from "react-router-dom";
 import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import useAuthState from "../../../zustand/useAuthState";
-import Cart from "./Cart";
+import React from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
+import logo from "../../../assets/logo.png";
+import useAuthState from "../../../zustand/useAuthState";
+import useFilters from "../../../zustand/useFilters";
+import Cart from "./Cart";
+import "./NavBar.css";
 
 interface NabBarProps {
   user: any;
@@ -43,7 +44,19 @@ const NavBar = () => {
 const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
   const location = useLocation();
   const filter = createFilterOptions<any>();
-  const [value, setValue] = React.useState<any | null>(null);
+  const filters = useFilters((state: any) => state.filters);
+  const setFilters = useFilters((state: any) => state.setFilters);
+  const [searchString, setSearchString] = React.useState<any>(null);
+  const history = useHistory();
+
+  console.log("Filters: ", filters);
+  const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setFilters("searchString", searchString);
+      history.push("/");
+    }
+    setSearchString(searchString);
+  };
 
   return (
     <nav className="navbar">
@@ -52,15 +65,13 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
       </Link>
       <React.Fragment>
         <Autocomplete
-          // onChange={handlSearchChange}
-          style={{ backgroundColor: "white", borderRadius: 7 }}
-          value={value}
+          value={searchString || null}
           onChange={(event: any, newValue: any) => {
-            setValue(newValue);
+            setSearchString(newValue);
           }}
+          style={{ backgroundColor: "white", borderRadius: 7 }}
           filterOptions={(options, params) => {
             const filtered = filter(options, params);
-
             return filtered;
           }}
           id="free-solo-dialog-demo"
@@ -78,10 +89,11 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
           selectOnFocus
           clearOnBlur
           handleHomeEndKeys
+          onKeyUp={handleSubmit}
           renderOption={(props: any, option: any) => (
             <li {...props}>{option.name}</li>
           )}
-          sx={{ width: 600, marginRight: 2, marginLeft: 2 }}
+          sx={{ width: 600, marginRight: 2, marginLeft: 2, padding: 0.3 }}
           freeSolo
           renderInput={(params: any) => (
             <TextField {...params} label="Search for products" />
@@ -144,6 +156,7 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
 
 const SupplierNavBar = ({ user, onLogout }: NabBarProps) => {
   const location = useLocation();
+  const resetFilters = useFilters((state: any) => state.resetFilters);
 
   const buttons = [
     {
@@ -155,7 +168,7 @@ const SupplierNavBar = ({ user, onLogout }: NabBarProps) => {
   return (
     <nav className="navbar">
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Link to="/">
+        <Link onClick={resetFilters} to="/">
           <img className="logo" src={logo} alt="logo" />
         </Link>
 

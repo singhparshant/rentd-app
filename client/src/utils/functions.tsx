@@ -12,3 +12,9 @@ export const readFileContent = async (file: any) => {
     }
   });
 };
+
+export const parseDate = (date: any) => {
+  const year = date.getFullYear().toString();
+  const dateString = date.toString();
+  return dateString.substring(0, dateString.indexOf(year) + year.length);
+};

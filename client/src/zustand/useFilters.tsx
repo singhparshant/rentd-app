@@ -17,8 +17,6 @@ const useFilters = create<FilterStore>((set) => ({
     set((state: any) => ({
       filters: {},
     })),
-  clearSearch: () =>
-    set((state: any) => ({ filters: { ...state.filters, search: "" } })),
 }));
 
 export default useFilters;

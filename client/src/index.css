@@ -16,6 +16,8 @@ body {
 }
 
 .button {
+  display: flex;
+  align-items: center;
   background-color: #ffb93f;
   color: black;
   padding: 12px;
