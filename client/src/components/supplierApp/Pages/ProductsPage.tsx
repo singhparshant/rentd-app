@@ -12,7 +12,7 @@ export default function ProductsPage() {
         <div className="mainboard-div">
           <h2 className="dashboard-heading">Your Products</h2>
           {/* <CustomTable /> */}
-          <ProductsTable />
+          {/* <ProductsTable /> */}
         </div>
         ) : <Redirect to="/login" />}
     </>
