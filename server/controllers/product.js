@@ -50,6 +50,11 @@ const list = async (req, res) => {
             },
           ],
         },
+        {
+          discount: req.query.hasDiscount && {
+            $gt: 0,
+          },
+        },
       ],
     };
 
