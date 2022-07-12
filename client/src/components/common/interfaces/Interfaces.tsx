@@ -37,6 +37,7 @@ export interface Filter {
   page?: number;
   limit?: number;
   searchString?: string;
+  sortBy?: string;
 }
 
 export interface Application {

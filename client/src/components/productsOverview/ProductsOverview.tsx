@@ -22,8 +22,6 @@ export default function ProductsOverview() {
 
   const { products, loading, pages } = useProducts(filters);
 
-  console.log("data", products);
-
   const handlePageClick = (d: any, page: any) => {
     setFilters("page", page);
   };

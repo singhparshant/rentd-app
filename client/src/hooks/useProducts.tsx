@@ -16,6 +16,7 @@ const useProducts = (filters: Filter) => {
         const response: any = await axiosInstance.get(getProductsPath, {
           params: filters,
         });
+
         setProducts(response.data.data);
         setPages(response.data.paging.pages);
       } catch (error: any) {
