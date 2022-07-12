@@ -6,7 +6,8 @@
 }
 
 .title,
-.resetButton {
+.resetButton,
+.dicountCheck {
   display: flex;
   justify-content: center;
   align-items: center;

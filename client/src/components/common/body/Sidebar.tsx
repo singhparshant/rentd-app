@@ -1,8 +1,7 @@
 import Categories from "./Categories";
 import Duration from "./Duration";
 import SliderFilter from "./SliderFilter";
-
-import { useEffect } from "react";
+import { Discount } from "./Discount";
 import useFilters from "../../../zustand/useFilters";
 import AvgRating from "./AvgRating";
 import ProductsPerPage from "./ProductsPerPage";
@@ -23,6 +22,7 @@ const Sidebar = () => {
       <Duration />
       <ProductsPerPage />
       <Sort />
+      <Discount />
       <br />
       <div className="resetButton">
         <div

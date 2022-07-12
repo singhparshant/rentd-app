@@ -160,7 +160,10 @@ export default function ProductDetailsScreen() {
         <div style={{ marginLeft: "20%" }}>
           <label style={{ fontSize: "20px" }}>Total Amount: &nbsp;</label>
           <strong style={{ color: "green", fontSize: 30 }}>
-            €{product.monthlyPrice * rentalDuration}
+            €
+            {product.monthlyPrice *
+              rentalDuration *
+              (1 - 0.01 * product.discount)}
           </strong>
           <br />
           <label style={{ fontSize: "10px" }}>

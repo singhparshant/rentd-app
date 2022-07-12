@@ -38,6 +38,7 @@ export interface Filter {
   limit?: number;
   searchString?: string;
   sortBy?: string;
+  hasDiscount?: boolean;
 }
 
 export interface Application {
