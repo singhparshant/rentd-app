@@ -1,11 +1,13 @@
-.sidebar{
-    display: "flex";
-    flex-direction: column;
-    justify-content: "space-between";
+.sidebar {
+  display: "flex";
+  flex-direction: column;
+  justify-content: "space-between";
+  height: 100%;
 }
 
-.title, .resetButton{
-    display: flex;
-    justify-content: center;
-    align-items: center,
+.title,
+.resetButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

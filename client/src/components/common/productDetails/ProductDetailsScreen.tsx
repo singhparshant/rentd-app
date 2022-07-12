@@ -3,6 +3,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Rating,
   Select,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -41,18 +42,18 @@ const responsive = {
 };
 
 export default function ProductDetailsScreen() {
-  const { id } = useParams<any>();
-
   const location = useLocation();
   const [qty, setQty] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const { width } = useViewport();
   const [rentalDuration, setRentalDuration] = useState<number>(0);
   const [suggestedProducts, setSuggestedProducts] = useState<any>({});
+  const [userRating, setUserRating] = useState(0);
   const { state } = location as LocationInterface;
   const product: Product = state.fromProductsPage;
   const breakpoint = 650;
 
+  console.log("user rating", userRating);
   interface Ioption {
     label: string;
     value: number;
@@ -81,7 +82,6 @@ export default function ProductDetailsScreen() {
     getProductsByCategory();
   }, []);
 
-  console.log("sugg: ", suggestedProducts);
   return (
     <div
       className="productdetailsScreen"
@@ -91,7 +91,7 @@ export default function ProductDetailsScreen() {
       }}
     >
       <div className="carouselContainer">
-        <Carousel1 sx={{}}>
+        <Carousel1>
           {product.productImages.map((image, idx) => {
             return (
               <img
@@ -110,20 +110,32 @@ export default function ProductDetailsScreen() {
             );
           })}
         </Carousel1>
+        <div className="ratingContainer">
+          <div>Rate:</div>
+          <Rating
+            name="half-rating"
+            precision={0.5}
+            value={userRating}
+            onChange={(e, newValue) => setUserRating(newValue || 0)}
+          />
+        </div>
       </div>
       <div className="detailsContainer">
         <Typography variant="h4">{product.name}</Typography>
         <br />
         <Typography variant="h5" style={{ color: "green" }}>
-          €{product.monthlyPrice}/month &nbsp;&nbsp;{" "}
-          {[...Array(Math.ceil(product.avgRating ? product.avgRating : 0))].map(
-            (el, idx) => (
-              <span>🌟</span>
-            )
-          )}
+          €{product.monthlyPrice}/month &nbsp;&nbsp;
         </Typography>
-        <hr />
-        <Typography variant="body1">{product.description}</Typography>
+        <Rating
+          name="half-rating"
+          value={product.avgRating}
+          precision={0.5}
+          readOnly
+        />
+
+        <Typography style={{ marginTop: 20 }} variant="body1">
+          {product.description}
+        </Typography>
       </div>
       <div className="functionalitiesContainer">
         <div style={{ marginLeft: "20%" }}>
@@ -132,7 +144,7 @@ export default function ProductDetailsScreen() {
             €{product.monthlyPrice * rentalDuration}
           </strong>
           <br />
-          <label style={{ fontSize: "8px" }}>
+          <label style={{ fontSize: "10px" }}>
             *Amount will be deducted on monthly basis
           </label>
           <br />
@@ -166,55 +178,6 @@ export default function ProductDetailsScreen() {
             Add to Cart
           </Button>
         </FormControl>
-      </div>
-
-      <div style={{ height: "150px", width: "100%" }}>
-        {/* <Carousel2 responsive={responsive}> */}
-        {/* {suggestedProducts &&
-            suggestedProducts.data &&
-            suggestedProducts.data.data &&
-            suggestedProducts.data.data.map((product: Product, idx: any) => {
-              return (
-                <div
-                  style={{
-                    height: "50px",
-                    backgroundColor: "green",
-                    width: "50px",
-                    display: "flex",
-                  }}
-                > */}
-        {/* <Card sx={{ margin: "8px", width: "150px" }}>
-                    <Link
-                      to={{
-                        pathname: `/products/${product._id}`,
-                        state: { fromProductsPage: product },
-                      }}
-                      style={{ textDecoration: "none" }}
-                      key={idx}
-                    >
-                      <div style={{ margin: 5, border: 20 }}>
-                        <CardMedia
-                          component="img"
-                          src={
-                            `data:image/png;base64,` + product.productImages[0]
-                          }
-                          style={{ maxHeight: 150 }}
-                          alt="Could not load image"
-                        />
-                        <CardContent>
-                          <Typography variant="body2" color="primary">
-                            €{product.monthlyPrice}
-                            <br></br>
-                            {product.name}
-                          </Typography>
-                        </CardContent>
-                      </div>
-                    </Link>
-                  </Card> */}
-        {/* </div>
-              );
-            })}
-        </Carousel2> */}
       </div>
     </div>
   );

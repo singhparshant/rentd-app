@@ -69,6 +69,7 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
           onChange={(event: any, newValue: any) => {
             setSearchString(newValue);
           }}
+          className="autocomplete"
           style={{ backgroundColor: "white", borderRadius: 7 }}
           filterOptions={(options, params) => {
             const filtered = filter(options, params);

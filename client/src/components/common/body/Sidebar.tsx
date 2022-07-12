@@ -9,9 +9,7 @@ import ProductsPerPage from "./ProductsPerPage";
 import "./sidebar.css";
 import { Sort } from "./Sort";
 
-interface SidebarProps {}
-
-const Sidebar = (props: SidebarProps) => {
+const Sidebar = () => {
   const resetFilters = useFilters((state: any) => state.resetFilters);
 
   return (
