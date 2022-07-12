@@ -1,15 +1,13 @@
 import Drawer from "@material-ui/core/Drawer";
 import { Typography } from "@mui/material";
 import { useState } from "react";
-import ProductsOverView from "../../cards/ProductsOverView";
+import ProductsOverview from "../../productsOverview/ProductsOverview";
 import Sidebar from "./Sidebar";
 
-type Props = {};
-
-const MobileComponent = (props: Props) => {
-  const [drawerStatus, setDrawerStatus] = useState(true);
+const MobileComponent = () => {
+  const [drawerStatus, setDrawerStatus] = useState(false);
   const toggleDrawer = () => {
-    // setDrawerStatus(!drawerStatus);
+    setDrawerStatus(!drawerStatus);
   };
   return (
     <div>
@@ -20,7 +18,7 @@ const MobileComponent = (props: Props) => {
       >
         <Typography> Filters</Typography>
       </div>
-      <ProductsOverView />
+      <ProductsOverview />
       <Drawer
         anchor={"left"}
         onClose={toggleDrawer}

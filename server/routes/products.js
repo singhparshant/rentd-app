@@ -11,5 +11,6 @@ router.put("/:id", ProductController.update);
 
 router.delete("/:id", ProductController.remove);
 
+router.post("/updateRating", ProductController.updateRating);
 
 module.exports = router;

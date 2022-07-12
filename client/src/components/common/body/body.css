@@ -1,14 +1,16 @@
-.bodyContainer{
-    height: 100vh;
-    display: flex;
-    padding: 5px;
+.bodyContainer {
+  height: 100vh;
+  display: flex;
+  padding: 5px;
 }
 
-.sideBarContainer{
-    width: 20%; 
-    background-color: whitesmoke
+.sideBarContainer {
+  width: 20%;
+  background-color: whitesmoke;
+  position: sticky;
+  top: 0px;
+  left: 0px;
 }
-
-.productsContainer{
-    width: 80%;
+.productsContainer {
+  width: 80%;
 }

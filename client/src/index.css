@@ -1,3 +1,6 @@
+* {
+  font-family: "Ubuntu" !important;
+}
 body {
   margin: 0;
 }
@@ -17,10 +20,11 @@ body {
 
 .button {
   display: flex;
+  justify-content: center;
   align-items: center;
   background-color: #ffb93f;
   color: black;
-  padding: 12px;
+  padding: 10px;
   border-radius: 10px;
   cursor: pointer;
   margin: 10px;

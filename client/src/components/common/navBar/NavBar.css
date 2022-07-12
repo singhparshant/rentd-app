@@ -5,16 +5,20 @@
   height: 70px;
   background-color: #2b0245;
   opacity: 85%;
+  background-image: linear-gradient(
+    to right top,
+    #ffb93f,
+    #ec7344,
+    #bd3650,
+    #7b0753,
+    #2b0245
+  );
 }
 
 .logo {
-  height: 65px;
+  height: 70px;
   cursor: pointer;
   border-width: 2px;
-  border-radius: 10px;
-  margin-top: 4px;
-  border-style: solid;
-  border-color: #ffb93f;
 }
 .greeting {
   font-size: 20px;

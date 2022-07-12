@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
-
+const util = require("util")
 const Product = require("../models/product");
 
 const list = async (req, res) => {
@@ -50,11 +50,30 @@ const list = async (req, res) => {
             },
           ],
         },
+        {
+          discount: req.query.hasDiscount === "true" ? {
+            $gt: 0,
+          } : undefined
+        },
       ],
     };
-    var products = await Product.find(queryObject).skip(skipIndex).limit(limit);
-    var productCount = await Product.find(queryObject).count();
-    var totalPages = Math.ceil(productCount / limit);
+
+    console.log("queryObj", util.inspect(queryObject, { showHidden: false, depth: null, colors: true }));
+
+    let sortObject = {}
+    if (req.query.sortBy === "price")
+      sortObject = { monthlyPrice: 1 }
+    else if (req.query.sortBy === "name")
+      sortObject = { name: 1 }
+
+    let products = await Product.find(queryObject)
+      .collation({ locale: "en" })
+      .sort(sortObject)
+      .skip(skipIndex)
+      .limit(limit);
+
+    let productCount = await Product.find(queryObject).count();
+    let totalPages = Math.ceil(productCount / limit);
 
     products.map((product) => {
       product.productImages = product.productImages.map((imgId) => {
@@ -224,4 +243,21 @@ const remove = async (req, res) => {
     });
 };
 
-module.exports = { list, create, update, remove };
+const updateRating = async (req, res) => {
+  try {
+    console.log("body", req.body)
+    const { productId, rating } = req.body;
+    const product = await Product.findById(productId);
+    const numberRatings = product.numberRatings || 0;
+    const avgRating = product.avgRating || 0;
+    product.avgRating = (avgRating * numberRatings + rating) / (numberRatings + 1)
+    product.numberRatings = numberRatings + 1;
+    product.save();
+    res.status(200).send({ "message": "rating updated" });
+
+  } catch (error) {
+    res.status(500).send({ "message": "could not update rating" });
+  }
+}
+
+module.exports = { list, create, update, remove, read, updateRating };

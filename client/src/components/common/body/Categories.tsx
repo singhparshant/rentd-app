@@ -9,11 +9,10 @@ import {
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axiosInstance from "../../../api/axios";
 import useFilters from "../../../zustand/useFilters";
 import { Filter } from "../interfaces/Interfaces";
-
-const categories = ["Mobility", "Furniture", "Household", "Sports"];
 
 function getStyles(
   category: string,
@@ -34,6 +33,17 @@ const Categories = () => {
   const filters = useFilters<Filter>((state: any) => state.filters);
   const setFilters = useFilters((state: any) => state.setFilters);
 
+  const [categories, setCategories] = useState([]);
+
+  //fetch categories dynamically
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await axiosInstance.get("/categories");
+      setCategories(response.data.map((cat: any) => cat.name));
+    };
+    fetchCategories();
+  }, []);
+
   const handleChange = (
     event: SelectChangeEvent<typeof filters.categories>
   ) => {
@@ -42,7 +52,6 @@ const Categories = () => {
       target: { name },
     } = event;
 
-    // setSelectedCategories(typeof value === "string" ? value.split(",") : value);
     setFilters(name, value);
   };
 

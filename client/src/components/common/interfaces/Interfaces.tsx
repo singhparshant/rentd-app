@@ -39,6 +39,8 @@ export interface Filter {
   page?: number;
   limit?: number;
   searchString?: string;
+  sortBy?: string;
+  hasDiscount?: boolean;
 }
 
 export interface Application {

@@ -1,42 +1,31 @@
-import { Rating } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import useFilters from "../../../zustand/useFilters";
 
-type Props = {};
-
-interface Ioption {
-  label: string;
-  value: number;
-}
-
-const options: Ioption[] = [
-  { label: "⭐", value: 1 },
-  { label: "⭐⭐", value: 2 },
-  { label: "⭐⭐⭐", value: 3 },
-  { label: "⭐⭐⭐⭐", value: 4 },
-  { label: "⭐⭐⭐⭐⭐", value: 5 },
-];
-
-const AvgRating = (props: Props) => {
+export const Sort = () => {
   const filters = useFilters((state: any) => state.filters);
   const setFilters = useFilters((state: any) => state.setFilters);
   const handleChange = (e: SelectChangeEvent) => {
     setFilters(e.target.name, e.target.value);
   };
 
+  const options = [
+    { label: "Price", value: "price" },
+    { label: "Name", value: "name" },
+  ];
+
   return (
     <FormControl variant="outlined" sx={{ width: "90%", margin: "10px" }}>
-      <InputLabel id="test-select-label">Min. Avg. Rating</InputLabel>
+      <InputLabel id="test-select-label">Sort by</InputLabel>
       <Select
-        value={filters.avgRating || null}
-        label={"Min. Avg. Rating"}
+        value={filters.sortBy || null}
+        label={"Sort by"}
         onChange={handleChange}
-        name="avgRating"
+        name="sortBy"
       >
-        {options.map((option: Ioption, index) => {
+        {options.map((option, index) => {
           return (
             <MenuItem key={index} value={option.value}>
               {option.label}
@@ -47,5 +36,3 @@ const AvgRating = (props: Props) => {
     </FormControl>
   );
 };
-
-export default AvgRating;

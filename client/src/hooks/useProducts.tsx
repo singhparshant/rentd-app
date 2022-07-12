@@ -5,7 +5,7 @@ import { Filter } from "../components/common/interfaces/Interfaces";
 
 const useProducts = (filters: Filter) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<any>([]);
+  const [products, setProducts] = useState<any>([]);
   const [error, setError] = useState<any>(null);
   const [pages, setPages] = useState(0);
 
@@ -16,7 +16,8 @@ const useProducts = (filters: Filter) => {
         const response: any = await axiosInstance.get(getProductsPath, {
           params: filters,
         });
-        setData(response);
+
+        setProducts(response.data.data);
         setPages(response.data.paging.pages);
       } catch (error: any) {
         setError(error);
@@ -25,6 +26,6 @@ const useProducts = (filters: Filter) => {
     };
     fetchData();
   }, [filters]);
-  return { data, loading, error, pages };
+  return { products, loading, error, pages };
 };
 export default useProducts;

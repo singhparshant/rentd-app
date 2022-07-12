@@ -37,6 +37,7 @@ const SliderFilter = () => {
 
   return (
     <div style={{ width: "85%", margin: "20px" }}>
+      <span style={{ fontFamily: "Helvetica Neue" }}>Maximum price</span>
       <Slider
         min={100}
         max={500}
