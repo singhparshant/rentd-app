@@ -1,3 +1,5 @@
+import { IconType } from "react-icons";
+
 export interface Product {
   _id?: number;
   supplierId: string;
@@ -58,4 +60,13 @@ export interface OrderItem {
   product: Product;
   quantity: number;
   rentalDuration: number;
+}
+
+export interface DashboardCardProps {
+  title: string;
+  color: Object;
+  barValue: number;
+  value: String; 
+  png: IconType;
+  series: Object[];
 }
