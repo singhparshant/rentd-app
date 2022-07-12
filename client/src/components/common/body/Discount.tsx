@@ -6,6 +6,7 @@ export const Discount = () => {
   const setFilters = useFilters((state: any) => state.setFilters);
 
   const handleChange = (e: any) => {
+    console.log("checked", e.target.checked);
     setFilters(e.target.name, e.target.checked);
   };
 

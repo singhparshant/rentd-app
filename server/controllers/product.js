@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
-
+const util = require("util")
 const Product = require("../models/product");
 
 const list = async (req, res) => {
@@ -51,12 +51,14 @@ const list = async (req, res) => {
           ],
         },
         {
-          discount: req.query.hasDiscount && {
+          discount: req.query.hasDiscount === "true" ? {
             $gt: 0,
-          },
+          } : undefined
         },
       ],
     };
+
+    console.log("queryObj", util.inspect(queryObject, { showHidden: false, depth: null, colors: true }));
 
     let sortObject = {}
     if (req.query.sortBy === "price")

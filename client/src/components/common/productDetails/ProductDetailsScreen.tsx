@@ -59,6 +59,8 @@ export default function ProductDetailsScreen() {
     label: string;
     value: number;
   }
+
+  //TODO: make dynamic (loaded from db)
   const options: Ioption[] = [
     { label: "Select duration", value: 0 },
     { label: "1 month", value: 1 },
@@ -96,6 +98,10 @@ export default function ProductDetailsScreen() {
       .catch(() => {
         toast.error("please try again!");
       });
+  };
+
+  const handleAddToCart = () => {
+    toast.success("added to cart!");
   };
 
   return (
@@ -196,9 +202,9 @@ export default function ProductDetailsScreen() {
               );
             })}
           </Select>
-          <Button variant="outlined" sx={{ marginTop: 1, width: "100%" }}>
+          <div className="button" onClick={handleAddToCart}>
             Add to Cart
-          </Button>
+          </div>
         </FormControl>
       </div>
     </div>
