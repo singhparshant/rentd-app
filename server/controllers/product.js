@@ -64,12 +64,7 @@ const list = async (req, res) => {
       .sort(sortObject)
       .skip(skipIndex)
       .limit(limit);
-    // if (req.query.sort) {
-    //   if (req.query.sort === "price")
-    //     products.sort((p1, p2) => p1.monthlyPrice - p2.monthlyPrice);
-    //   else if (req.query.sort === "name")
-    //     products.sort((p1, p2) => p1.name.localeCompare(p2.name));
-    // }
+
     let productCount = await Product.find(queryObject).count();
     let totalPages = Math.ceil(productCount / limit);
 
