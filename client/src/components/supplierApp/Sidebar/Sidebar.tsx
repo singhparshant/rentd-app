@@ -72,7 +72,7 @@ const Sidebar = (props: any) => {
             })}
             <div className="menuItem" onClick={handleLogout}>
                 <RiLogoutCircleRLine/>
-                <span>Logout {user.role}</span>
+                <span>Logout</span>
             </div>
         </div>
         </motion.div>
