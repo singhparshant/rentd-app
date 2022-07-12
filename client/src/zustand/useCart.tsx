@@ -5,7 +5,6 @@ import { OrderItem, Product } from "../components/common/interfaces/Interfaces";
 import Cart from "../components/common/navBar/Cart";
 
 const product1: Product = {
-  _id: "123",
   name: "Nike Air Limited Edition 42",
   monthlyPrice: 25,
   discount: 0,
@@ -19,7 +18,6 @@ const product1: Product = {
   supplierId: "ttt",
 };
 const product2: Product = {
-  _id: "345",
   name: "Adidas StanSmith",
   monthlyPrice: 25,
   discount: 0,

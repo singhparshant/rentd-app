@@ -21,7 +21,8 @@ import axiosInstance from "../../../api/axios";
 import { getProductsPath } from "../../../api/requestPaths";
 import useViewport from "../../../hooks/useViewPort";
 import { Product } from "../../common/interfaces/Interfaces";
-import axios from 'axios';
+import useAuthState from '../../../zustand/useAuthState';
+
 
 
 
@@ -64,7 +65,6 @@ const categories: Ioption2[] = [
 
   const location = useLocation();
   var newProduct: Product = {
-    _id: "",
     name: "",
     monthlyPrice: 0,
     discount: 0,
@@ -77,11 +77,32 @@ const categories: Ioption2[] = [
     productImages: [""],
     supplierId: ""
   };
-  const [descriptionText, setDescription] = useState<string>();
-  const [productData, setProductData] = useState({ name:"", monthlyPrice: 0, discount: 0, 
-                                                 deposit: 0, minDuration: 0, description: "",
+  const { user } = useAuthState() as any;
+
+  const createNewProduct = () => {
+    
+    
+    const newProduct : Product = {
+      name: productData.name,
+      supplierId: user.userId,
+      monthlyPrice: productData.monthlyPrice,
+      discount: Number(productData.discount),
+      deposit: Number(productData.deposit),
+      minDuration: productData.minDuration,
+      description: productData.description,
+      avgRating: 0,
+      numberRatings: 0,
+      category: productData.category,
+      productImages: []
+    }
+    console.log("new Produtc is: ",  newProduct)
+    axiosInstance.post("/products", newProduct)
+  }
+  
+  const [productData, setProductData] = useState({ name:"", monthlyPrice: 0, discount: "", 
+                                                 deposit: "", minDuration: 0, description: "",
                                                  avgRating: 0, numberRatings: 0, category: "Select category",
-                                                 productImages: [""],  supplierId: ""});
+                                                 productImages: [],  supplierId: ""});
   
 
   const newProductCompleted: Boolean = false;
@@ -250,7 +271,7 @@ const categories: Ioption2[] = [
                 autoComplete="discount"
                 value={productData.discount}
                 onChange={(e) =>
-                 setProductData({ ...productData, discount: Number(e.target.value) })
+                 setProductData({ ...productData, discount: e.target.value })
                 }
               />
               <TextField
@@ -265,7 +286,7 @@ const categories: Ioption2[] = [
               autoComplete="deposit"
               value={productData.deposit}
               onChange={(e) =>
-                setProductData({ ...productData, deposit: Number(e.target.value) })
+                setProductData({ ...productData, deposit: e.target.value })
               }
             />
             </div>
@@ -383,7 +404,7 @@ const categories: Ioption2[] = [
         <div
         className="button"
         style={{ marginLeft: "42%", marginTop:"5%",  width: "fit-content", textAlign: "center" }}
-        //onClick={createProdu)}
+        onClick={createNewProduct}
       >
        <Typography style={{fontSize:"20px"}}>
               Create product
