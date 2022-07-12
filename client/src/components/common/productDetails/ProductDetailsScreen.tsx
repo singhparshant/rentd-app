@@ -142,12 +142,15 @@ export default function ProductDetailsScreen() {
         <Typography variant="h5" style={{ color: "green" }}>
           €{product.monthlyPrice}/month &nbsp;&nbsp;
         </Typography>
-        <Rating
-          name="half-rating"
-          value={product.avgRating}
-          precision={0.5}
-          readOnly
-        />
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Rating
+            name="half-rating"
+            value={product.avgRating}
+            precision={0.5}
+            readOnly
+          />
+          <span style={{ marginLeft: 5 }}>({product.numberRatings})</span>
+        </div>
 
         <Typography style={{ marginTop: 20 }} variant="body1">
           {product.description}

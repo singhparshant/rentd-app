@@ -13,6 +13,7 @@ import useProducts from "../../hooks/useProducts";
 import useViewport from "../../hooks/useViewPort";
 import useFilters from "../../zustand/useFilters";
 import { Product } from "../common/interfaces/Interfaces";
+import "./productsOverview.css";
 
 export default function ProductsOverview() {
   const { width } = useViewport();
@@ -71,8 +72,12 @@ export default function ProductsOverview() {
                   width: "350px",
                   transition: "transform 0.15s ease-in-out",
                   "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
+                  position: "relative",
                 }}
               >
+                {product.discount > 0 && (
+                  <div className="discount">{product.discount}% off</div>
+                )}
                 <Link
                   to={{
                     pathname: `/products/${product._id}`,
