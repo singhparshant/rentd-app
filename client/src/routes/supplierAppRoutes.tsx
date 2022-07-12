@@ -7,25 +7,29 @@ import {
   getProductsPath,
   landingPagePath,
   profilePath,
+  analyticsPath,
 } from "../api/requestPaths";
 import NotFound from "../components/common/notFound/NotFound";
 import OrderDetailsScreen from "../components/common/orderDetailsScreen/OrderDetailsScreen";
-import OrdersScreen from "../components/common/ordersScreen/OrdersScreen";
 import ProductDetailsScreen from "../components/common/productDetails/ProductDetailsScreen";
 import ProfileScreen from "../components/common/profileScreen/ProfileScreen";
 import AddProductScreen from "../components/supplierApp/addProductScreen/AddProductScreen";
-import ProductsScreen from "../components/supplierApp/productsScreen/ProductsScreen";
+import AnalyticsPage from "../components/supplierApp/Pages/AnalyticsPage";
+import DisplayOrdersPage from "../components/supplierApp/Pages/DisplayOrdersPage";
+import LandingPage from "../components/supplierApp/Pages/LandingPage";
+import ProductsPage from "../components/supplierApp/Pages/ProductsPage";
 import { AppRoute } from "./customerAppRoutes";
 
 export const supplierAppRoutes: Array<AppRoute> = [
   {
     path: landingPagePath,
     component: <Redirect to={getOrdersPath} />,
+    // component: <LandingPage />,
   },
 
   {
     path: getOrdersPath,
-    component: <OrdersScreen />,
+    component: <DisplayOrdersPage />,
   },
 
   {
@@ -35,7 +39,7 @@ export const supplierAppRoutes: Array<AppRoute> = [
 
   {
     path: getProductsPath,
-    component: <ProductsScreen />,
+    component: <ProductsPage />,
   },
 
   {
@@ -48,6 +52,10 @@ export const supplierAppRoutes: Array<AppRoute> = [
     component: <AddProductScreen />,
   },
   { path: profilePath, component: <ProfileScreen /> },
+    {
+    path: analyticsPath,
+    component: <AnalyticsPage />
+  },
   {
     path: "/*",
     component: <NotFound />,

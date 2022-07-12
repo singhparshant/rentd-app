@@ -9,6 +9,9 @@ import useAuthState from "./zustand/useAuthState";
 import { supplierAppRoutes } from "./routes/supplierAppRoutes";
 import { adminAppRoutes } from "./routes/adminAppRoutes";
 import { Toaster } from "react-hot-toast";
+import Sidebar from "./components/supplierApp/Sidebar/Sidebar";
+import MainBoard from "./components/supplierApp/MainBoard/MainBoard";
+import RightSide from "./components/supplierApp/RightSide/RightSide";
 
 const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
@@ -49,18 +52,42 @@ const App = () => {
     }
   };
 
+  const apps = () => {
+    if (user !== null && user.role === "supplier"){
+      return (
+        <div className="supplier-app">
+          <div className="app-container">
+              <Router>
+                <Toaster />
+                <Sidebar />
+                <Switch>{routes()}</Switch>
+              </Router>
+              {/* <MainBoard /> */}
+              {/* <RightSide /> */}
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className="other-apps">
+          <ErrorBoundary FallbackComponent={ErrorHandler}>
+            <Router>
+              <Toaster />
+              <NavBar />
+              <Switch>{routes()}</Switch>
+              {/* <Footer /> */}
+            </Router>
+          </ErrorBoundary>
+        </div>
+      )
+    }
+  }
+
   return (
     <div className="app">
-      <ErrorBoundary FallbackComponent={ErrorHandler}>
-        <Router>
-          <Toaster />
-          <NavBar />
-          <Switch>{routes()}</Switch>
-          {/* <Footer /> */}
-        </Router>
-      </ErrorBoundary>
+      {apps()}
     </div>
-  );
+  )
 };
 
 export default App;
