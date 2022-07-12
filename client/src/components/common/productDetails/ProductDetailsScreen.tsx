@@ -16,6 +16,7 @@ import { getProductsPath } from "../../../api/requestPaths";
 import useViewport from "../../../hooks/useViewPort";
 import { Product } from "../interfaces/Interfaces";
 import "./productdetailsScreen.css";
+import toast from "react-hot-toast";
 
 interface LocationInterface {
   state: {
@@ -42,6 +43,7 @@ const responsive = {
 };
 
 export default function ProductDetailsScreen() {
+  const { id } = useParams<any>();
   const location = useLocation();
   const [qty, setQty] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -53,7 +55,6 @@ export default function ProductDetailsScreen() {
   const product: Product = state.fromProductsPage;
   const breakpoint = 650;
 
-  console.log("user rating", userRating);
   interface Ioption {
     label: string;
     value: number;
@@ -81,6 +82,21 @@ export default function ProductDetailsScreen() {
     };
     getProductsByCategory();
   }, []);
+
+  const handleRating = (newValue: number) => {
+    setUserRating(newValue || 0);
+    axiosInstance
+      .post("/products/updateRating", {
+        productId: id,
+        rating: newValue,
+      })
+      .then(() => {
+        toast.success("rating updated!");
+      })
+      .catch(() => {
+        toast.error("please try again!");
+      });
+  };
 
   return (
     <div
@@ -111,12 +127,12 @@ export default function ProductDetailsScreen() {
           })}
         </Carousel1>
         <div className="ratingContainer">
-          <div>Rate:</div>
+          <div style={{ marginRight: 5 }}>Rate:</div>
           <Rating
             name="half-rating"
             precision={0.5}
             value={userRating}
-            onChange={(e, newValue) => setUserRating(newValue || 0)}
+            onChange={(e, newValue) => handleRating(newValue || 0)}
           />
         </div>
       </div>

@@ -233,4 +233,21 @@ const remove = async (req, res) => {
     });
 };
 
-module.exports = { list, create, update, remove };
+const updateRating = async (req, res) => {
+  try {
+    console.log("body", req.body)
+    const { productId, rating } = req.body;
+    const product = await Product.findById(productId);
+    const numberRatings = product.numberRatings || 0;
+    const avgRating = product.avgRating || 0;
+    product.avgRating = (avgRating * numberRatings + rating) / (numberRatings + 1)
+    product.numberRatings = numberRatings + 1;
+    product.save();
+    res.status(200).send({ "message": "rating updated" });
+
+  } catch (error) {
+    res.status(500).send({ "message": "could not update rating" });
+  }
+}
+
+module.exports = { list, create, update, remove, read, updateRating };
