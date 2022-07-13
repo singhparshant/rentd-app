@@ -33,7 +33,7 @@ export default function Login() {
       
       setUser(userCurr);
       console.log("user logged in: ", userCurr)
-      setCart(id)
+      setCart()
       history.push("/");
     } catch (error) {
       toast.error("please try again!");
