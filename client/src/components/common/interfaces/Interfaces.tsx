@@ -1,5 +1,5 @@
 export interface Product {
-  _id: string;
+  _id?: number;
   supplierId: string;
   name: string;
   monthlyPrice: number;
@@ -37,17 +37,21 @@ export interface Filter {
   page?: number;
   limit?: number;
   searchString?: string;
+  sortBy?: string;
+  hasDiscount?: boolean;
 }
 
 export interface Application {
+  _id?: string;
   email: string;
   username: string;
   role: "customer" | "supplier";
   address: string;
-  iban: string;
+  IBAN: string;
   codeOfConduct: string;
   status: "pending" | "accepted" | "rejected";
   KYCDocs: string[];
+  createdAt?: string;
 }
 export interface Customer {}
 

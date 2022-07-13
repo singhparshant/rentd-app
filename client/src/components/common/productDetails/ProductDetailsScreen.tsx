@@ -3,6 +3,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Rating,
   Select,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -15,6 +16,7 @@ import { getProductsPath } from "../../../api/requestPaths";
 import useViewport from "../../../hooks/useViewPort";
 import { Product } from "../interfaces/Interfaces";
 import "./productdetailsScreen.css";
+import toast from "react-hot-toast";
 
 interface LocationInterface {
   state: {
@@ -42,13 +44,13 @@ const responsive = {
 
 export default function ProductDetailsScreen() {
   const { id } = useParams<any>();
-
   const location = useLocation();
   const [qty, setQty] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const { width } = useViewport();
   const [rentalDuration, setRentalDuration] = useState<number>(0);
   const [suggestedProducts, setSuggestedProducts] = useState<any>({});
+  const [userRating, setUserRating] = useState(0);
   const { state } = location as LocationInterface;
   const product: Product = state.fromProductsPage;
   const breakpoint = 650;
@@ -57,6 +59,8 @@ export default function ProductDetailsScreen() {
     label: string;
     value: number;
   }
+
+  //TODO: make dynamic (loaded from db)
   const options: Ioption[] = [
     { label: "Select duration", value: 0 },
     { label: "1 month", value: 1 },
@@ -81,7 +85,25 @@ export default function ProductDetailsScreen() {
     getProductsByCategory();
   }, []);
 
-  console.log("sugg: ", suggestedProducts);
+  const handleRating = (newValue: number) => {
+    setUserRating(newValue || 0);
+    axiosInstance
+      .post("/products/updateRating", {
+        productId: id,
+        rating: newValue,
+      })
+      .then(() => {
+        toast.success("rating updated!");
+      })
+      .catch(() => {
+        toast.error("please try again!");
+      });
+  };
+
+  const handleAddToCart = () => {
+    toast.success("added to cart!");
+  };
+
   return (
     <div
       className="productdetailsScreen"
@@ -91,7 +113,7 @@ export default function ProductDetailsScreen() {
       }}
     >
       <div className="carouselContainer">
-        <Carousel1 sx={{}}>
+        <Carousel1>
           {product.productImages.map((image, idx) => {
             return (
               <img
@@ -110,29 +132,47 @@ export default function ProductDetailsScreen() {
             );
           })}
         </Carousel1>
+        <div className="ratingContainer">
+          <div style={{ marginRight: 5 }}>Rate:</div>
+          <Rating
+            name="half-rating"
+            precision={0.5}
+            value={userRating}
+            onChange={(e, newValue) => handleRating(newValue || 0)}
+          />
+        </div>
       </div>
       <div className="detailsContainer">
         <Typography variant="h4">{product.name}</Typography>
         <br />
         <Typography variant="h5" style={{ color: "green" }}>
-          €{product.monthlyPrice}/month &nbsp;&nbsp;{" "}
-          {[...Array(Math.ceil(product.avgRating ? product.avgRating : 0))].map(
-            (el, idx) => (
-              <span>🌟</span>
-            )
-          )}
+          €{product.monthlyPrice}/month &nbsp;&nbsp;
         </Typography>
-        <hr />
-        <Typography variant="body1">{product.description}</Typography>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Rating
+            name="half-rating"
+            value={product.avgRating}
+            precision={0.5}
+            readOnly
+          />
+          <span style={{ marginLeft: 5 }}>({product.numberRatings})</span>
+        </div>
+
+        <Typography style={{ marginTop: 20 }} variant="body1">
+          {product.description}
+        </Typography>
       </div>
       <div className="functionalitiesContainer">
         <div style={{ marginLeft: "20%" }}>
           <label style={{ fontSize: "20px" }}>Total Amount: &nbsp;</label>
           <strong style={{ color: "green", fontSize: 30 }}>
-            €{product.monthlyPrice * rentalDuration}
+            €
+            {product.monthlyPrice *
+              rentalDuration *
+              (1 - 0.01 * product.discount)}
           </strong>
           <br />
-          <label style={{ fontSize: "8px" }}>
+          <label style={{ fontSize: "10px" }}>
             *Amount will be deducted on monthly basis
           </label>
           <br />
@@ -162,59 +202,10 @@ export default function ProductDetailsScreen() {
               );
             })}
           </Select>
-          <Button variant="outlined" sx={{ marginTop: 1, width: "100%" }}>
+          <div className="button" onClick={handleAddToCart}>
             Add to Cart
-          </Button>
+          </div>
         </FormControl>
-      </div>
-
-      <div style={{ height: "150px", width: "100%" }}>
-        {/* <Carousel2 responsive={responsive}> */}
-        {/* {suggestedProducts &&
-            suggestedProducts.data &&
-            suggestedProducts.data.data &&
-            suggestedProducts.data.data.map((product: Product, idx: any) => {
-              return (
-                <div
-                  style={{
-                    height: "50px",
-                    backgroundColor: "green",
-                    width: "50px",
-                    display: "flex",
-                  }}
-                > */}
-        {/* <Card sx={{ margin: "8px", width: "150px" }}>
-                    <Link
-                      to={{
-                        pathname: `/products/${product._id}`,
-                        state: { fromProductsPage: product },
-                      }}
-                      style={{ textDecoration: "none" }}
-                      key={idx}
-                    >
-                      <div style={{ margin: 5, border: 20 }}>
-                        <CardMedia
-                          component="img"
-                          src={
-                            `data:image/png;base64,` + product.productImages[0]
-                          }
-                          style={{ maxHeight: 150 }}
-                          alt="Could not load image"
-                        />
-                        <CardContent>
-                          <Typography variant="body2" color="primary">
-                            €{product.monthlyPrice}
-                            <br></br>
-                            {product.name}
-                          </Typography>
-                        </CardContent>
-                      </div>
-                    </Link>
-                  </Card> */}
-        {/* </div>
-              );
-            })}
-        </Carousel2> */}
       </div>
     </div>
   );

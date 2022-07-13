@@ -11,10 +11,7 @@ let productSchema = new Schema(
     deposit: Number,
     minDuration: Number,
     description: String,
-    supplierId: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-    },
+    supplierId: String,
     avgRating: Number,
     numberRatings: Number,
     category: {

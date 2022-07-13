@@ -49,7 +49,6 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
   const [searchString, setSearchString] = React.useState<any>(null);
   const history = useHistory();
 
-  console.log("Filters: ", filters);
   const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       setFilters("searchString", searchString);
@@ -69,6 +68,7 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
           onChange={(event: any, newValue: any) => {
             setSearchString(newValue);
           }}
+          className="autocomplete"
           style={{ backgroundColor: "white", borderRadius: 7 }}
           filterOptions={(options, params) => {
             const filtered = filter(options, params);

@@ -15,25 +15,11 @@ const stripeWebhookRouter = require("./routes/webHook");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const User = require("./models/user");
+const checkoutRouter = require("./routes/checkout.js");
+const categoryRouter = require("./routes/category.js");
 const cors = require("cors");
 const app = express();
 var bodyParser = require("body-parser");
-const checkoutRouter = require("./routes/checkout.js");
-
-//setup SwaggerUI documentation
-const swaggerOptions = {
-  swaggerDefinition: {
-    info: {
-      version: "1.0.0",
-      title: "Rentd API",
-      description: "Rentd API Information",
-      servers: ["http://localhost:8080"],
-    },
-  },
-  apis: ["./routes/*.js"],
-};
-
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 //set up db connection
 const options = {
@@ -69,6 +55,7 @@ app.use("/orders", ordersRouter);
 app.use("/shoppingCarts", shoppingCartRouter);
 app.use("/users", userRouter);
 app.use("/applications", applicationRouter);
+app.use("/categories", categoryRouter);
 app.use("/payment", checkoutRouter);
 
 // catch 404 and forward to error handler

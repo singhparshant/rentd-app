@@ -1,23 +1,15 @@
 import Categories from "./Categories";
 import Duration from "./Duration";
 import SliderFilter from "./SliderFilter";
-
-import { useEffect } from "react";
+import { Discount } from "./Discount";
 import useFilters from "../../../zustand/useFilters";
 import AvgRating from "./AvgRating";
 import ProductsPerPage from "./ProductsPerPage";
 import "./sidebar.css";
+import { Sort } from "./Sort";
 
-interface SidebarProps {}
-
-const Sidebar = (props: SidebarProps) => {
-  const filters = useFilters((state: any) => state.filters);
-  const setFilters = useFilters((state: any) => state.setFilters);
+const Sidebar = () => {
   const resetFilters = useFilters((state: any) => state.resetFilters);
-
-  useEffect(() => {
-    console.log("Filters: ", filters);
-  }, [filters]);
 
   return (
     <div className="sidebar">
@@ -29,6 +21,8 @@ const Sidebar = (props: SidebarProps) => {
       <AvgRating />
       <Duration />
       <ProductsPerPage />
+      <Sort />
+      <Discount />
       <br />
       <div className="resetButton">
         <div

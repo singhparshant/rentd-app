@@ -91,11 +91,7 @@ export default function Login() {
                 alignItems: "center",
               }}
             >
-              <div
-                className="button"
-                style={{ width: "50px", textAlign: "center" }}
-                onClick={handleLogin}
-              >
+              <div className="button" onClick={handleLogin}>
                 Login
               </div>
 
