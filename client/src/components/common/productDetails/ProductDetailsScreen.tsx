@@ -1,5 +1,4 @@
 import {
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -163,7 +162,7 @@ export default function ProductDetailsScreen() {
         </Typography>
       </div>
       <div className="functionalitiesContainer">
-        <div style={{ marginLeft: "20%" }}>
+        <div>
           <label style={{ fontSize: "20px" }}>Total Amount: &nbsp;</label>
           <strong style={{ color: "green", fontSize: 30 }}>
             €
@@ -179,14 +178,7 @@ export default function ProductDetailsScreen() {
           <br />
         </div>
         <br />
-        <FormControl
-          variant="outlined"
-          sx={{
-            width: "50%",
-            margin: "10px",
-            left: "18%",
-          }}
-        >
+        <FormControl variant="outlined" sx={{ width: "70%" }}>
           <InputLabel>Rental Duration</InputLabel>
           <Select
             value={rentalDuration}
@@ -202,10 +194,10 @@ export default function ProductDetailsScreen() {
               );
             })}
           </Select>
-          <div className="button" onClick={handleAddToCart}>
-            Add to Cart
-          </div>
         </FormControl>
+        <div className="button" onClick={handleAddToCart}>
+          Add to Cart
+        </div>
       </div>
     </div>
   );
