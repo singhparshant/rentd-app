@@ -48,8 +48,6 @@ app.use(
 );
 app.use(bodyParser.json({ limit: "5mb" }));
 app.use(express.json());
-
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/products", productsRouter);
 app.use("/orders", ordersRouter);
 app.use("/shoppingCarts", shoppingCartRouter);
