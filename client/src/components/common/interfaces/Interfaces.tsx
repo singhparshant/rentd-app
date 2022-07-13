@@ -8,6 +8,7 @@ export interface Product {
   discount: number;
   deposit: number;
   minDuration: number;
+  maxDuration: number;
   description: string;
   avgRating: number;
   numberRatings: number;
@@ -68,7 +69,7 @@ export interface DashboardCardProps {
   title: string;
   color: Object;
   barValue: number;
-  value: String; 
+  value: String;
   png: IconType;
   series: Object[];
 }

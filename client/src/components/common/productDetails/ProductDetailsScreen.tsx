@@ -59,19 +59,15 @@ export default function ProductDetailsScreen() {
     value: number;
   }
 
-  //TODO: make dynamic (loaded from db)
-  const options: Ioption[] = [
-    { label: "Select duration", value: 0 },
-    { label: "1 month", value: 1 },
-    { label: "2 months", value: 2 },
-    { label: "3 months", value: 3 },
-    { label: "4 months", value: 4 },
-    { label: "5 months", value: 5 },
-    { label: "6 months", value: 6 },
-    { label: "7 months", value: 7 },
-    { label: "8 months", value: 8 },
-    { label: "9 months", value: 9 },
-  ];
+  const getOptions = () => {
+    let options: Ioption[] = [{ label: "Select duration", value: 0 }];
+    for (let i = product.minDuration; i <= product.maxDuration; i++)
+      options.push({ label: `${i} months`, value: i });
+
+    return options;
+  };
+
+  //TODO: suggested products (additional feature)
   useEffect(() => {
     const getProductsByCategory = async () => {
       const response = await axiosInstance.get(getProductsPath, {
@@ -186,7 +182,7 @@ export default function ProductDetailsScreen() {
             onChange={(e: any) => setRentalDuration(e.target.value)}
             name="Rental Duration"
           >
-            {options.map((option: Ioption, index) => {
+            {getOptions().map((option: Ioption, index) => {
               return (
                 <MenuItem key={index} value={option.value}>
                   {option.label}
