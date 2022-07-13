@@ -58,8 +58,6 @@ const list = async (req, res) => {
       ],
     };
 
-    console.log("queryObj", util.inspect(queryObject, { showHidden: false, depth: null, colors: true }));
-
     let sortObject = {}
     if (req.query.sortBy === "price")
       sortObject = { monthlyPrice: 1 }

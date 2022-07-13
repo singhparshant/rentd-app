@@ -17,6 +17,7 @@ import useViewport from "../../../hooks/useViewPort";
 import { Product } from "../interfaces/Interfaces";
 import "./productdetailsScreen.css";
 import toast from "react-hot-toast";
+import ProductCard from "../../productsOverview/ProductCard";
 
 interface LocationInterface {
   state: {
@@ -78,7 +79,7 @@ export default function ProductDetailsScreen() {
           categories: [`${product.category}`],
         },
       });
-      setSuggestedProducts(response.data.data);
+      const products = setSuggestedProducts(response.data.data);
     };
     getProductsByCategory();
   }, []);
@@ -200,20 +201,10 @@ export default function ProductDetailsScreen() {
           </div>
         </div>
       </div>
+      <h3> Suggested products:</h3>
       <div className="suggestions">
-        Suggested products:
         {suggestedProducts?.map((product: Product) => (
-          <Card
-            sx={{
-              margin: "8px",
-              width: "350px",
-              transition: "transform 0.15s ease-in-out",
-              "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
-              position: "relative",
-            }}
-          >
-            {product.name}
-          </Card>
+          <ProductCard product={product} />
         ))}
       </div>
     </>
