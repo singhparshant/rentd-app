@@ -39,3 +39,9 @@
   align-items: center;
   margin-top: 30px;
 }
+
+.suggestions {
+  display: flex;
+  margin: 60px 20px;
+  border: 2px solid red;
+}
