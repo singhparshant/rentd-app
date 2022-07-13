@@ -114,25 +114,29 @@ export default function SignUp() {
     }
   };
 
-  const handleCustomerSignup = (toastId: string) => {
+  const handleCustomerSignup = async (toastId: string) => {
     //create an account for the customer
-    axiosInstance
-      .post("/users", {
+    const response = await axiosInstance.post("/users", {
         username: userData.username,
         password: userData.password,
         email: userData.email,
         role: userData.role,
         address: userData.address,
       })
-      .then(() => {
-        toast.dismiss(toastId);
-        toast.success("Done!");
-        history.push("/login");
-      })
-      .catch(() => {
-        toast.dismiss(toastId);
-        toast.error("Something went wrong!");
-      });
+    if(response.data){
+      toast.dismiss(toastId);
+      toast.success("Done!");
+      history.push("/login");
+      console.log("id of user is: ", response.data._id)
+      axiosInstance.post("/shoppingCarts", {id: response.data._id})
+
+    }
+    else{
+      toast.dismiss(toastId);
+      toast.error("Something went wrong!");
+    }
+      
+    
   };
 
   const handleSupplierSignup = async (toastId: string) => {

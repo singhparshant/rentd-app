@@ -1,24 +1,21 @@
 const mongoose = require("mongoose");
+const Product = require("./product");
 let Schema = mongoose.Schema;
 
 let shoppingCartSchema = new Schema(
   {
-    _user: {
+    user: {
       type: Schema.Types.ObjectId, ref: "user"
     },
-    total: {
-      type: Number,
-    },
-    products:
-        [{
-            productID:{
-                type: Schema.Types.ObjectId, ref: "product"
-            },
-            quantity: Number
-        }]
+    orderItems : [{ product: {
+                    type: Schema.Types.ObjectId, ref: "product"
+                  },
+                  quantity: Number,
+                  rentalDuration: Number
+    }]
     
   },
-  { _id:false, timestamps: true }
+  { timestamps: true }
 );
 
 let ShoppingCart = mongoose.model("shoppingCart", shoppingCartSchema);
