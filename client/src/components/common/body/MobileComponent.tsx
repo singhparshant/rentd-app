@@ -9,7 +9,7 @@ type Props = {};
 const MobileComponent = (props: Props) => {
   const [drawerStatus, setDrawerStatus] = useState(true);
   const toggleDrawer = () => {
-    // setDrawerStatus(!drawerStatus);
+    setDrawerStatus(!drawerStatus);
   };
   return (
     <div>

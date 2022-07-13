@@ -11,6 +11,7 @@ import { Wrapper } from "./CartItem.styles";
 import useCart from "../../../zustand/useCart";
 import useAuthState from "../../../zustand/useAuthState";
 import { Link, useHistory } from "react-router-dom";
+import axiosInstance from "../../../api/axios";
 
 export default function CartScreen() {
   const {
@@ -206,7 +207,26 @@ export default function CartScreen() {
           backgroundColor: "#2b0245",
         }}
         onClick={() => {
-          history.push("/checkout");
+          axiosInstance
+            .post(
+              "/payment/create-checkout-session",
+              JSON.stringify({
+                items: [
+                  { id: 1, quantity: 3 },
+                  { id: 2, quantity: 1 },
+                ],
+              })
+            )
+            .then((res) => {
+              console.log("RES: ", res);
+              if (res.data) return res.data;
+              return res.data.then((json: any) => Promise.reject(json));
+            })
+            .then(({ url }) => {
+              console.log("URL: ", url);
+              window.location = url;
+            })
+            .catch((e) => console.error(e.error));
         }}
       >
         Proceed to checkout
