@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom';
 import useAuthState from '../../../zustand/useAuthState';
-import CustomTable from '../CustomTables/CustomTable';
+import CustomTable from '../CustomTable/CustomTable';
 import DashboardCard from '../DashboardCard/DashboardCard';
 
 const LandingPage = () => {
