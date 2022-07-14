@@ -13,6 +13,10 @@ export interface Product {
   productImages: string[];
 }
 
+export interface ShoppingCart {
+  cart: OrderItem[]
+}
+
 export interface Order {
   _id: string;
   customer: Customer;

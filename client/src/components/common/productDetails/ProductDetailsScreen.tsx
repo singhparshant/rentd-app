@@ -14,9 +14,12 @@ import { useLocation, useParams } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
 import { getProductsPath } from "../../../api/requestPaths";
 import useViewport from "../../../hooks/useViewPort";
-import { Product } from "../interfaces/Interfaces";
+import { Product, OrderItem } from "../interfaces/Interfaces";
 import "./productdetailsScreen.css";
 import toast from "react-hot-toast";
+import useCart from "../../../zustand/useCart";
+import useAuthState from "../../../zustand/useAuthState";
+
 
 interface LocationInterface {
   state: {
@@ -99,9 +102,26 @@ export default function ProductDetailsScreen() {
         toast.error("please try again!");
       });
   };
+  const {
+    cart,
+    addItemToCart
+  } = useCart() as any;
 
-  const handleAddToCart = () => {
+  const { user } = useAuthState() as any;
+
+  const handleAddToCart = (rentalDuration : number) => {
     toast.success("added to cart!");
+    const orderItem : OrderItem = {
+      id: 10,
+      product: product,
+      quantity: 1,
+      rentalDuration: rentalDuration,
+    }
+    addItemToCart(orderItem)
+    if(user){
+      toast.success("persisted cart!");
+      axiosInstance.put("/shoppingCarts", orderItem)
+    }
   };
 
   return (
@@ -202,7 +222,7 @@ export default function ProductDetailsScreen() {
               );
             })}
           </Select>
-          <div className="button" onClick={handleAddToCart}>
+          <div className="button" onClick={() => {handleAddToCart(rentalDuration)}}>
             Add to Cart
           </div>
         </FormControl>

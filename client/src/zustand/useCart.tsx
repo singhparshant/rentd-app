@@ -1,7 +1,8 @@
 import { PersonAddDisabledTwoTone } from "@mui/icons-material";
 import create from "zustand";
 import { persist } from "zustand/middleware";
-import { OrderItem, Product } from "../components/common/interfaces/Interfaces";
+import axiosInstance from "../api/axios";
+import { OrderItem, Product, ShoppingCart} from "../components/common/interfaces/Interfaces";
 import Cart from "../components/common/navBar/Cart";
 
 const product1: Product = {
@@ -44,8 +45,16 @@ const orderItem2: OrderItem = {
 };
 
 const useCart = create((set) => ({
-  cart: [orderItem1, orderItem2],
-  addItemToCart: (item: any) => {
+  cart: [],
+  setCart: async (id: any) =>{
+    //TODO
+    const shoppingCart : ShoppingCart = await axiosInstance.get("/shoppingCarts", id)
+    console.log("Getting the shopping cart of the user: " )
+    set(() => ({
+      cart: shoppingCart,
+    }));
+  },
+  addItemToCart: (item: OrderItem) => {
     set((state: any) => ({
       cart: [...state.cart, item],
     }));

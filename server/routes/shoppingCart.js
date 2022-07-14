@@ -10,7 +10,7 @@ router.post("/", shoppingCartController.create);
 
 router.get("/:id", shoppingCartController.read);
 
-router.put("/:id", shoppingCartController.update);
+router.put("/", shoppingCartController.update);
 
 router.delete("/:id", shoppingCartController.remove);
 
