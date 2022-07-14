@@ -5,16 +5,24 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
 import logo from "../../../assets/logo.png";
 import useAuthState from "../../../zustand/useAuthState";
+import useCart from "../../../zustand/useCart";
 import useFilters from "../../../zustand/useFilters";
 import Cart from "./Cart";
 import "./NavBar.css";
 
+
+
 interface NabBarProps {
   user: any;
-  onLogout: () => void;
+  onLogout: () => void
 }
 
+
 const NavBar = () => {
+  const {
+    cart,
+    emptyCart
+  } = useCart() as any;
   const history = useHistory();
   const user = useAuthState((state: any) => state.user);
   const setUser = useAuthState((state: any) => state.setUser);
@@ -22,6 +30,7 @@ const NavBar = () => {
   const handleLogout = async () => {
     try {
       //delete jwt cookie from browser
+      emptyCart()
       await axiosInstance.get("/users/logout");
       setUser(null);
       history.push("/");
@@ -31,9 +40,9 @@ const NavBar = () => {
   };
 
   if (!user || user.role === "customer")
-    return <CustomerNavBar user={user} onLogout={handleLogout} />;
+    return <CustomerNavBar user={user} onLogout={() => handleLogout()} />;
   if (user.role === "supplier")
-    return <SupplierNavBar user={user} onLogout={handleLogout} />;
+    return <SupplierNavBar user={user} onLogout={() => handleLogout() } />;
   if (user.role === "admin")
     return <AdminNavBar user={user} onLogout={handleLogout} />;
   return <></>;
@@ -225,7 +234,7 @@ const AdminNavBar = ({ user, onLogout }: NabBarProps) => {
           <Avatar alt={user.name} src={user.imageUrl} />
         </Link>
 
-        <div onClick={onLogout} className="button">
+        <div onClick={() => onLogout()} className="button">
           Logout
         </div>
       </div>

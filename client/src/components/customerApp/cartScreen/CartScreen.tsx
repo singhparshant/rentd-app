@@ -22,9 +22,9 @@ export default function CartScreen() {
     decrementItemQuantity,
     updateItem,
   } = useCart() as any;
+  console.log("CART is: ", cart)
   const history = useHistory();
   const { user } = useAuthState() as any;
-  console.log("cart items are: ", user);
   const src =
     "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=80";
   const icon = "https://www.svgrepo.com/show/21045/delete-button.svg";
@@ -36,11 +36,12 @@ export default function CartScreen() {
       }}
     >
       <div>
-        <h2 style={{ marginLeft: "10%" }}>{user.username}'s cart: </h2>
+        <h2 style={{ marginLeft: "10%" }}>{!(user) ? "your": user.username + "'s"} cart: </h2>
       </div>
       {cart.map((index: any) => {
         //console.log("index  is: ", index)
         //console.log("index product is: ", index.product)
+        console.log("element in cart is: ", index)
         return (
           <Wrapper style={{ marginLeft: "10%", marginBottom: "5%" }}>
             <div style={{ display: "flex" }}>
