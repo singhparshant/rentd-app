@@ -9,7 +9,7 @@ const list = async (req, res) => {
   try {
     // Server-side pagination logic
     var page = req.query.page || 1;
-    var limit = parseInt(req.query.limit) || 4;
+    var limit = parseInt(req.query.limit) || 20;
     var skipIndex = (page - 1) * limit;
 
     const queryObject = {

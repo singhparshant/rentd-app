@@ -63,13 +63,11 @@ export default function ProductDetailsScreen() {
 
   const getOptions = () => {
     let options: Ioption[] = [{ label: "Select duration", value: 0 }];
-    for (let i = product.minDuration; i <= product.maxDuration; i++)
+    for (let i = product.minDuration || 1; i <= 12; i++)
       options.push({ label: `${i} months`, value: i });
 
     return options;
   };
-
-  console.log("suggestions", suggestedProducts);
 
   //TODO: suggested products (additional feature)
   useEffect(() => {
@@ -79,10 +77,13 @@ export default function ProductDetailsScreen() {
           categories: [`${product.category}`],
         },
       });
-      const products = setSuggestedProducts(response.data.data);
+      let products: any[] = response.data.data;
+      products = products.filter((prod) => prod._id !== id);
+      setSuggestedProducts(products);
     };
+    window.scroll(0, 0);
     getProductsByCategory();
-  }, []);
+  }, [id]);
 
   const handleRating = (newValue: number) => {
     setUserRating(newValue || 0);
@@ -201,11 +202,15 @@ export default function ProductDetailsScreen() {
           </div>
         </div>
       </div>
-      <h3> Suggested products:</h3>
-      <div className="suggestions">
-        {suggestedProducts?.map((product: Product) => (
-          <ProductCard product={product} />
-        ))}
+      <div className="suggestionsContainer">
+        <h3> More products of this category:</h3>
+        <div
+          style={{ display: width > breakpoint ? "flex" : "block", margin: 60 }}
+        >
+          {suggestedProducts?.map((product: Product) => (
+            <ProductCard product={product} />
+          ))}
+        </div>
       </div>
     </>
   );
