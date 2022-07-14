@@ -10,7 +10,6 @@ let productSchema = new Schema(
     discount: Number,
     deposit: Number,
     minDuration: Number,
-    maxDuration: Number,
     description: String,
     supplierId: String,
     avgRating: Number,

@@ -115,7 +115,7 @@ export default function ProductDetailsScreen() {
       >
         <div className="carouselContainer">
           <Carousel1>
-            {product.productImages.map((image, idx) => {
+            {product.productImages.map((image) => {
               return (
                 <img
                   src={`data:image/png;base64,` + image}
@@ -123,11 +123,10 @@ export default function ProductDetailsScreen() {
                     margin: "25px",
                     maxHeight: 350,
                     maxWidth: 350,
-                    width: "auto",
-                    height: "auto",
+
                     borderRadius: "7px",
                   }}
-                  key={idx}
+                  key={product._id}
                   alt="Could not load."
                 />
               );

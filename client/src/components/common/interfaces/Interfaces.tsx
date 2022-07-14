@@ -6,7 +6,6 @@ export interface Product {
   discount: number;
   deposit: number;
   minDuration: number;
-  maxDuration: number;
   description: string;
   avgRating: number;
   numberRatings: number;
