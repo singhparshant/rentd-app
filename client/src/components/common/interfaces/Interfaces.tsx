@@ -61,3 +61,17 @@ export interface OrderItem {
   quantity: number;
   rentalDuration: number;
 }
+
+export interface Order {
+  id: string;
+  customerId: string;
+  quantity: Number;
+  amount: Number;
+  monthlyPrice: number;
+  duration: Number;
+  productId: string;
+  subId: string;
+  paymentID: string;
+  deliveryId: string;
+  status: String;
+}

@@ -9,11 +9,11 @@ const arr = [
   { id: 2, quantity: 1 },
 ];
 
-const createProductAndPrice = async () => {
+const createProductAndPrice = async (item) => {
   let priceRecurring, product, priceOneTime;
   try {
     product = await stripe.products.create({
-      name: "newProduct",
+      name: item._id,
     });
   } catch (err) {
     console.error(err);
@@ -21,7 +21,7 @@ const createProductAndPrice = async () => {
 
   try {
     priceRecurring = await stripe.prices.create({
-      unit_amount: 100 * 100,
+      unit_amount: item.monthlyPrice * 100,
       currency: "eur",
       recurring: { interval: "month" },
       product: product.id,
@@ -30,7 +30,7 @@ const createProductAndPrice = async () => {
     });
 
     priceOneTime = await stripe.prices.create({
-      unit_amount: 400 * 100,
+      unit_amount: item.deposit * 100,
       currency: "eur",
       product: product.id,
       //we use lookup key to place orders
@@ -39,25 +39,37 @@ const createProductAndPrice = async () => {
   } catch (err) {
     console.error(err);
   }
-  console.log("priceOneTime: ", priceOneTime);
   return [priceOneTime, priceRecurring];
 };
 
 const create_session = async (req, res) => {
-  //   console.log("Inside function", req.body);
-  const [priceOneTime, priceRecurring] = await createProductAndPrice();
+  const item = req.body.product;
+  const [priceOneTime, priceRecurring] = await createProductAndPrice(item);
+  console.log(item);
   try {
     const session = await stripe.checkout.sessions.create({
       billing_address_collection: "auto",
       line_items: [
+        // {
+        //   name: item.name,
+        //   // images: `data:image/jpeg;base64,${item.productImages[0]}`,
+        //   description: `Duration of renting is ${req.body.duration}`,
+        //   price: priceRecurring.id,
+        //   quantity: 1,
+        //   amount: item.monthlyPrice,
+        // },
         {
-          price: priceOneTime.id,
-          quantity: 1,
+          name: item.name,
+          images: ["../storage/productImages/bike1_1.jpeg"], //`data:image/jpeg;base64,${item.productImages[0]}`,
+          description: `Duration of renting is ${req.body.duration}`,
+          // price: priceOneTime.id,
+          quantity: req.body.quantity,
+          amount: item.monthlyPrice,
         },
-        {
-          price: priceRecurring.id,
-          quantity: 1,
-        },
+      ],
+      line_items: [
+        { price: priceOneTime.id, quantity: 1 },
+        { price: priceRecurring.id, quantity: 1 },
       ],
       //   metadata: { basket_id: req.body.lookup_key },
       mode: "subscription",
