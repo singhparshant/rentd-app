@@ -7,8 +7,6 @@ let orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "user",
     },
-    amount: Number,
-    monthlyPrice: Number,
     orderItems: [
       {
         productID: {
@@ -16,15 +14,11 @@ let orderSchema = new Schema(
           ref: "product",
         },
         quantity: Number,
-        rentalDuration: Number,
+        duration: Number,
       },
     ],
-    paymentMethod: String,
-    paymentID: {
-      type: Schema.Types.ObjectId,
-      ref: "payment",
-    },
-    deliveryID: {
+    amount: Number,
+    deliveryId: {
       type: Schema.Types.ObjectId,
       ref: "delivery",
     },

@@ -4,11 +4,12 @@ let Schema = mongoose.Schema;
 let paymentSchema = new Schema(
   {
     senderID: {
-        type: Schema.Types.ObjectId, ref: "user"
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
     senderIBAN: String,
     recepientIBAN: String,
-    amount:Number
+    amount: Number,
   },
   { timestamps: true }
 );

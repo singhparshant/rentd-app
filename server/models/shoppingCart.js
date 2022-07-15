@@ -5,15 +5,19 @@ let Schema = mongoose.Schema;
 let shoppingCartSchema = new Schema(
   {
     user: {
-      type: Schema.Types.ObjectId, ref: "user"
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
-    orderItems : [{ product: {
-                    type: Schema.Types.ObjectId, ref: "product"
-                  },
-                  quantity: Number,
-                  rentalDuration: Number
-    }]
-    
+    orderItems: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: "product",
+        },
+        quantity: Number,
+        rentalDuration: Number,
+      },
+    ],
   },
   { timestamps: true }
 );
