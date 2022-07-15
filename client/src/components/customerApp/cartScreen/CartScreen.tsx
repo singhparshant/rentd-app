@@ -1,17 +1,42 @@
-import React from "react";
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { Wrapper } from "./CartItem.styles";
-import useCart from "../../../zustand/useCart";
-import useAuthState from "../../../zustand/useAuthState";
-import { Link, useHistory } from "react-router-dom";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
+import { Button, Card, CardContent, Typography } from "@mui/material";
+import { useHistory } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
+import useAuthState from "../../../zustand/useAuthState";
+import useCart from "../../../zustand/useCart";
+import { Order, OrderItem, Product } from "../../common/interfaces/Interfaces";
+
+const buttonStyle = {
+  width: "45px",
+  height: "45px",
+  backgroundColor: "#ffb93f",
+  border: "none",
+  padding: "10px",
+  borderRadius: "10px",
+  margin: "2px",
+};
+const product: Product = {
+  avgRating: 3.5,
+  category: "Household",
+  deposit: 300,
+  description:
+    "Polyester fabric cover.\nAssembled in less than 20 minutes without tools with a friend.\nThe fabric has been selected for its durability and ease of cleaning.\nA naturally strong wooden frame is wrapped with a cuddly, supportive foam padding.\nConveniently supplied in a box - all parts for mounting your sofa are located in the closed compartment on the bottom of the base profile.",
+  discount: 0,
+  minDuration: 1,
+  monthlyPrice: 100,
+  name: "Zinus, Mid-Century Upholstered Sofa, Living Room Couch",
+  numberRatings: 15,
+  productImages: ["bike1_1.jpeg"],
+  supplierId: "62b22f7dc565fc91d7cac190",
+  _id: "62bc4f9150d02c83c876ee1f",
+};
+
+const tentative_order = {
+  customerId: "62b46dce95b02b7c1b024ae9",
+  amount: 800,
+  orderItems: [{ product: product, quantity: 2, duration: 2 }],
+};
 
 export default function CartScreen() {
   const {
@@ -23,177 +48,95 @@ export default function CartScreen() {
     decrementItemQuantity,
     updateItem,
   } = useCart() as any;
-  console.log("CART is: ", cart)
+  console.log("CART is: ", cart);
   const history = useHistory();
   const { user } = useAuthState() as any;
-  const src =
-    "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=80";
-  const icon = "https://www.svgrepo.com/show/21045/delete-button.svg";
+
   return (
-    <Card
+    <div
       style={{
-        display: "block",
-        alignContent: "center",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
-      <div>
-        <h2 style={{ marginLeft: "10%" }}>{!(user) ? "your": user.username + "'s"} cart: </h2>
-      </div>
-      {cart.map((index: any) => {
-        //console.log("index  is: ", index)
-        //console.log("index product is: ", index.product)
-        console.log("element in cart is: ", index)
+      {cart.map((item: OrderItem, idx: number) => {
+        const product: Product = item.product;
         return (
-          <Wrapper style={{ marginLeft: "10%", marginBottom: "5%" }}>
-            <div style={{ display: "flex" }}>
-              <div style={{ alignContent: "center", maxWidth: "100%" }}>
-                <h3 style={{ marginLeft: "60%", width: "max-content" }}>
-                  {index.product.name}
-                </h3>
+          <div style={{ width: "50%" }}>
+            <Card
+              sx={{
+                margin: "8px",
+                // width: "80%",
+                transition: "transform 0.15s ease-in-out",
+                "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
+              }}
+            >
+              <div style={{ margin: 5, border: 20 }}>
                 <div
                   style={{
                     display: "flex",
-                    marginTop: "20%",
-                    marginRight: "20%",
+                    alignItems: "center",
+                    justifyContent: "space-between",
                   }}
                 >
-                  <div
-                    className="information"
-                    style={{
-                      textAlign: "center",
-                      display: "block",
-                      marginLeft: "30%",
-                      minWidth: "max-content",
-                    }}
-                  >
-                    <p style={{ display: "inline" }}>
-                      Price/month: ${index.product.monthlyPrice}
-                    </p>
-                    <p>
-                      Total: $
-                      {(
-                        index.quantity *
-                        index.product.monthlyPrice *
-                        index.rentalDuration
-                      ).toFixed(2)}
-                    </p>
+                  <img
+                    src={`data:image/png;base64,` + product.productImages[0]}
+                    style={{ maxHeight: 100 }}
+                    alt="Could not load"
+                  />
+                  <div className="quantity">
+                    <span>Quantiy:&nbsp;</span>
+                    <Button
+                      style={buttonStyle}
+                      onClick={() => incrementItemQuantity(item)}
+                    >
+                      <AddIcon />
+                    </Button>
+                    {item.quantity}
+                    <Button
+                      style={buttonStyle}
+                      onClick={() => {
+                        decrementItemQuantity(item);
+                      }}
+                    >
+                      <RemoveIcon />
+                    </Button>
                   </div>
-
-                  <div
-                    className="buttonsQuantities"
-                    style={{
-                      alignSelf: "center",
-                      display: "flex",
-                      marginTop: "-15%",
-                    }}
-                  >
-                    <div style={{ marginRight: "50px" }}>
-                      <p style={{ marginLeft: "35%", marginRight: "-10%" }}>
-                        Quantity
-                      </p>
-                      <div
-                        style={{
-                          display: "flex",
-                          marginTop: "-2%",
-                          alignContent: "center",
-                        }}
-                      >
-                        <Button
-                          size="small"
-                          disableElevation
-                          variant="contained"
-                          onClick={() => {
-                            decrementItemQuantity(index);
-                          }}
-                        >
-                          -
-                        </Button>
-                        <p style={{ marginLeft: "10%", marginRight: "10%" }}>
-                          {index.quantity}
-                        </p>
-                        <Button
-                          size="small"
-                          disableElevation
-                          variant="contained"
-                          onClick={() => incrementItemQuantity(index)}
-                        >
-                          +
-                        </Button>
-                      </div>
-                    </div>
-                    <div style={{ marginLeft: "50%", marginRight: "10%" }}>
-                      <p style={{ marginLeft: "10%", marginRight: "-10%" }}>
-                        Number of months
-                      </p>
-                      <div
-                        style={{
-                          display: "flex",
-                          marginTop: "-2%",
-                          alignContent: "center",
-                        }}
-                      >
-                        <Button
-                          size="small"
-                          disableElevation
-                          variant="contained"
-                          onClick={() => {
-                            decrementItemDuration(index);
-                          }}
-                        >
-                          -
-                        </Button>
-                        <p style={{ marginLeft: "10%", marginRight: "10%" }}>
-                          {index.rentalDuration}
-                        </p>
-                        <Button
-                          size="small"
-                          disableElevation
-                          variant="contained"
-                          onClick={() => incrementItemDuration(index)}
-                        >
-                          +
-                        </Button>
-                      </div>
-                    </div>
+                  {/*  */}
+                  <div className="duration">
+                    <span>Duration:&nbsp;</span>
+                    <Button
+                      style={buttonStyle}
+                      onClick={() => incrementItemDuration(item)}
+                    >
+                      <AddIcon />
+                    </Button>
+                    {item.duration}
+                    <Button
+                      style={buttonStyle}
+                      onClick={() => {
+                        decrementItemDuration(product);
+                      }}
+                    >
+                      <RemoveIcon />
+                    </Button>
                   </div>
                 </div>
+                <CardContent>
+                  <Typography variant="h5" color="#ffb93f">
+                    €{product.monthlyPrice} /month
+                  </Typography>
+
+                  <br></br>
+                  <Typography variant="body1" color="text.primary">
+                    {product.name}
+                  </Typography>
+                </CardContent>
               </div>
-              <div
-                style={{
-                  marginLeft: "30%",
-                  alignSelf: "center",
-                  verticalAlign: "middle",
-                  marginTop: "0%",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  image={src}
-                  style={{
-                    maxWidth: 200,
-                    maxHeight: 160,
-                    marginTop: "5%",
-                    marginRight: "5%",
-                  }}
-                />
-                <Button
-                  style={{
-                    maxWidth: "5%",
-                    backgroundColor: "transparent",
-                    marginLeft: "20%",
-                    marginRight: "5%",
-                    marginTop: "5%",
-                  }}
-                  variant="contained"
-                  onClick={() => {
-                    removeItem(index);
-                  }}
-                >
-                  <img src={icon} height={20} style={{ marginRight: "10%" }} />
-                </Button>
-              </div>
-            </div>
-          </Wrapper>
+            </Card>
+          </div>
         );
       })}
       <Button
@@ -209,15 +152,7 @@ export default function CartScreen() {
         }}
         onClick={() => {
           axiosInstance
-            .post(
-              "/payment/create-checkout-session",
-              JSON.stringify({
-                items: [
-                  { id: 1, quantity: 3 },
-                  { id: 2, quantity: 1 },
-                ],
-              })
-            )
+            .post("/payment/create-checkout-session", tentative_order)
             .then((res) => {
               console.log("RES: ", res);
               if (res.data) return res.data;
@@ -232,6 +167,8 @@ export default function CartScreen() {
       >
         Proceed to checkout
       </Button>
-    </Card>
+    </div>
   );
 }
+
+//

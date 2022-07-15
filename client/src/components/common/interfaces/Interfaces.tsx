@@ -1,5 +1,5 @@
 export interface Product {
-  _id?: number;
+  _id?: string;
   supplierId: string;
   name: string;
   monthlyPrice: number;
@@ -14,19 +14,7 @@ export interface Product {
 }
 
 export interface ShoppingCart {
-  cart: OrderItem[]
-}
-
-export interface Order {
-  _id: string;
-  customer: Customer;
-  totalAmount: number;
-  monthlyPrice: number;
-  orderItems: OrderItem[];
-  paymentMethod: String;
-  paymentId: Object;
-  deliveryID: Object;
-  Status: String;
+  cart: OrderItem[];
 }
 export interface UserData {
   userName: string;
@@ -60,22 +48,17 @@ export interface Application {
 export interface Customer {}
 
 export interface OrderItem {
-  id: number;
+  _id?: string;
   product: Product;
   quantity: number;
-  rentalDuration: number;
+  duration: number;
 }
 
 export interface Order {
-  id: string;
+  _id?: string;
   customerId: string;
-  quantity: Number;
   amount: Number;
-  monthlyPrice: number;
-  duration: Number;
-  productId: string;
-  subId: string;
-  paymentID: string;
-  deliveryId: string;
-  status: String;
+  deliveryId?: string;
+  status?: String;
+  orderItems: OrderItem[];
 }

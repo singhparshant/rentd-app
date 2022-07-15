@@ -2,56 +2,20 @@ import { PersonAddDisabledTwoTone } from "@mui/icons-material";
 import create from "zustand";
 import { persist } from "zustand/middleware";
 import axiosInstance from "../api/axios";
-import { OrderItem, Product, ShoppingCart} from "../components/common/interfaces/Interfaces";
+import {
+  OrderItem,
+  Product,
+  ShoppingCart,
+} from "../components/common/interfaces/Interfaces";
 import Cart from "../components/common/navBar/Cart";
-
-const product1: Product = {
-  name: "Nike Air Limited Edition 42",
-  monthlyPrice: 25,
-  discount: 0,
-  deposit: 100,
-  minDuration: 6,
-  description: "Shoes are beautiful",
-  avgRating: 5,
-  numberRatings: 5,
-  category: "Shoes",
-  productImages: ["images"],
-  supplierId: "ttt",
-};
-const product2: Product = {
-  name: "Adidas StanSmith",
-  monthlyPrice: 25,
-  discount: 0,
-  deposit: 100,
-  minDuration: 6,
-  description: "Shoes are beautiful",
-  avgRating: 5,
-  numberRatings: 5,
-  category: "Shoes",
-  productImages: ["images"],
-  supplierId: "ttt",
-};
-const orderItem1: OrderItem = {
-  id: 1,
-  product: product1,
-  quantity: 2,
-  rentalDuration: 3,
-};
-const orderItem2: OrderItem = {
-  id: 2,
-  product: product2,
-  quantity: 2,
-  rentalDuration: 3,
-};
-
 const useCart = create((set) => ({
   cart: [],
-  setCart: async (id: any) =>{
+  setCart: async (id: any) => {
     //TODO
-    const shoppingCart : ShoppingCart = await axiosInstance.get("/shoppingCarts", id)
-    console.log("Getting the shopping cart of the user: " )
+    const shoppingCart = await axiosInstance.get("/shoppingCarts", id);
+    console.log("Getting the shopping cart of the user: ");
     set(() => ({
-      cart: shoppingCart,
+      cart: shoppingCart.data.data,
     }));
   },
   addItemToCart: (item: OrderItem) => {
@@ -61,14 +25,14 @@ const useCart = create((set) => ({
   },
   removeItem: (item: any) => {
     set((state: any) => ({
-      cart: state.cart.filter((el: OrderItem) => el.id !== item.id),
+      cart: state.cart.filter((el: OrderItem) => el._id !== item.id),
     }));
   },
   emptyCart: () => set({ cart: [] }),
   incrementItemQuantity: (item: OrderItem) => {
     set((state: any) => ({
       cart: state.cart.map((el: OrderItem) => {
-        if (el.id === item.id) {
+        if (el._id === item._id) {
           return {
             ...el,
             quantity: item.quantity + 1,
@@ -82,7 +46,7 @@ const useCart = create((set) => ({
   decrementItemQuantity: (item: OrderItem) => {
     set((state: any) => ({
       cart: state.cart.map((el: OrderItem) => {
-        if (el.id === item.id) {
+        if (el._id === item._id) {
           return {
             ...el,
             quantity: item.quantity - 1,
@@ -96,10 +60,10 @@ const useCart = create((set) => ({
   incrementItemDuration: (item: OrderItem) => {
     set((state: any) => ({
       cart: state.cart.map((el: OrderItem) => {
-        if (el.id === item.id) {
+        if (el._id === item._id) {
           return {
             ...el,
-            rentalDuration: item.rentalDuration + 1,
+            duration: item.duration + 1,
           };
         } else {
           return el;
@@ -110,10 +74,10 @@ const useCart = create((set) => ({
   decrementItemDuration: (item: OrderItem) => {
     set((state: any) => ({
       cart: state.cart.map((el: OrderItem) => {
-        if (el.id === item.id) {
+        if (el._id === item._id) {
           return {
             ...el,
-            rentalDuration: item.rentalDuration - 1,
+            duration: item.duration - 1,
           };
         } else {
           return el;

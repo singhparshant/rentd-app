@@ -7,19 +7,17 @@ let orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "user",
     },
-    quantity: Number,
+    orderItems: [
+      {
+        productID: {
+          type: Schema.Types.ObjectId,
+          ref: "product",
+        },
+        quantity: Number,
+        duration: Number,
+      },
+    ],
     amount: Number,
-    monthlyPrice: Number,
-    duration: Number,
-    productId: {
-      type: Schema.Types.ObjectId,
-      ref: "product",
-    },
-    subId: String,
-    paymentID: {
-      type: Schema.Types.ObjectId,
-      ref: "payment",
-    },
     deliveryId: {
       type: Schema.Types.ObjectId,
       ref: "delivery",
