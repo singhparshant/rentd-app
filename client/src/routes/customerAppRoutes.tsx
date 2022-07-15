@@ -4,22 +4,21 @@ import NotFound from "../components/common/notFound/NotFound";
 import ProductDetailsScreen from "../components/common/productDetails/ProductDetailsScreen";
 import SignUp from "../components/common/signUp/SignUp";
 import CartScreen from "../components/customerApp/cartScreen/CartScreen";
-import CheckoutScreen from "../components/customerApp/checkoutScreen/CheckoutScreen";
-import HomeScreen from "../components/customerApp/homeScreen/HomeScreen";
+// import CheckoutScreen from "../components/customerApp/checkoutScreen/CheckoutScreen";
 import OrderDetailsScreen from "../components/common/orderDetailsScreen/OrderDetailsScreen";
 import OrdersScreen from "../components/common/ordersScreen/OrdersScreen";
+import HomeScreen from "../components/customerApp/homeScreen/HomeScreen";
 // import ProductsSearchScreen from "../components/common/productsSearchScreen/ProductsSearchScreen";
 import {
-  checkoutPath,
   getCartPath,
   getOrderByIdPath,
   getOrdersPath,
   getProductByIdPath,
   landingPagePath,
   loginPagePath,
-  registerPagePath,
   //   searchProductPath,
   profilePath,
+  registerPagePath,
 } from "../api/requestPaths";
 import ProfileScreen from "../components/common/profileScreen/ProfileScreen";
 
@@ -52,10 +51,10 @@ export const customerAppRoutes: Array<AppRoute> = [
     path: getCartPath,
     component: <CartScreen />,
   },
-  {
-    path: checkoutPath,
-    component: <CheckoutScreen />,
-  },
+  // {
+  //   path: checkoutPath,
+  //   component: <CheckoutScreen />,
+  // },
   {
     path: getOrdersPath,
     component: <OrdersScreen />,
