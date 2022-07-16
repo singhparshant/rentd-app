@@ -32,10 +32,29 @@ const product: Product = {
   _id: "62bc4f9150d02c83c876ee1f",
 };
 
+const product2: Product = {
+  avgRating: 3.5,
+  category: "Household",
+  deposit: 300,
+  description:
+    "Polyester fabric cover.\nAssembled in less than 20 minutes without tools with a friend.\nThe fabric has been selected for its durability and ease of cleaning.\nA naturally strong wooden frame is wrapped with a cuddly, supportive foam padding.\nConveniently supplied in a box - all parts for mounting your sofa are located in the closed compartment on the bottom of the base profile.",
+  discount: 0,
+  minDuration: 1,
+  monthlyPrice: 100,
+  name: "Couchhhhh",
+  numberRatings: 15,
+  productImages: ["bike1_1.jpeg"],
+  supplierId: "62b22f7dc565fc91d7cac190",
+  _id: "62bc4f9150d02c83c876ee1",
+};
+
 const tentative_order = {
   customerId: "62b46dce95b02b7c1b024ae9",
   amount: 800,
-  orderItems: [{ product: product, quantity: 2, duration: 2 }],
+  orderItems: [
+    { product: product, quantity: 2, duration: 2 },
+    // { product: product2, quantity: 1, duration: 2 },
+  ],
 };
 
 export default function CartScreen() {
