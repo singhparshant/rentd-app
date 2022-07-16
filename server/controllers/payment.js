@@ -1,52 +1,39 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST);
 
 const createProductAndPrice = async (orderItems) => {
-  let priceOneTime, priceRecurring;
+  let priceOneTime, priceRecurring, product;
   const retVal = await Promise.all(
     orderItems.map(async (orderItem) => {
       const item = orderItem.product;
+      product = await Promise.all([
+        stripe.products.create({
+          name: item.name,
+          // images: ["../storage/productImages/${item.productImages[0]}"],
+        }),
+      ]);
+
+      console.log("Product id : ", product.id);
+
       try {
-        product = await stripe.products.create({
-          name: item._id,
+        priceRecurring = await stripe.prices.create({
+          // description: `Duration of renting is ${orderItem.duration}`,
+          // quantiy: orderItem.quantity,
+          unit_amount: item.monthlyPrice * 100,
+          currency: "eur",
+          recurring: { interval: "month" },
+          product: product.id,
+          //we use lookup key to place orders
+          lookup_key: (Math.random() + 1).toString(36).substring(7),
         });
-      } catch (err) {
-        console.error(err);
-      }
 
-      try {
-        priceRecurring = await Promise.all(
-          stripe.prices.create({
-            description: `Duration of renting is ${row.item.duration}`,
-            quantiy: orderItem.quantity,
-            unit_amount: orderItem.duration * item.monthlyPrice * 100,
-            currency: "eur",
-            recurring: { interval: "month" },
-            product: product.id,
-            //we use lookup key to place orders
-            lookup_key: (Math.random() + 1).toString(36).substring(7),
-            product_data: {
-              name: item.product.name,
-              images: ["../storage/productImages/bike1_1.jpeg"],
-            },
-          })
-        );
-
-        priceOneTime = await Promise.all(
-          stripe.prices.create({
-            quantiy: orderItem.quantity,
-            unit_amount: item.deposit * 100,
-            currency: "eur",
-            product: product.id,
-            //we use lookup key to place orders
-            lookup_key: (Math.random() + 1).toString(36).substring(7),
-            product_data: {
-              name: item.product.name,
-              images: [
-                "../storage/productImages/${item.product.productImages[0]}",
-              ],
-            },
-          })
-        );
+        priceOneTime = await stripe.prices.create({
+          // quantiy: orderItem.quantity,
+          unit_amount: item.deposit * 100,
+          currency: "eur",
+          product: product.id,
+          //we use lookup key to place orders
+          lookup_key: (Math.random() + 1).toString(36).substring(7),
+        });
       } catch (err) {
         console.error(err);
       }
@@ -81,24 +68,21 @@ const create_session = async (req, res) => {
   const lineItemsArray = await createProductAndPrice(order.orderItems);
   console.log("lineItemsArray: ", lineItemsArray);
 
-  // try {
-  //   const session = await stripe.checkout.sessions.create({
-  //     billing_address_collection: "auto",
-  //     line_items: lineItemsArray,
-  //     // line_items: [
-  //     //   { price: priceOneTime.id, quantity: 1 },
-  //     //   { price: priceRecurring.id, quantity: 1 },
-  //     // ],
-  //     // metadata: { basket_id: req.body.lookup_key },
-  //     mode: "subscription",
-  //     success_url: "https://example.com/success",
-  //     cancel_url: "https://example.com/cancel",
-  //   });
-  //   res.json({ url: session.url });
-  // } catch (e) {
-  //   console.log(e);
-  //   res.status(500).json({ error: e.messsage });
-  // }
+  try {
+    const session = await stripe.checkout.sessions.create({
+      billing_address_collection: "auto",
+      payment_method_types: ["card"],
+      line_items: lineItemsArray,
+      metadata: { customerId: order.customerId },
+      mode: "subscription",
+      success_url: "https://example.com/success",
+      cancel_url: "https://example.com/cancel",
+    });
+    res.json({ url: session.url });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: e.messsage });
+  }
 };
 
 module.exports = { create_session };
