@@ -15,6 +15,7 @@ import ProductDetailsScreen from "../components/common/productDetails/ProductDet
 import ProfileScreen from "../components/common/profileScreen/ProfileScreen";
 import AddProductScreen from "../components/supplierApp/addProductScreen/AddProductScreen";
 import ProductsScreen from "../components/supplierApp/productsScreen/ProductsScreen";
+import UpdateProductScreen from "../components/supplierApp/updateProductScreen/UpdateProductScreen";
 import { AppRoute } from "./customerAppRoutes";
 
 export const supplierAppRoutes: Array<AppRoute> = [
@@ -40,7 +41,7 @@ export const supplierAppRoutes: Array<AppRoute> = [
 
   {
     path: getProductByIdPath,
-    component: <ProductDetailsScreen />,
+    component: <UpdateProductScreen />,
   },
 
   {
