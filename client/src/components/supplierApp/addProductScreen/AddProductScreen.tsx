@@ -19,8 +19,10 @@ import { Product } from "../../common/interfaces/Interfaces";
 import imageIcon from "../../../assets/imageIcon.png";
 import { readFileContent } from "../../../utils/functions";
 import toast from "react-hot-toast";
+import { useHistory } from "react-router-dom";
 
 export default function AddProductScreen() {
+  const history = useHistory();
   const uploadImageRef = useRef<HTMLInputElement>(null);
   const [categories, setCategories] = useState([]);
   const [newProduct, setNewProduct] = useState<Product>({
@@ -86,6 +88,7 @@ export default function AddProductScreen() {
     try {
       await axiosInstance.post("/products", newProduct);
       toast.success("product added!");
+      history.push("/products");
     } catch (error) {
       toast.error("please try again!");
     }

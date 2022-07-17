@@ -10,19 +10,13 @@ import useFilters from "../../../zustand/useFilters";
 import Cart from "./Cart";
 import "./NavBar.css";
 
-
-
 interface NabBarProps {
   user: any;
-  onLogout: () => void
+  onLogout: () => void;
 }
 
-
 const NavBar = () => {
-  const {
-    cart,
-    emptyCart
-  } = useCart() as any;
+  const { cart, emptyCart } = useCart() as any;
   const history = useHistory();
   const user = useAuthState((state: any) => state.user);
   const setUser = useAuthState((state: any) => state.setUser);
@@ -30,7 +24,7 @@ const NavBar = () => {
   const handleLogout = async () => {
     try {
       //delete jwt cookie from browser
-      emptyCart()
+      emptyCart();
       await axiosInstance.get("/users/logout");
       setUser(null);
       history.push("/");
@@ -42,7 +36,7 @@ const NavBar = () => {
   if (!user || user.role === "customer")
     return <CustomerNavBar user={user} onLogout={() => handleLogout()} />;
   if (user.role === "supplier")
-    return <SupplierNavBar user={user} onLogout={() => handleLogout() } />;
+    return <SupplierNavBar user={user} onLogout={() => handleLogout()} />;
   if (user.role === "admin")
     return <AdminNavBar user={user} onLogout={handleLogout} />;
   return <></>;
@@ -172,6 +166,7 @@ const SupplierNavBar = ({ user, onLogout }: NabBarProps) => {
       buttonText: "Products",
       path: "/products",
     },
+    { buttonText: "+ Add product", path: "/addProduct" },
     { buttonText: "Orders", path: "/orders" },
   ];
   return (
