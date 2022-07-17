@@ -56,6 +56,11 @@ const list = async (req, res) => {
             $gt: 0,
           } : undefined
         },
+        {
+          supplierId: req.query.supplierId && {
+            $eq: req.query.supplierId,
+          }
+        },
       ],
     };
 

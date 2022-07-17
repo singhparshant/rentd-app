@@ -20,11 +20,14 @@ import imageIcon from "../../../assets/imageIcon.png";
 import { readFileContent } from "../../../utils/functions";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
+import { userInfo } from "os";
+import useAuthState from "../../../zustand/useAuthState";
 
 export default function AddProductScreen() {
   const history = useHistory();
   const uploadImageRef = useRef<HTMLInputElement>(null);
   const [categories, setCategories] = useState([]);
+  const user = useAuthState((state: any) => state.user);
   const [newProduct, setNewProduct] = useState<Product>({
     name: "",
     monthlyPrice: 0,
@@ -36,7 +39,7 @@ export default function AddProductScreen() {
     numberRatings: 0,
     category: "",
     productImages: [],
-    supplierId: "",
+    supplierId: user.id,
   });
 
   //fetch categories dynamically
