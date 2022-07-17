@@ -11,6 +11,10 @@ const ordersRouter = require("./routes/orders.js");
 const shoppingCartRouter = require("./routes/shoppingCart.js");
 const userRouter = require("./routes/user.js");
 const applicationRouter = require("./routes/application.js");
+const stripeWebhookRouter = require("./routes/webHook");
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const User = require("./models/user");
 const checkoutRouter = require("./routes/checkout.js");
 const categoryRouter = require("./routes/category.js");
 const cors = require("cors");
@@ -31,13 +35,19 @@ mongoose.connect(connectionString, options, (err) => {
 });
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
-app.use(bodyParser.json({ limit: "5mb" }));
 app.use(logger("dev"));
 
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(
+  "/stripeWebhook",
+  express.raw({ type: "application/json" }),
+  stripeWebhookRouter
+);
+app.use(bodyParser.json({ limit: "5mb" }));
+app.use(express.json());
 app.use("/products", productsRouter);
 app.use("/orders", ordersRouter);
 app.use("/shoppingCarts", shoppingCartRouter);

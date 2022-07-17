@@ -1,6 +1,6 @@
 export interface Product {
-  _id?: number;
-  supplierId?: string;
+  _id?: string;
+  supplierId: string;
   name: string;
   monthlyPrice: number;
   discount: number;
@@ -13,16 +13,8 @@ export interface Product {
   productImages: string[];
 }
 
-export interface Order {
-  _id: string;
-  customer: Customer;
-  totalAmount: number;
-  monthlyPrice: number;
-  orderItems: OrderItem[];
-  paymentMethod: String;
-  paymentId: Object;
-  deliveryID: Object;
-  Status: String;
+export interface ShoppingCart {
+  cart: OrderItem[];
 }
 export interface UserData {
   userName: string;
@@ -56,8 +48,17 @@ export interface Application {
 export interface Customer {}
 
 export interface OrderItem {
-  id: number;
+  _id?: string;
   product: Product;
   quantity: number;
-  rentalDuration: number;
+  duration: number;
+}
+
+export interface Order {
+  _id?: string;
+  customerId: string;
+  amount: Number;
+  deliveryId?: string;
+  status?: String;
+  orderItems: OrderItem[];
 }
