@@ -1,7 +1,9 @@
+const { getOrder } = require("./payment");
 const express = require("express");
 const router = express.Router();
 const asyncHandler = require("express-async-handler");
 const stripe = require("stripe");
+const Order = require("../models/order");
 const signingSecret = process.env.STRIPE_SIGNING_SECRET;
 
 const stripeWebhook = asyncHandler(async (req, res) => {
@@ -20,15 +22,24 @@ const stripeWebhook = asyncHandler(async (req, res) => {
       return res.sendStatus(400);
     }
   }
-
   // Handle the event
-  if (event.type === "payment_intent.succeeded")
-    console.log("Event was successful: ", event.data.metadata.order);
-  // Then define and call a method to handle the successful payment intent.
-  // handlePaymentIntentSucceeded(paymentIntent);
+  if (event.type === "payment_intent.succeeded") {
+    const orderRequest = getOrder();
+    orderRequest.orderItems.map((orderItem) => {
+      orderItem["status"] = "ORDERED";
+      orderItem["deliveryId"] = (Math.random() + 1).toString(36).substring(7);
+      orderItem["product"] = orderItem.product.productId;
+    });
+  }
 
   // Return a 200 response to acknowledge receipt of the event
   res.send(event);
 });
 
 module.exports = { stripeWebhook };
+
+// {
+//   customerId: '62b46dce95b02b7c1b024ae9',
+//   amount: 800,
+//   orderItems: [ { product: [Object], quantity: 2, duration: 2 } ]
+// }
