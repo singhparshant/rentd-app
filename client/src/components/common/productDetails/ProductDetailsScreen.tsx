@@ -106,17 +106,22 @@ export default function ProductDetailsScreen() {
   const { user } = useAuthState() as any;
 
   const handleAddToCart = (rentalDuration: number) => {
-    toast.success("Added to cart!");
-    const orderItem: OrderItem = {
-      _id: (Math.random() + 1).toString(36).substring(7),
-      product: product,
-      quantity: 1,
-      duration: 1,
-    };
-    addItemToCart(orderItem);
-    if (user) {
-      // toast.success("persisted cart!");
-      axiosInstance.put("/shoppingCarts", orderItem);
+    console.log("Product : ", product);
+    console.log("Cart: ", cart);
+    if (rentalDuration > 0) {
+      const orderItem: OrderItem = {
+        _id: (Math.random() + 1).toString(36).substring(7),
+        product: product,
+        quantity: 1,
+        duration: rentalDuration,
+      };
+      addItemToCart(orderItem);
+      toast.success("Added to cart!");
+      if (user) {
+        axiosInstance.put("/shoppingCarts", orderItem);
+      }
+    } else {
+      toast.error("Please select a duration!");
     }
   };
 

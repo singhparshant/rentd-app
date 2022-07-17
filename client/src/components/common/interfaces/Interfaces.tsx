@@ -52,13 +52,12 @@ export interface OrderItem {
   product: Product;
   quantity: number;
   duration: number;
+  status?: "ordered" | "delivered" | "refunded" | "Cancelled";
+  deliveryId?: string;
 }
 
 export interface Order {
   _id?: string;
   customerId: string;
-  amount: Number;
-  deliveryId?: string;
-  status?: String;
   orderItems: OrderItem[];
 }
