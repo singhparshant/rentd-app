@@ -3,6 +3,7 @@
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const util = require("util");
+const { v4: uuid } = require("uuid");
 const Product = require("../models/product");
 
 const list = async (req, res) => {
@@ -61,15 +62,6 @@ const list = async (req, res) => {
       ],
     };
 
-    console.log(
-      "queryObj",
-      util.inspect(queryObject, {
-        showHidden: false,
-        depth: null,
-        colors: true,
-      })
-    );
-
     let sortObject = {};
     if (req.query.sortBy === "price") sortObject = { monthlyPrice: 1 };
     else if (req.query.sortBy === "name") sortObject = { name: 1 };
@@ -114,7 +106,6 @@ const list = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  console.log("IM IN CREATE PA");
   const token = req.cookies["jwt"];
   if (!token) return res.status(403).send("You are not logged in.");
   try {
@@ -133,27 +124,37 @@ const create = async (req, res) => {
     });
 
   try {
-    if (Array.isArray(req.body)) {
-      console.log("IM IN line 94 PA");
-      Product.insertMany(req.body, { ordered: false })
-        .then(function (product) {
-          res.status(200).json({
-            success: true,
-            data: product,
-          });
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    } else {
-      console.log("IM IN line 106 PA");
-      let product = new Product(req.body);
-      product = await product.save();
-      res.status(200).json({
-        success: true,
-        data: product,
-      });
+    const productImages = req.body.productImages;
+    //store product images in storage/productImages
+    const extenstions = productImages.map((imgContent) =>
+      imgContent.substring(imgContent.indexOf("/") + 1, imgContent.indexOf(";"))
+    );
+    let fileNames = productImages.map(
+      (_, idx) => uuid() + "." + extenstions[idx]
+    );
+
+    //prune input
+    for (let i = 0; i < productImages.length; i++) {
+      const regex = new RegExp(`^data:image\/${extenstions[i]};base64,`);
+      productImages[i] = productImages[i].replace(regex, "");
     }
+    productImages.map((imgContent, idx) => {
+      fs.writeFile(
+        `${__dirname}/../storage/productImages/${fileNames[idx]}`,
+        imgContent,
+        "base64",
+        function (err) {
+          console.log(err);
+        }
+      );
+    });
+    req.body.productImages = fileNames;
+    let product = new Product(req.body);
+    product = await product.save();
+    res.status(200).json({
+      success: true,
+      data: product,
+    });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
