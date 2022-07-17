@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Button,
   FormControl,
@@ -10,13 +10,18 @@ import {
   Box,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { ReactComponent as Tick } from "../../../assets/icons/tick.svg";
+
 // import Carousel2 from "react-multi-carousel";
 import Typography from "@material-ui/core/Typography";
 import axiosInstance from "../../../api/axios";
 import { Product } from "../../common/interfaces/Interfaces";
-import useAuthState from "../../../zustand/useAuthState";
+import imageIcon from "../../../assets/imageIcon.png";
+import { readFileContent } from "../../../utils/functions";
+import toast from "react-hot-toast";
 
 export default function AddProductScreen() {
+  const uploadImageRef = useRef<HTMLInputElement>(null);
   const [categories, setCategories] = useState([]);
   const [newProduct, setNewProduct] = useState<Product>({
     name: "",
@@ -49,32 +54,41 @@ export default function AddProductScreen() {
     return options;
   };
 
-  console.log("new Product", newProduct);
-
   const handleChange = (e: any) => {
     setNewProduct((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const icon = "https://static.thenounproject.com/png/3322766-200.png";
+  const handleProductImagesUpload = async (files: FileList | null) => {
+    if (!files) return;
+    for (let i = 0; i < files.length; i++) {
+      const imageContent = await readFileContent(files.item(i));
+      setNewProduct((prev) => ({
+        ...prev,
+        productImages: [...prev.productImages, imageContent],
+      }));
+    }
+  };
 
-  const { user } = useAuthState() as any;
-
-  const createNewProduct = () => {
-    //   const newProduct: Product = {
-    //     name: productData.name,
-    //     supplierId: user.userId,
-    //     monthlyPrice: productData.monthlyPrice,
-    //     discount: Number(productData.discount),
-    //     deposit: Number(productData.deposit),
-    //     minDuration: productData.minDuration,
-    //     maxDuration: 10,
-    //     description: productData.description,
-    //     avgRating: 0,
-    //     numberRatings: 0,
-    //     category: productData.category,
-    //     productImages: [],
-    //   };
-    //   axiosInstance.post("/products", newProduct);
+  const createNewProduct = async () => {
+    if (
+      newProduct.productImages.length === 0 ||
+      newProduct.category === "Select a category" ||
+      newProduct.discount < 0 ||
+      newProduct.discount > 100 ||
+      !newProduct.name ||
+      !newProduct.description ||
+      !newProduct.deposit
+    ) {
+      toast.error("invalid data!");
+      console.log("new prod", newProduct);
+      return;
+    }
+    try {
+      await axiosInstance.post("/products", newProduct);
+      toast.success("product added!");
+    } catch (error) {
+      toast.error("please try again!");
+    }
   };
 
   return (
@@ -110,12 +124,8 @@ export default function AddProductScreen() {
                 fullWidth
                 placeholder="Name"
                 name="name"
-                autoComplete="Full name"
-                autoFocus
-                //value={userData.name}
-                //onChange={(e) =>
-                // setUserData({ ...userData, name: e.target.value })
-                //}
+                value={newProduct.name}
+                onChange={handleChange}
               />
               <TextField
                 label="Description"
@@ -147,24 +157,24 @@ export default function AddProductScreen() {
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <TextField
                   margin="normal"
-                  label="Discount"
+                  label="Discount %"
                   //required
                   style={{ width: "50%", marginRight: "3%" }}
                   name="discount"
-                  placeholder="Discount"
+                  placeholder="Discount %"
                   type="number"
                   autoComplete="discount"
                   value={newProduct.discount || ""}
                   onChange={handleChange}
                 />
                 <TextField
-                  label="Deposit"
+                  label="Deposit in €"
                   margin="normal"
                   style={{ width: "50%" }}
                   //required
                   type="number"
                   name="deposit"
-                  placeholder="Deposit"
+                  placeholder="Deposit in €"
                   autoComplete="deposit"
                   value={newProduct.deposit || ""}
                   onChange={handleChange}
@@ -185,7 +195,7 @@ export default function AddProductScreen() {
                     value={newProduct.minDuration}
                     label={"Minimal Rental Duration"}
                     onChange={handleChange}
-                    name="Rental Duration"
+                    name="minDuration"
                   >
                     {getMinRentalDurationOption().map((option, index: any) => {
                       return (
@@ -203,7 +213,7 @@ export default function AddProductScreen() {
                     value={newProduct.category || "Select category"}
                     label={"Category"}
                     onChange={handleChange}
-                    name="Category"
+                    name="category"
                   >
                     {["Select category", ...categories].map(
                       (category, index: any) => {
@@ -225,19 +235,34 @@ export default function AddProductScreen() {
           <Typography style={{ fontSize: "20px", marginTop: 20 }}>
             Product images
           </Typography>
-          <Button style={{ marginLeft: "40%" }}>
+          <div
+            style={{ marginLeft: "40%", cursor: "pointer", width: "100px" }}
+            onClick={() => uploadImageRef.current?.click()}
+          >
             <img
-              src={icon}
+              src={imageIcon}
               style={{
-                maxHeight: 350,
-                maxWidth: 350,
                 width: "100px",
                 height: "100px",
                 borderRadius: "7px",
               }}
               alt="Could not load."
             />
-          </Button>
+            <input
+              type="file"
+              multiple
+              style={{ display: "none" }}
+              accept="image/*"
+              ref={uploadImageRef}
+              onChange={(e) => handleProductImagesUpload(e.target.files)}
+            />
+            {newProduct.productImages.length > 0 && (
+              <>
+                <span style={{ color: "green" }}>Uploaded!</span>
+                <Tick style={{ color: "green" }} />
+              </>
+            )}
+          </div>
         </Box>
         <div
           style={{

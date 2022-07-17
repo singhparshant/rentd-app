@@ -1,6 +1,6 @@
 export interface Product {
   _id?: number;
-  supplierId: string;
+  supplierId?: string;
   name: string;
   monthlyPrice: number;
   discount: number;
