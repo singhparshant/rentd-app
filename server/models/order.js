@@ -15,14 +15,13 @@ let orderSchema = new Schema(
         },
         quantity: Number,
         duration: Number,
+        status: String,
+        deliveryId: {
+          type: Schema.Types.ObjectId,
+          ref: "delivery",
+        },
       },
     ],
-    amount: Number,
-    deliveryId: {
-      type: Schema.Types.ObjectId,
-      ref: "delivery",
-    },
-    status: String,
   },
   { timestamps: true }
 );
