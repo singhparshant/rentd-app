@@ -7,7 +7,7 @@ export default function OrdersScreen() {
 
     return (
         <div>
-            {user ? (<h1>Orders for {user.name}</h1>) : <Redirect to="/login" />}
+            {user ? (<h1>Orders for {}</h1>) : <Redirect to="/login" />}
         </div>
     )
 
