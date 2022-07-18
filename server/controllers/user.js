@@ -54,9 +54,91 @@ const logout = async (req, res) => {
   res.send("Successfully logged out!");
 }
 
-const read = (req, res) => { }
+const read = async (req, res) => { 
+  let response = await User.findById(req.params.id);
+  //console.log("response: ")
+  if(!response){
+    return res.status(404).json({
+      message: "User not found with id " + req.params.id
+    });
+  }
+  return res.status(200).json(response) 
+};
 
-const update = (req, res) => { }
+
+const update = async (req, res) => { 
+  console.log("SOMETHING")
+  let user = await User.findById(req.params.id);
+  console.log("user is: ", user)
+  if (req.body.oldPassword != "") {
+    //there is old password given
+    console.log("maluma")
+    try {
+      //const passwordHash = user.passwordHash;
+      //console.log("user")
+      console.log("alejandro sanz has old password:", req.body.oldPassword)
+      //const passwordHashOldUpdate = await bcrypt.hash(req.body.oldPassword, 10);
+      //console.log("new hash: ", passwordHashOldUpdate)
+      
+      console.log("about to compare")
+      const isValid = await bcrypt.compare(req.body.oldPassword, user.passwordHash);
+      console.log("is valid is: ", isValid)
+      
+      
+      console.log("j balvin is valid: ", isValid)
+      if (isValid){
+        console.log("password match rrrr")
+        console.log("new password is: ", req.body.newPassword)
+        const passwordHashNew = await bcrypt.hash(req.body.newPassword, 10);
+        console.log("passwordhashnew is: ", passwordHashNew)
+        const responseUpdate = await User.findByIdAndUpdate(
+          req.params.id,
+          {
+            username: req.body.username,
+            password: passwordHashNew,
+            email: req.body.email,
+            role: req.body.role,
+            address: req.body.address,
+          }
+          );
+
+          return res.status(200).json({
+            responseUpdate
+          })
+        console.log("the response update is: ", responseUpdate)
+      }
+      else{
+        return res.status(404).send({
+          message: "Wrong password, error message is: " + error.message
+        })
+      }
+    } catch (error) {
+      console.log("error message is: ", error.message)
+      return res.status(404).send({
+        message: "Some error related to password"
+      });
+    }
+    
+  }
+  else{
+    const responseUpdate = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          username: req.body.username,
+          password: user.passwordHash,
+          email: req.body.email,
+          role: req.body.role,
+          address: req.body.address,
+        }
+        );
+
+  }
+  
+  
+  
+  
+
+}
 
 const remove = async (req, res) => {
   User.findByIdAndDelete(req.params.id)
