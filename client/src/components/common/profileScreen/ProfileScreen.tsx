@@ -19,7 +19,7 @@ import toast from "react-hot-toast";
 
 
 interface userInfo{
-  name: string;
+  username: string;
   address: string;
   oldPassword: string;
   email: string;
@@ -31,7 +31,7 @@ export default function ProfileScreen() {
   const [name, setName] = useState(0);
   const [address, setAddress] = useState(0);
   const [details, setDetails] = useState<userInfo> ({
-    name: "",
+    username: "",
     address: "",
     oldPassword: "",
     email: "",
@@ -51,7 +51,7 @@ export default function ProfileScreen() {
       console.log("id: ",id)
       const response = await axiosInstance.get("users/"+id);
       console.log("response is: ", response)
-      setDetails((prev: any) => ({ name: response.data.username, address: response.data.address, oldPassword: "" , 
+      setDetails((prev: any) => ({ username: response.data.username, address: response.data.address, oldPassword: "" , 
         email: response.data.email, role: response.data.role, newPassword: "" }));
       console.log("hello")
     };
@@ -93,9 +93,10 @@ export default function ProfileScreen() {
                 required
                 fullWidth
                 placeholder="Name"
-                name="name"
-                value={details.name}
+                name="username"
+                value={details.username}
                 onChange={ (e: any) => {
+                  
                   setDetails((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
                   }
                 }

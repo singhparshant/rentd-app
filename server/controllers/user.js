@@ -74,38 +74,36 @@ const update = async (req, res) => {
     //there is old password given
     console.log("maluma")
     try {
-      //const passwordHash = user.passwordHash;
-      //console.log("user")
-      console.log("alejandro sanz has old password:", req.body.oldPassword)
-      //const passwordHashOldUpdate = await bcrypt.hash(req.body.oldPassword, 10);
-      //console.log("new hash: ", passwordHashOldUpdate)
-      
-      console.log("about to compare")
+    
+      //console.log("about to compare")
       const isValid = await bcrypt.compare(req.body.oldPassword, user.passwordHash);
-      console.log("is valid is: ", isValid)
+      //console.log("is valid is: ", isValid)
       
       
       console.log("j balvin is valid: ", isValid)
       if (isValid){
-        console.log("password match rrrr")
-        console.log("new password is: ", req.body.newPassword)
+        //console.log("password match rrrr")
+        //console.log("new password is: ", req.body.newPassword)
         const passwordHashNew = await bcrypt.hash(req.body.newPassword, 10);
-        console.log("passwordhashnew is: ", passwordHashNew)
+        //console.log("passwordhashnew is: ", passwordHashNew)
         const responseUpdate = await User.findByIdAndUpdate(
-          req.params.id,
+          {_id: req.params.id},
           {
-            username: req.body.username,
-            password: passwordHashNew,
-            email: req.body.email,
-            role: req.body.role,
-            address: req.body.address,
-          }
+            $set: {
+              username: req.body.username,
+              passwordHash: passwordHashNew,
+              email: req.body.email,
+              role: req.body.role,
+              address: req.body.address,
+            }
+          }, {new:true}
           );
-
+          //console.log("the response update with new password is: ", responseUpdate)
+          //console.log("name should have been: ", req.body.username)
           return res.status(200).json({
             responseUpdate
           })
-        console.log("the response update is: ", responseUpdate)
+        
       }
       else{
         return res.status(404).send({
@@ -113,7 +111,7 @@ const update = async (req, res) => {
         })
       }
     } catch (error) {
-      console.log("error message is: ", error.message)
+      //console.log("error message is: ", error.message)
       return res.status(404).send({
         message: "Some error related to password"
       });
@@ -122,16 +120,23 @@ const update = async (req, res) => {
   }
   else{
     const responseUpdate = await User.findByIdAndUpdate(
-        req.params.id,
+        {_id: req.params.id},
         {
-          username: req.body.username,
-          password: user.passwordHash,
-          email: req.body.email,
-          role: req.body.role,
-          address: req.body.address,
-        }
+          $set :  {
+            username: req.body.username,
+            passwordHash: user.passwordHash,
+            email: req.body.email,
+            role: req.body.role,
+            address: req.body.address
+          }
+        }, {new:true}
+        
         );
-
+        //console.log("the response update with old password is: ", responseUpdate)
+        //console.log("name should have been: ", req.body.username)
+        return res.status(200).json({
+          responseUpdate
+        })
   }
   
   
