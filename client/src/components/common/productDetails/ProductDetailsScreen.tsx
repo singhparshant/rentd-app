@@ -14,7 +14,7 @@ import { useLocation, useParams } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
 import { getProductsPath } from "../../../api/requestPaths";
 import useViewport from "../../../hooks/useViewPort";
-import useAuthState from "../../../zustand/useAuthState";
+import { v4 as uuid } from "uuid";
 import useCart from "../../../zustand/useCart";
 import ProductCard from "../../productsOverview/ProductCard";
 import { OrderItem, Product } from "../interfaces/Interfaces";
@@ -102,29 +102,16 @@ export default function ProductDetailsScreen() {
   };
   const { cart, addItemToCart } = useCart() as any;
 
-  const { user } = useAuthState() as any;
-
   const handleAddToCart = (rentalDuration: number) => {
-    console.log("Product : ", product);
-    console.log("Cart: ", cart);
     if (rentalDuration > 0) {
       const orderItem: OrderItem = {
-        _id: (Math.random() + 1).toString(36).substring(7),
+        _id: uuid(),
         product: product,
         quantity: 1,
         duration: rentalDuration,
       };
-      if (
-        !cart.find(
-          (item: OrderItem) =>
-            item.product._id === product._id && item.duration === rentalDuration
-        )
-      )
-        addItemToCart(orderItem);
+      addItemToCart(orderItem);
       toast.success("Added to cart!");
-      if (user) {
-        axiosInstance.put("/shoppingCarts", orderItem);
-      }
     } else {
       toast.error("Please select a duration!");
     }

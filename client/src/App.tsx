@@ -33,7 +33,7 @@ const App = () => {
           route.path !== success &&
           route.path !== failure && (
             <Route key={idx} exact path={route.path}>
-              {route.component}{" "}
+              {route.component}
             </Route>
           )
       );

@@ -117,26 +117,22 @@ export default function SignUp() {
   const handleCustomerSignup = async (toastId: string) => {
     //create an account for the customer
     const response = await axiosInstance.post("/users", {
-        username: userData.username,
-        password: userData.password,
-        email: userData.email,
-        role: userData.role,
-        address: userData.address,
-      })
-    if(response.data){
+      username: userData.username,
+      password: userData.password,
+      email: userData.email,
+      role: userData.role,
+      address: userData.address,
+    });
+    if (response.data) {
       toast.dismiss(toastId);
       toast.success("Done!");
       history.push("/login");
-      console.log("id of user is: ", response.data._id)
-      axiosInstance.post("/shoppingCarts", {id: response.data._id})
-
-    }
-    else{
+      console.log("id of user is: ", response.data._id);
+      axiosInstance.post("/shoppingCarts", { id: response.data._id });
+    } else {
       toast.dismiss(toastId);
       toast.error("Something went wrong!");
     }
-      
-    
   };
 
   const handleSupplierSignup = async (toastId: string) => {
@@ -146,7 +142,6 @@ export default function SignUp() {
       username: userData.username,
       role: userData.role,
       address: userData.address,
-      IBAN: userData.IBAN,
       codeOfConduct: "",
       status: "pending",
       KYCDocs: [],
@@ -304,25 +299,6 @@ export default function SignUp() {
 
               {userData.role === "supplier" && (
                 <>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      name="IBAN"
-                      label="IBAN"
-                      id="IBAN"
-                      value={userData.IBAN}
-                      onChange={handleChange}
-                      error={
-                        userData.IBAN !== "" && !validator.isIBAN(userData.IBAN)
-                      }
-                      helperText={
-                        userData.IBAN !== "" &&
-                        !validator.isIBAN(userData.IBAN) &&
-                        "Invalid IBAN"
-                      }
-                    />
-                  </Grid>
                   <Grid
                     item
                     xs={12}

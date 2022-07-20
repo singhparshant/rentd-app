@@ -4,6 +4,7 @@ import { Application } from "../../common/interfaces/Interfaces";
 import "./application.css";
 import applicationImage from "../../../assets/application.png";
 import { parseDate } from "../../../utils/functions";
+import { Card } from "@mui/material";
 
 interface ApplicationsOverviewProps {
   applications: Application[];
@@ -25,27 +26,36 @@ export default function ApplicationsOverview({
               }}
               style={{ textDecoration: "none", width: "80%", color: "black" }}
             >
-              <div key={index} className="applicationCard">
-                <p>Application {index + 1}</p>
+              <Card
+                sx={{
+                  margin: "8px",
+                  // width: "80%",
+                  transition: "transform 0.15s ease-in-out",
+                  "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
+                }}
+              >
+                <div key={index} className="applicationCard">
+                  <p>Application {index + 1}</p>
 
-                <div>
-                  <div style={{ paddingBottom: 5 }}>
-                    <b>email:</b> {application.email}
+                  <div>
+                    <div style={{ paddingBottom: 5 }}>
+                      <b>email:</b> {application.email}
+                    </div>
+                    {application.createdAt && (
+                      <span>
+                        <b>created at: </b>
+                        {parseDate(new Date(application.createdAt))}
+                      </span>
+                    )}
                   </div>
-                  {application.createdAt && (
-                    <span>
-                      <b>created at: </b>
-                      {parseDate(new Date(application.createdAt))}
-                    </span>
-                  )}
-                </div>
 
-                <img
-                  className="applicationImage"
-                  src={applicationImage}
-                  alt=""
-                />
-              </div>
+                  <img
+                    className="applicationImage"
+                    src={applicationImage}
+                    alt=""
+                  />
+                </div>
+              </Card>
             </Link>
           ))}
         </>

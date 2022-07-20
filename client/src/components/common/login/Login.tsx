@@ -12,7 +12,6 @@ import { useHistory } from "react-router-dom";
 import useAuthState from "../../../zustand/useAuthState";
 import toast from "react-hot-toast";
 import axiosInstance from "../../../api/axios";
-import useCart from "../../../zustand/useCart";
 const theme = createTheme();
 
 export default function Login() {
@@ -20,16 +19,14 @@ export default function Login() {
   const setUser = useAuthState((state: any) => state.setUser);
   const [userData, setUserData] = useState({ email: "", password: "" });
   const fromRef = useRef<any>(null);
-  const { cart, setCart } = useCart() as any;
 
   const handleLogin = async () => {
     try {
       const response = await axiosInstance.post("/users/login", userData);
-      const userCurr = await response.data;
+      const user = await response.data;
 
-      setUser(userCurr);
-      console.log("user logged in: ", userCurr);
-      setCart("62b46dce95b02b7c1b024ae9");
+      setUser(user);
+      //  setCart(user.id);
       history.push("/");
     } catch (error) {
       toast.error("please try again!");

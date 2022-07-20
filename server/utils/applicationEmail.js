@@ -9,8 +9,8 @@ const sendApplicationEmail = async (application, status) => {
         host: 'smtp.ethereal.email',
         port: 587,
         auth: {
-            user: 'bernita.armstrong90@ethereal.email',
-            pass: 'deCnCJ9XwUy5EujE2T'
+            user: 'adella.torp75@ethereal.email',
+            pass: 'Ms1kf6MN7pRnb9kMkp'
         }
     });
 
@@ -40,7 +40,6 @@ const acceptanceEmail = async (application) => {
         username: application.username,
         passwordHash,
         address: application.address,
-        IBAN: application.IBAN
     }
     const supplier = new User(supplierData);
 
