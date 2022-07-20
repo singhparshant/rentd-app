@@ -6,7 +6,6 @@ let applicationSchema = new Schema(
     email: String,
     username: String,
     address: String,
-    IBAN: String,
     codeOfConduct: String,
     KYCDocs: [String],
     status: {

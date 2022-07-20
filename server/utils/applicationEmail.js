@@ -40,7 +40,6 @@ const acceptanceEmail = async (application) => {
         username: application.username,
         passwordHash,
         address: application.address,
-        IBAN: application.IBAN
     }
     const supplier = new User(supplierData);
 
