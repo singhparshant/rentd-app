@@ -7,9 +7,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
+import axiosInstance from "../../../api/axios";
 import { Product } from "../../common/interfaces/Interfaces";
+import { ReactComponent as Tick } from "../../../assets/icons/tick.svg";
+import imageIcon from "../../../assets/imageIcon.png";
 
 interface LocationInterface {
   state: {
@@ -20,9 +24,35 @@ interface LocationInterface {
 export default function UpdateProductScreen() {
   const location = useLocation();
   const { state } = location as LocationInterface;
-  const product = state.fromProductsPage;
+  const [product, setProduct] = useState<Product>(state.fromProductsPage);
+  const [categories, setCategories] = useState([]);
+  const uploadImageRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = () => {};
+  const getMinRentalDurationOption = () => {
+    let options = [{ label: "Select duration", value: 0 }];
+    for (let i = 1; i <= 12; i++)
+      options.push({ label: `${i} months`, value: i });
+
+    return options;
+  };
+
+  //fetch categories dynamically
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await axiosInstance.get("/categories");
+      setCategories(response.data.map((cat: any) => cat.name));
+    };
+    fetchCategories();
+  }, []);
+
+  const handleChange = (e: any) => {
+    setProduct((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+  const handleProductImagesUpload = (files: any) => {};
+
+  const handleUpdateProduct = () => {
+    toast.success("updated!");
+  };
 
   return (
     <div
@@ -54,10 +84,7 @@ export default function UpdateProductScreen() {
           />
         </div>
         <Box>
-          <Box
-            component="form"
-            //onSubmit={handleSubmit}
-          >
+          <Box component="form">
             <div>
               <Typography style={{ fontSize: "20px" }}>
                 Product details
@@ -97,7 +124,7 @@ export default function UpdateProductScreen() {
                 autoComplete="description"
                 fullWidth
                 // autoFocus
-                value={product.monthlyPrice || ""}
+                value={product.monthlyPrice}
                 onChange={handleChange}
               />
               <div style={{ display: "flex", justifyContent: "center" }}>
@@ -143,13 +170,13 @@ export default function UpdateProductScreen() {
                     onChange={handleChange}
                     name="minDuration"
                   >
-                    {/* {getMinRentalDurationOption().map((option, index: any) => {
+                    {getMinRentalDurationOption().map((option, index: any) => {
                       return (
                         <MenuItem key={index} value={option.value}>
                           {option.label}
                         </MenuItem>
                       );
-                    })} */}
+                    })}
                   </Select>
                 </div>
                 <div style={{ width: "50%", marginLeft: "3%" }}>
@@ -161,7 +188,7 @@ export default function UpdateProductScreen() {
                     onChange={handleChange}
                     name="category"
                   >
-                    {/* {["Select category", ...categories].map(
+                    {["Select category", ...categories].map(
                       (category, index: any) => {
                         return (
                           <MenuItem key={index} value={category}>
@@ -169,7 +196,7 @@ export default function UpdateProductScreen() {
                           </MenuItem>
                         );
                       }
-                    )} */}
+                    )}
                   </Select>
                 </div>
               </div>
@@ -177,9 +204,9 @@ export default function UpdateProductScreen() {
           </Box>
         </Box>
 
-        {/* <Box>
+        <Box>
           <Typography style={{ fontSize: "20px", marginTop: 20 }}>
-            Product images
+            Replace product images
           </Typography>
           <div
             style={{ marginLeft: "40%", cursor: "pointer", width: "100px" }}
@@ -210,6 +237,7 @@ export default function UpdateProductScreen() {
             )}
           </div>
         </Box>
+
         <div
           style={{
             display: "flex",
@@ -223,11 +251,11 @@ export default function UpdateProductScreen() {
               width: "fit-content",
               textAlign: "center",
             }}
-            onClick={createproduct}
+            onClick={handleUpdateProduct}
           >
-            <Typography style={{ fontSize: "20px" }}>Create product</Typography>
+            <Typography style={{ fontSize: "20px" }}>Update product</Typography>
           </div>
-        </div> */}
+        </div>
       </Container>
     </div>
   );

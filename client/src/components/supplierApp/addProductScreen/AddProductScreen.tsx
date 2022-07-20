@@ -1,7 +1,5 @@
 import React, { useRef } from "react";
 import {
-  Button,
-  FormControl,
   InputLabel,
   MenuItem,
   Select,
@@ -12,7 +10,6 @@ import {
 import { useEffect, useState } from "react";
 import { ReactComponent as Tick } from "../../../assets/icons/tick.svg";
 
-// import Carousel2 from "react-multi-carousel";
 import Typography from "@material-ui/core/Typography";
 import axiosInstance from "../../../api/axios";
 import { Product } from "../../common/interfaces/Interfaces";
@@ -20,7 +17,6 @@ import imageIcon from "../../../assets/imageIcon.png";
 import { readFileContent } from "../../../utils/functions";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
-import { userInfo } from "os";
 import useAuthState from "../../../zustand/useAuthState";
 
 export default function AddProductScreen() {
