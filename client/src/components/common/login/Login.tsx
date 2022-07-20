@@ -25,11 +25,10 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       const response = await axiosInstance.post("/users/login", userData);
-      const userCurr = await response.data;
+      const user = await response.data;
 
-      setUser(userCurr);
-      console.log("user logged in: ", userCurr);
-      setCart("62b46dce95b02b7c1b024ae9");
+      setUser(user);
+      //  setCart(user.id);
       history.push("/");
     } catch (error) {
       toast.error("please try again!");

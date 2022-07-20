@@ -11,9 +11,7 @@ const useAuthState = create(
   persist(
     (set) => ({
       user: null,
-      loading: true,
       setUser: (user: any) => set({ user }),
-      setLoading: (loading: Boolean) => set({ loading }),
     }),
     {
       name: "authState", // unique name
