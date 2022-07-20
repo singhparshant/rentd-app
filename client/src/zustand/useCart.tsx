@@ -4,6 +4,7 @@ import { OrderItem } from "../components/common/interfaces/Interfaces";
 const useCart = create((set) => ({
   cart: [],
   setCart: async (id: any) => {
+    
     //TODO
     const shoppingCart = await axiosInstance.get("/shoppingCarts", id);
     console.log("Getting the shopping cart of the user: ");
