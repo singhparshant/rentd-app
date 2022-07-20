@@ -28,15 +28,11 @@ const App = () => {
 
   const routes = () => {
     if (!user || user.role === "customer") {
-      return customerAppRoutes.map(
-        (route, idx) =>
-          route.path !== success &&
-          route.path !== failure && (
-            <Route key={idx} exact path={route.path}>
-              {route.component}
-            </Route>
-          )
-      );
+      return customerAppRoutes.map((route, idx) => (
+        <Route key={idx} exact path={route.path}>
+          {route.component}
+        </Route>
+      ));
     }
     if (user.role === "supplier") {
       return supplierAppRoutes.map((route, idx) => (
