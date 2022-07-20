@@ -39,7 +39,6 @@ export interface Application {
   username: string;
   role: "customer" | "supplier";
   address: string;
-  IBAN: string;
   codeOfConduct: string;
   status: "pending" | "accepted" | "rejected";
   KYCDocs: string[];
