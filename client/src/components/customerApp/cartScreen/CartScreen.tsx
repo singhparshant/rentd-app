@@ -1,7 +1,7 @@
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import { Button, Card, CardContent, Typography } from "@mui/material";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
 import useAuthState from "../../../zustand/useAuthState";
 import useCart from "../../../zustand/useCart";
@@ -10,7 +10,7 @@ import useViewport from "../../../hooks/useViewPort";
 import emptyCart from "../../../assets/emptyCart.png";
 
 const buttonStyle = {
-  height: "25px",
+  height: "30px",
   backgroundColor: "#ffb93f",
   border: "none",
   padding: "5px",
@@ -24,6 +24,7 @@ const checkoutButtonStyle = {
   marginLeft: "30%",
   marginRight: "30%",
   marginBottom: "5%",
+  marginTop: "5%",
   backgroundColor: "#2b0245",
 };
 
@@ -72,6 +73,7 @@ export default function CartScreen() {
         width: "100%",
       }}
     >
+      <h1>Your cart</h1>
       {cart.length > 0 ? (
         cart.map((item: OrderItem) => {
           const product: Product = item.product;
@@ -80,109 +82,127 @@ export default function CartScreen() {
               style={{ width: width > breakpoint ? "70%" : "100%" }}
               key={item._id}
             >
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <h1>Your cart</h1>
-              </div>
-              <Card
-                sx={{
-                  margin: "8px",
-                  // width: "80%",
-                  transition: "transform 0.15s ease-in-out",
-                  "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
+              <div style={{ display: "flex", justifyContent: "center" }}></div>
+              <Link
+                to={{
+                  pathname: `/products/${product._id}`,
+                  state: { fromProductsPage: product },
                 }}
+                style={{ textDecoration: "none" }}
               >
-                <div style={{ margin: 5, border: 20 }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <img
-                      src={`data:image/png;base64,` + product.productImages[0]}
-                      style={{ maxHeight: 100 }}
-                      alt="Could not load"
-                    />
+                <Card
+                  sx={{
+                    margin: "8px",
+                    // width: "80%",
+                    transition: "transform 0.15s ease-in-out",
+                    "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
+                  }}
+                >
+                  <div style={{ margin: 5, border: 20 }}>
                     <div
-                      className="quantity"
                       style={{
-                        display: width > breakpoint ? "flex" : "block",
+                        display: "flex",
                         alignItems: "center",
+                        justifyContent: "space-between",
                       }}
                     >
-                      <div>
-                        <span>Quantiy:&nbsp;</span>
+                      <img
+                        src={
+                          `data:image/png;base64,` + product.productImages[0]
+                        }
+                        style={{ maxHeight: 100 }}
+                        alt="Could not load"
+                      />
+                      <div
+                        className="quantity"
+                        style={{
+                          display: width > breakpoint ? "flex" : "block",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div>
+                          <span>Quantiy:&nbsp;</span>
+                        </div>
+                        <div>
+                          <Button
+                            style={buttonStyle}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              addItemToCart(item);
+                            }}
+                          >
+                            <AddIcon />
+                          </Button>
+                        </div>
+                        <div style={{ textAlign: "center", fontSize: 18 }}>
+                          {item.quantity}
+                        </div>
+                        <div>
+                          <Button
+                            style={buttonStyle}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (item.quantity > 1)
+                                decrementItemQuantity(item);
+                              else removeItem(item);
+                            }}
+                          >
+                            <RemoveIcon />
+                          </Button>
+                        </div>
                       </div>
-                      <div>
-                        <Button
-                          style={buttonStyle}
-                          onClick={() => addItemToCart(item)}
-                        >
-                          <AddIcon />
-                        </Button>
-                      </div>
-                      <div style={{ textAlign: "center", fontSize: 18 }}>
-                        {item.quantity}
-                      </div>
-                      <div>
-                        <Button
-                          style={buttonStyle}
-                          onClick={() => {
-                            if (item.quantity > 1) decrementItemQuantity(item);
-                            else removeItem(item);
-                          }}
-                        >
-                          <RemoveIcon />
-                        </Button>
-                      </div>
-                    </div>
 
-                    <div
-                      className="duration"
-                      style={{
-                        display: width > breakpoint ? "flex" : "block",
-                        alignItems: "center",
-                      }}
-                    >
-                      <div>
-                        <span>Duration:&nbsp;</span>
-                      </div>
-                      <div>
-                        <Button
-                          style={buttonStyle}
-                          onClick={() => incrementItemDuration(item)}
-                        >
-                          <AddIcon />
-                        </Button>
-                      </div>
-                      <div style={{ textAlign: "center", fontSize: 18 }}>
-                        {item.duration}
-                      </div>
-                      <div>
-                        <Button
-                          style={buttonStyle}
-                          onClick={() => {
-                            if (item.duration > 1) decrementItemDuration(item);
-                          }}
-                        >
-                          <RemoveIcon />
-                        </Button>
+                      <div
+                        className="duration"
+                        style={{
+                          display: width > breakpoint ? "flex" : "block",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div>
+                          <span>Duration:&nbsp;</span>
+                        </div>
+                        <div>
+                          <Button
+                            style={buttonStyle}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              incrementItemDuration(item);
+                            }}
+                          >
+                            <AddIcon />
+                          </Button>
+                        </div>
+                        <div style={{ textAlign: "center", fontSize: 18 }}>
+                          {item.duration}
+                        </div>
+                        <div>
+                          <Button
+                            style={buttonStyle}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (item.duration > 1)
+                                decrementItemDuration(item);
+                            }}
+                          >
+                            <RemoveIcon />
+                          </Button>
+                        </div>
                       </div>
                     </div>
+                    <CardContent>
+                      <Typography variant="h5" color="#ffb93f">
+                        €{product.monthlyPrice} /month
+                      </Typography>
+
+                      <br></br>
+                      <Typography variant="body1" color="text.primary">
+                        {product.name}
+                      </Typography>
+                    </CardContent>
                   </div>
-                  <CardContent>
-                    <Typography variant="h5" color="#ffb93f">
-                      €{product.monthlyPrice} /month
-                    </Typography>
-
-                    <br></br>
-                    <Typography variant="body1" color="text.primary">
-                      {product.name}
-                    </Typography>
-                  </CardContent>
-                </div>
-              </Card>
+                </Card>
+              </Link>
             </div>
           );
         })
