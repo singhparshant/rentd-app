@@ -105,8 +105,6 @@ export default function ProductDetailsScreen() {
   const { user } = useAuthState() as any;
 
   const handleAddToCart = (rentalDuration: number) => {
-    console.log("Product : ", product);
-    console.log("Cart: ", cart);
     if (rentalDuration > 0) {
       const orderItem: OrderItem = {
         _id: (Math.random() + 1).toString(36).substring(7),
@@ -114,13 +112,13 @@ export default function ProductDetailsScreen() {
         quantity: 1,
         duration: rentalDuration,
       };
-      if (
-        cart.find(
-          (item: OrderItem) =>
-            item.product._id === product._id && item.duration === rentalDuration
-        )
-      )
-        addItemToCart(orderItem);
+      // if (
+      //   cart.find(
+      //     (item: OrderItem) =>
+      //       item.product._id === product._id && item.duration === rentalDuration
+      //   )
+      // )
+      addItemToCart(orderItem);
       toast.success("Added to cart!");
       if (user) {
         axiosInstance.put("/shoppingCarts", orderItem);

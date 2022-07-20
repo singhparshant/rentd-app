@@ -72,12 +72,12 @@ export default function CartScreen() {
     cart,
     removeItem,
     incrementItemDuration,
-    incrementItemQuantity,
+    addItemToCart,
     decrementItemDuration,
     decrementItemQuantity,
     updateItem,
   } = useCart() as any;
-  console.log("CART is: ", cart);
+
   const history = useHistory();
   const { user } = useAuthState() as any;
   console.log("user: ", user);
@@ -131,7 +131,7 @@ export default function CartScreen() {
                       <div>
                         <Button
                           style={buttonStyle}
-                          onClick={() => incrementItemQuantity(item)}
+                          onClick={() => addItemToCart(item)}
                         >
                           <AddIcon />
                         </Button>

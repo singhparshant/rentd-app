@@ -17,53 +17,56 @@ import axios from "axios";
 import axiosInstance from "../../../api/axios";
 import toast from "react-hot-toast";
 
-
-interface userInfo{
+interface userInfo {
   username: string;
   address: string;
   oldPassword: string;
   email: string;
   role: string;
-  newPassword:string;
+  newPassword: string;
 }
 export default function ProfileScreen() {
-  const  state = useAuthState() as any;
+  const state = useAuthState() as any;
   const [name, setName] = useState(0);
   const [address, setAddress] = useState(0);
-  const [details, setDetails] = useState<userInfo> ({
+  const [details, setDetails] = useState<userInfo>({
     username: "",
     address: "",
     oldPassword: "",
     email: "",
     role: "",
-    newPassword:""
+    newPassword: "",
   });
   const setInfo = async (id: any) => {
-    console.log("setInfo")
-    const response = await axiosInstance.put("users/update/"+id, details);
-    if (response){
-      toast.success("Profile updated")
+    console.log("setInfo");
+    const response = await axiosInstance.put("users/update/" + id, details);
+    if (response) {
+      toast.success("Profile updated");
     }
-  }
+  };
   useEffect(() => {
-    const fetchUser =  async () => {
+    const fetchUser = async () => {
       const id = state.user.id;
-      console.log("id: ",id)
-      const response = await axiosInstance.get("users/"+id);
-      console.log("response is: ", response)
-      setDetails((prev: any) => ({ username: response.data.username, address: response.data.address, oldPassword: "" , 
-        email: response.data.email, role: response.data.role, newPassword: "" }));
-      console.log("hello")
+      console.log("id: ", id);
+      const response = await axiosInstance.get("users/" + id);
+      console.log("response is: ", response);
+      setDetails((prev: any) => ({
+        username: response.data.username,
+        address: response.data.address,
+        oldPassword: "",
+        email: response.data.email,
+        role: response.data.role,
+        newPassword: "",
+      }));
+      console.log("hello");
     };
     fetchUser();
   }, []);
-  
+
   //console.log("fetched user: ", fetchUser)
   //const { user } = useAuthState() as any;
-  
 
   return (
-    
     <div
       className="productdetailsScreen"
       style={{
@@ -95,12 +98,12 @@ export default function ProfileScreen() {
                 placeholder="Name"
                 name="username"
                 value={details.username}
-                onChange={ (e: any) => {
-                  
-                  setDetails((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
-                  }
-                }
-    
+                onChange={(e: any) => {
+                  setDetails((prev: any) => ({
+                    ...prev,
+                    [e.target.name]: e.target.value,
+                  }));
+                }}
               />
               <TextField
                 label="Address"
@@ -113,50 +116,58 @@ export default function ProfileScreen() {
                 fullWidth
                 // autoFocus
                 value={details.address}
-                onChange={ (e: any) => {
-                  setDetails((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
-                  }
-                }
-              
+                onChange={(e: any) => {
+                  setDetails((prev: any) => ({
+                    ...prev,
+                    [e.target.name]: e.target.value,
+                  }));
+                }}
               />
-              <br/>
-              <div style={{
-                borderWidth:"2px",
-                borderColor:"black"
-
-              }}>
-                <h3 style={{marginTop: "15px", marginBottom: "5px"}}>Change password</h3>
+              <br />
+              <div
+                style={{
+                  borderWidth: "2px",
+                  borderColor: "black",
+                }}
+              >
+                <h3 style={{ marginTop: "15px", marginBottom: "5px" }}>
+                  Change password
+                </h3>
                 <TextField
-                label="Old password"
-                margin="normal"
-                required
-                type={"string"}
-                placeholder="Old password"
-                name="oldPassword"
-                autoComplete="Old password"
-                fullWidth
-                value={details.oldPassword}
-                onChange={ (e: any) => {
-                  setDetails((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
-                  }
-                }
-              />
-              <TextField
-                label="New password"
-                margin="normal"
-                required
-                type={"string"}
-                placeholder="New password"
-                name="newPassword"
-                autoComplete="New password"
-                fullWidth
-                // autoFocus
-                value={details.newPassword}
-                onChange={ (e: any) => {
-                  setDetails((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
-                  }
-                }
-              />
+                  label="Old password"
+                  margin="normal"
+                  required
+                  type={"string"}
+                  placeholder="Old password"
+                  name="oldPassword"
+                  autoComplete="Old password"
+                  fullWidth
+                  value={details.oldPassword}
+                  onChange={(e: any) => {
+                    setDetails((prev: any) => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
+                <TextField
+                  label="New password"
+                  margin="normal"
+                  required
+                  type={"string"}
+                  placeholder="New password"
+                  name="newPassword"
+                  autoComplete="New password"
+                  fullWidth
+                  // autoFocus
+                  value={details.newPassword}
+                  onChange={(e: any) => {
+                    setDetails((prev: any) => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }));
+                  }}
+                />
               </div>
               {/* 
               <div style={{ display: "flex", justifyContent: "center" }}>
@@ -185,8 +196,6 @@ export default function ProfileScreen() {
                   //onChange={handleChange}
                 />
               </div> */}
-
-              
             </div>
           </Box>
         </Box>
@@ -211,5 +220,5 @@ export default function ProfileScreen() {
         </div>
       </Container>
     </div>
-  )
+  );
 }

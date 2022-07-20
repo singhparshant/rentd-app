@@ -1,42 +1,23 @@
 import create from "zustand";
 import axiosInstance from "../api/axios";
 import { OrderItem } from "../components/common/interfaces/Interfaces";
-const useCart = create((set) => ({
+const useCart = create((set, get) => ({
   cart: [],
   setCart: async (id: any) => {
-    
     //TODO
     const shoppingCart = await axiosInstance.get("/shoppingCarts", id);
-    console.log("Getting the shopping cart of the user: ");
     set(() => ({
       cart: shoppingCart.data.data,
     }));
   },
-  addItemToCart: (item: OrderItem) => {
-    set((state: any) => ({
-      cart: [...state.cart, item],
-    }));
-  },
+  addItemToCart: (item: OrderItem) => AddItemToCart(item, get, set),
   removeItem: (item: any) => {
     set((state: any) => ({
       cart: state.cart.filter((el: OrderItem) => el._id !== item._id),
     }));
   },
   emptyCart: () => set({ cart: [] }),
-  incrementItemQuantity: (item: OrderItem) => {
-    set((state: any) => ({
-      cart: state.cart.map((el: OrderItem) => {
-        if (el._id === item._id) {
-          return {
-            ...el,
-            quantity: item.quantity + 1,
-          };
-        } else {
-          return el;
-        }
-      }),
-    }));
-  },
+
   decrementItemQuantity: (item: OrderItem) => {
     set((state: any) => ({
       cart: state.cart.map((el: OrderItem) => {
@@ -80,5 +61,24 @@ const useCart = create((set) => ({
     }));
   },
 }));
+
+const AddItemToCart = (item: OrderItem, get: any, set: any) => {
+  let cart = get().cart;
+
+  const idx = cart.findIndex(
+    (it: OrderItem) =>
+      item.product._id === it.product._id && item.duration === it.duration
+  );
+
+  if (idx > -1) {
+    //item exists in cart, update quantity:
+    cart[idx] = { ...cart[idx], quantity: cart[idx].quantity + 1 };
+  } else {
+    //add new item to cart
+    cart = [...cart, item];
+  }
+
+  set({ cart });
+};
 
 export default useCart;
