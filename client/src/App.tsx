@@ -9,6 +9,7 @@ import useAuthState from "./zustand/useAuthState";
 import { supplierAppRoutes } from "./routes/supplierAppRoutes";
 import { adminAppRoutes } from "./routes/adminAppRoutes";
 import { Toaster } from "react-hot-toast";
+import { failure, success } from "./api/requestPaths";
 
 const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
@@ -27,11 +28,15 @@ const App = () => {
 
   const routes = () => {
     if (!user || user.role === "customer") {
-      return customerAppRoutes.map((route, idx) => (
-        <Route key={idx} exact path={route.path}>
-          {route.component}{" "}
-        </Route>
-      ));
+      return customerAppRoutes.map(
+        (route, idx) =>
+          route.path !== success &&
+          route.path !== failure && (
+            <Route key={idx} exact path={route.path}>
+              {route.component}{" "}
+            </Route>
+          )
+      );
     }
     if (user.role === "supplier") {
       return supplierAppRoutes.map((route, idx) => (

@@ -16,11 +16,14 @@ import {
   getProductByIdPath,
   landingPagePath,
   loginPagePath,
-  //   searchProductPath,
   profilePath,
   registerPagePath,
+  success,
+  failure,
 } from "../api/requestPaths";
 import ProfileScreen from "../components/common/profileScreen/ProfileScreen";
+import Success from "../components/customerApp/postpaymentScreens/Success";
+import Failure from "../components/customerApp/postpaymentScreens/Failure";
 
 export interface AppRoute {
   path: string;
@@ -43,18 +46,18 @@ export const customerAppRoutes: Array<AppRoute> = [
     path: getProductByIdPath,
     component: <ProductDetailsScreen />,
   },
-  //   {
-  //     path: searchProductPath,
-  //     component: <ProductsSearchScreen />,
-  //   },
   {
     path: getCartPath,
     component: <CartScreen />,
   },
-  // {
-  //   path: checkoutPath,
-  //   component: <CheckoutScreen />,
-  // },
+  {
+    path: success,
+    component: <Success />,
+  },
+  {
+    path: failure,
+    component: <Failure />,
+  },
   {
     path: getOrdersPath,
     component: <OrdersScreen />,

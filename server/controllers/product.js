@@ -2,15 +2,15 @@
 
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
-const util = require("util")
-const { v4: uuid } = require('uuid');
+const util = require("util");
+const { v4: uuid } = require("uuid");
 const Product = require("../models/product");
 
 const list = async (req, res) => {
   try {
     // Server-side pagination logic
     var page = req.query.page || 1;
-    var limit = parseInt(req.query.limit) || 20;
+    var limit = parseInt(req.query.limit) || 6;
     var skipIndex = (page - 1) * limit;
 
     const queryObject = {
@@ -52,9 +52,12 @@ const list = async (req, res) => {
           ],
         },
         {
-          discount: req.query.hasDiscount === "true" ? {
-            $gt: 0,
-          } : undefined
+          discount:
+            req.query.hasDiscount === "true"
+              ? {
+                  $gt: 0,
+                }
+              : undefined,
         },
         {
           supplierId: req.query.supplierId && {
@@ -64,11 +67,9 @@ const list = async (req, res) => {
       ],
     };
 
-    let sortObject = {}
-    if (req.query.sortBy === "price")
-      sortObject = { monthlyPrice: 1 }
-    else if (req.query.sortBy === "name")
-      sortObject = { name: 1 }
+    let sortObject = {};
+    if (req.query.sortBy === "price") sortObject = { monthlyPrice: 1 };
+    else if (req.query.sortBy === "name") sortObject = { name: 1 };
 
     let products = await Product.find(queryObject)
       .collation({ locale: "en" })
@@ -130,19 +131,28 @@ const create = async (req, res) => {
   try {
     const productImages = req.body.productImages;
     //store product images in storage/productImages
-    const extenstions = productImages.map((imgContent) => imgContent.substring(imgContent.indexOf("/") + 1, imgContent.indexOf(";")));
-    let fileNames = productImages.map((_, idx) => uuid() + "." + extenstions[idx]);
+    const extenstions = productImages.map((imgContent) =>
+      imgContent.substring(imgContent.indexOf("/") + 1, imgContent.indexOf(";"))
+    );
+    let fileNames = productImages.map(
+      (_, idx) => uuid() + "." + extenstions[idx]
+    );
 
     //prune input
     for (let i = 0; i < productImages.length; i++) {
-      const regex = new RegExp(`^data:image\/${extenstions[i]};base64,`)
+      const regex = new RegExp(`^data:image\/${extenstions[i]};base64,`);
       productImages[i] = productImages[i].replace(regex, "");
     }
     productImages.map((imgContent, idx) => {
-      fs.writeFile(`${__dirname}/../storage/productImages/${fileNames[idx]}`, imgContent, 'base64', function (err) {
-        console.log(err);
-      });
-    })
+      fs.writeFile(
+        `${__dirname}/../storage/productImages/${fileNames[idx]}`,
+        imgContent,
+        "base64",
+        function (err) {
+          console.log(err);
+        }
+      );
+    });
     req.body.productImages = fileNames;
     let product = new Product(req.body);
     product = await product.save();
@@ -150,7 +160,6 @@ const create = async (req, res) => {
       success: true,
       data: product,
     });
-
   } catch (err) {
     console.log(err);
     return res.status(500).json({
@@ -250,19 +259,19 @@ const remove = async (req, res) => {
 
 const updateRating = async (req, res) => {
   try {
-    console.log("body", req.body)
+    console.log("body", req.body);
     const { productId, rating } = req.body;
     const product = await Product.findById(productId);
     const numberRatings = product.numberRatings || 0;
     const avgRating = product.avgRating || 0;
-    product.avgRating = (avgRating * numberRatings + rating) / (numberRatings + 1)
+    product.avgRating =
+      (avgRating * numberRatings + rating) / (numberRatings + 1);
     product.numberRatings = numberRatings + 1;
     product.save();
-    res.status(200).send({ "message": "rating updated" });
-
+    res.status(200).send({ message: "rating updated" });
   } catch (error) {
-    res.status(500).send({ "message": "could not update rating" });
+    res.status(500).send({ message: "could not update rating" });
   }
-}
+};
 
 module.exports = { list, create, update, remove, read, updateRating };
