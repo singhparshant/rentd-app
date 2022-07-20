@@ -16,6 +16,8 @@ const applicationsPath = "/applications";
 const applicationsByIdPath = "/applications/:id";
 const profilePath = "/profile";
 const settingsPath = "/settings";
+const success = "/success";
+const failure = "/failure";
 
 export {
   landingPagePath,
@@ -33,4 +35,6 @@ export {
   applicationsByIdPath,
   profilePath,
   settingsPath,
+  success,
+  failure,
 };

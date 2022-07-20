@@ -7,8 +7,11 @@ let orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "user",
     },
+    paymentId: String,
+    subscriptionId: String,
     orderItems: [
       {
+        _id: String,
         productID: {
           type: Schema.Types.ObjectId,
           ref: "product",
