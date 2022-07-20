@@ -25,12 +25,14 @@ const stripeWebhook = asyncHandler(async (req, res) => {
   // Handle the event
   if (event.type === "payment_intent.succeeded") {
     const orderRequest = getOrder();
+    console.log("In webhook: ", event);
+    console.log("order is : ", orderRequest);
     orderRequest.orderItems.map((orderItem) => {
       orderItem["status"] = "ordered";
       orderItem["deliveryId"] = (Math.random() + 1).toString(36).substring(7);
       orderItem["product"] = orderItem.product.productId;
     });
-    const order = new Order();
+    // const order = new Order({customerId:  });
   }
 
   // Return a 200 response to acknowledge receipt of the event
