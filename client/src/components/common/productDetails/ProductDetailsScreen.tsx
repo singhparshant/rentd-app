@@ -1,5 +1,4 @@
 import {
-  Card,
   FormControl,
   InputLabel,
   MenuItem,
@@ -10,16 +9,16 @@ import { useEffect, useState } from "react";
 import Carousel1 from "react-material-ui-carousel";
 // import Carousel2 from "react-multi-carousel";
 import Typography from "@material-ui/core/Typography";
+import toast from "react-hot-toast";
 import { useLocation, useParams } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
 import { getProductsPath } from "../../../api/requestPaths";
 import useViewport from "../../../hooks/useViewPort";
-import { Product, OrderItem } from "../interfaces/Interfaces";
-import "./productdetailsScreen.css";
-import toast from "react-hot-toast";
-import ProductCard from "../../productsOverview/ProductCard";
-import useCart from "../../../zustand/useCart";
 import useAuthState from "../../../zustand/useAuthState";
+import useCart from "../../../zustand/useCart";
+import ProductCard from "../../productsOverview/ProductCard";
+import { OrderItem, Product } from "../interfaces/Interfaces";
+import "./productdetailsScreen.css";
 
 interface LocationInterface {
   state: {
@@ -85,7 +84,7 @@ export default function ProductDetailsScreen() {
     };
     window.scroll(0, 0);
     getProductsByCategory();
-  }, [id]);
+  }, [id, product.category]);
 
   const handleRating = (newValue: number) => {
     setUserRating(newValue || 0);
@@ -115,7 +114,13 @@ export default function ProductDetailsScreen() {
         quantity: 1,
         duration: rentalDuration,
       };
-      addItemToCart(orderItem);
+      if (
+        cart.find(
+          (item: OrderItem) =>
+            item.product._id === product._id && item.duration === rentalDuration
+        )
+      )
+        addItemToCart(orderItem);
       toast.success("Added to cart!");
       if (user) {
         axiosInstance.put("/shoppingCarts", orderItem);

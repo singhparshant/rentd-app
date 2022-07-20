@@ -79,8 +79,8 @@ const create_session = async (req, res) => {
       line_items: lineItemsArray,
       metadata: { customerId: order.customerId },
       mode: "subscription",
-      success_url: "https://example.com/success",
-      cancel_url: "https://example.com/cancel",
+      success_url: "localhost:3000/successs",
+      cancel_url: "localhost:3000/failure",
     });
     res.json({ url: session.url });
   } catch (e) {
