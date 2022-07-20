@@ -11,7 +11,7 @@ const createProductAndPrice = async (orderItems) => {
     const item = orderItem.product;
     product = await stripe.products.create({
       name: item.name,
-      // images: ["../storage/productImages/${item.productImages[0]}"],
+      // images: [`../storage/productImages/${item.productImages[0]}`],
     });
     console.log("Product id : ", product.id);
 
@@ -79,8 +79,8 @@ const create_session = async (req, res) => {
       line_items: lineItemsArray,
       metadata: { customerId: order.customerId },
       mode: "subscription",
-      success_url: "localhost:3000/successs",
-      cancel_url: "localhost:3000/failure",
+      success_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/failure",
     });
     res.json({ url: session.url });
   } catch (e) {

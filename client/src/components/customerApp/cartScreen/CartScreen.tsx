@@ -5,7 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
 import useAuthState from "../../../zustand/useAuthState";
 import useCart from "../../../zustand/useCart";
-import { OrderItem, Product } from "../../common/interfaces/Interfaces";
+import { Order, OrderItem, Product } from "../../common/interfaces/Interfaces";
 import useViewport from "../../../hooks/useViewPort";
 import emptyCart from "../../../assets/emptyCart.png";
 
@@ -44,15 +44,16 @@ export default function CartScreen() {
   const breakpoint = 550;
 
   //todo: create an order out of the basket
-  const tentative_order = {};
 
   const handleCheckout = () => {
     if (!user) {
       history.push("/login");
       return;
     }
+    const order: Order = { customerId: user.id, orderItems: cart };
+
     axiosInstance
-      .post("/payment/create-checkout-session", tentative_order)
+      .post("/payment/create-checkout-session", order)
       .then((res) => {
         if (res.data) return res.data;
         return res.data.then((json: any) => Promise.reject(json));
