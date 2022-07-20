@@ -19,10 +19,6 @@ let userSchema = new Schema(
     address: {
       type: String
     },
-    //only needed for supplier
-    IBAN: {
-      type: String,
-    }
   },
   { timestamps: true }
 );
