@@ -115,7 +115,7 @@ export default function ProductDetailsScreen() {
         duration: rentalDuration,
       };
       if (
-        cart.find(
+        !cart.find(
           (item: OrderItem) =>
             item.product._id === product._id && item.duration === rentalDuration
         )

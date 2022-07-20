@@ -62,8 +62,20 @@ const tentative_order = {
   customerId: "62b46dce95b02b7c1b024ae9",
   amount: 800,
   orderItems: [
-    { product: product, quantity: 2, duration: 2 },
-    { product: product2, quantity: 1, duration: 2 },
+    {
+      _id: "12345",
+      product: product,
+      quantity: 2,
+      duration: 2,
+      status: "ordered",
+    },
+    {
+      _id: "abcdef",
+      product: product2,
+      quantity: 1,
+      duration: 2,
+      status: "ordered",
+    },
   ],
 };
 
