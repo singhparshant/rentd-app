@@ -203,6 +203,7 @@ export default function CartScreen() {
       <Button
         variant="contained"
         style={checkoutButtonStyle}
+        disabled={cart.length > 0 ? false : true}
         onClick={() => {
           user
             ? axiosInstance
@@ -220,7 +221,7 @@ export default function CartScreen() {
             : history.push("/login");
         }}
       >
-        Proceed to checkout
+        <p style={{ color: "white" }}>Proceed to checkout</p>
       </Button>
     </div>
   );
