@@ -8,16 +8,16 @@ let orderData;
 const createProductAndPrice = async (orderItems) => {
   let priceOneTime,
     priceRecurring,
-    product,
+    stripeProduct,
     retVal = [];
   for (let i = 0; i < orderItems.length; i++) {
     let orderItem = orderItems[i];
     const item = orderItem.product;
-    product = await stripe.products.create({
+    stripeProduct = await stripe.products.create({
       name: item.name,
       // images: [`../storage/productImages/${item.productImages[0]}`],
     });
-    console.log("Product id : ", product.id);
+    console.log("Product id : ", stripeProduct.id);
 
     try {
       priceRecurring = await stripe.prices.create({
@@ -26,7 +26,7 @@ const createProductAndPrice = async (orderItems) => {
         unit_amount: item.monthlyPrice * 100,
         currency: "eur",
         recurring: { interval: "month" },
-        product: product.id,
+        product: stripeProduct.id,
         //we use lookup key to place orders
         lookup_key: `${orderItem._id}`,
       });
@@ -35,7 +35,7 @@ const createProductAndPrice = async (orderItems) => {
         // quantiy: orderItem.quantity,
         unit_amount: item.deposit * 100,
         currency: "eur",
-        product: product.id,
+        product: stripeProduct.id,
         //we use lookup key to place orders
         lookup_key: `One-Time,${orderItem._id}`,
       });
