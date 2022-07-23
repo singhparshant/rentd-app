@@ -8,6 +8,7 @@ let orderSchema = new Schema(
       ref: "user",
     },
     paymentId: String,
+    amount: Number,
     orderItems: [
       {
         _id: String,
