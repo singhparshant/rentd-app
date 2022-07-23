@@ -159,8 +159,11 @@ export default function ProductDetailsScreen() {
           <Typography variant="h4">{product.name}</Typography>
           <br />
           <Typography variant="h5" style={{ color: "green" }}>
-            €{product.monthlyPrice}/month &nbsp;&nbsp;
+            €{product.monthlyPrice}/month &nbsp; <br />
           </Typography>
+          <p>
+            One-time deposit: <strong>€{product.deposit}</strong>&nbsp;
+          </p>
           <div style={{ display: "flex", alignItems: "center" }}>
             <Rating
               name="half-rating"
@@ -170,7 +173,6 @@ export default function ProductDetailsScreen() {
             />
             <span style={{ marginLeft: 5 }}>({product.numberRatings})</span>
           </div>
-
           <Typography style={{ marginTop: 20 }} variant="body1">
             {product.description}
           </Typography>
@@ -182,7 +184,8 @@ export default function ProductDetailsScreen() {
               €
               {product.monthlyPrice *
                 rentalDuration *
-                (1 - 0.01 * product.discount)}
+                (1 - 0.01 * product.discount) +
+                product.deposit}
             </strong>
             <br />
             <label style={{ fontSize: "10px" }}>
