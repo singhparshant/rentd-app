@@ -6,6 +6,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST);
 const Order = require("../models/order");
 const order = require("../models/order");
 const Delivery = require("../models/delivery");
+const User = require("../models/user");
 const signingSecret = process.env.STRIPE_SIGNING_SECRET;
 
 const stripeWebhook = asyncHandler(async (req, res) => {
@@ -27,8 +28,6 @@ const stripeWebhook = asyncHandler(async (req, res) => {
   // Handle the event
   if (event.type === "payment_intent.succeeded") {
     const orderRequest = getOrder();
-    console.log("OrderRequest: ", orderRequest);
-    console.log("Event: ", event);
 
     //get the subscription list using customer id retrieved from the event
     const subscriptionList = await stripe.subscriptions.list({
@@ -50,6 +49,7 @@ const stripeWebhook = asyncHandler(async (req, res) => {
     const deliveryObject = new Delivery({
       status: "ordered",
       estimatedArrival: new Date(Date.now() + 60 * 60 * 24 * 3 * 1000),
+      address: await User.findById(orderRequest.customerId).address,
     });
 
     //update orderitem object with new attributes like subscription id, delivery id and create a mongo order object
@@ -68,12 +68,13 @@ const stripeWebhook = asyncHandler(async (req, res) => {
       customerId: orderRequest.customerId,
       orderItems: orderRequest.orderItems,
       paymentId: event.data.object.id,
-      amount: event.data.object.amount,
+      amount: event.data.object.amount / 100,
     });
 
     //save in database
     try {
-      console.log("orderobject to be saved: ", orderObject);
+      console.log("order object to be saved: ", orderObject);
+      console.log("delivery object to be saved: ", deliveryObject);
       await orderObject.save();
       await deliveryObject.save();
     } catch (error) {
