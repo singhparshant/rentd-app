@@ -88,10 +88,7 @@ export default function SignUp() {
       validator.isEmail(userData.email);
     //make sure documents are uploaded
     if (userData.role === "supplier")
-      valid &&=
-        documents.codeOfConduct &&
-        documents.KYCDocs.length > 0 &&
-        validator.isIBAN(userData.IBAN);
+      valid &&= documents.codeOfConduct && documents.KYCDocs.length > 0;
     if (userData.role === "customer")
       valid &&= userData.password === userData.passwordConfirm;
     return valid;
