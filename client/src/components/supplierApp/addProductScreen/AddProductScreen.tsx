@@ -14,7 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import axiosInstance from "../../../api/axios";
 import { Product } from "../../common/interfaces/Interfaces";
 import imageIcon from "../../../assets/imageIcon.png";
-import { readFileContent } from "../../../utils/functions";
+import { readFileContent, verifyProductData } from "../../../utils/functions";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import useAuthState from "../../../zustand/useAuthState";
@@ -71,17 +71,8 @@ export default function AddProductScreen() {
   };
 
   const createNewProduct = async () => {
-    if (
-      newProduct.productImages.length === 0 ||
-      newProduct.category === "Select a category" ||
-      newProduct.discount < 0 ||
-      newProduct.discount > 100 ||
-      !newProduct.name ||
-      !newProduct.description ||
-      !newProduct.deposit
-    ) {
+    if (!verifyProductData(newProduct)) {
       toast.error("invalid data!");
-      console.log("new prod", newProduct);
       return;
     }
     try {

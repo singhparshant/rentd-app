@@ -207,8 +207,8 @@ const read = async (req, res) => {
 
 const update = async (req, res) => {
   let productId = req.params.id;
-  let update = req.body;
-  Product.findByIdAndUpdate(productId, { $set: update }, { new: true })
+  let updatedProduct = req.body;
+  Product.findByIdAndUpdate(productId, { $set: updatedProduct }, { new: true })
     .then((data) => {
       if (!data) {
         return res.status(404).json({

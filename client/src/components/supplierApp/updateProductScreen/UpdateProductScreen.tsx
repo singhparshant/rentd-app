@@ -14,7 +14,7 @@ import axiosInstance from "../../../api/axios";
 import { Product } from "../../common/interfaces/Interfaces";
 import { ReactComponent as Tick } from "../../../assets/icons/tick.svg";
 import imageIcon from "../../../assets/imageIcon.png";
-import { readFileContent } from "../../../utils/functions";
+import { readFileContent, verifyProductData } from "../../../utils/functions";
 
 interface LocationInterface {
   state: {
@@ -29,8 +29,6 @@ export default function UpdateProductScreen() {
   const [categories, setCategories] = useState([]);
   const uploadImageRef = useRef<HTMLInputElement>(null);
   const history = useHistory();
-
-  console.log("product", product);
 
   const getMinRentalDurationOption = () => {
     let options = [{ label: "Select duration", value: 0 }];
@@ -66,8 +64,18 @@ export default function UpdateProductScreen() {
     }
   };
 
-  const handleUpdateProduct = () => {
-    toast.success("updated!");
+  const handleUpdateProduct = async () => {
+    if (!verifyProductData(product)) {
+      toast.error("invalid data!");
+      return;
+    }
+    try {
+      await axiosInstance.put(`/products/${product._id}`, product);
+      toast.success("updated!");
+      history.push("/products");
+    } catch (error) {
+      toast.error("something went wrong");
+    }
   };
 
   const handleDeleteProduct = async () => {
