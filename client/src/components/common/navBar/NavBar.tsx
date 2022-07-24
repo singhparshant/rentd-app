@@ -16,16 +16,18 @@ interface NabBarProps {
 }
 
 const NavBar = () => {
-  const { cart, emptyCart } = useCart() as any;
+  const { emptyCart } = useCart() as any;
   const history = useHistory();
   const user = useAuthState((state: any) => state.user);
   const setUser = useAuthState((state: any) => state.setUser);
 
   const handleLogout = async () => {
     try {
-      //delete jwt cookie from browser
       emptyCart();
+
+      //delete jwt cookie from browser
       await axiosInstance.get("/users/logout");
+
       setUser(null);
       history.push("/");
     } catch (error) {

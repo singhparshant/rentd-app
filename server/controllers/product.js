@@ -55,8 +55,8 @@ const list = async (req, res) => {
           discount:
             req.query.hasDiscount === "true"
               ? {
-                  $gt: 0,
-                }
+                $gt: 0,
+              }
               : undefined,
         },
         {

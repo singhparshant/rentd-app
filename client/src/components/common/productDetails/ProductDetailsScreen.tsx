@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import Carousel1 from "react-material-ui-carousel";
-// import Carousel2 from "react-multi-carousel";
 import Typography from "@material-ui/core/Typography";
 import toast from "react-hot-toast";
 import { useLocation, useParams } from "react-router-dom";
@@ -47,8 +46,6 @@ const responsive = {
 export default function ProductDetailsScreen() {
   const { id } = useParams<any>();
   const location = useLocation();
-  const [qty, setQty] = useState(0);
-  const [totalAmount, setTotalAmount] = useState(0);
   const { width } = useViewport();
   const [rentalDuration, setRentalDuration] = useState<number>(0);
   const [suggestedProducts, setSuggestedProducts] = useState<any>([]);
@@ -100,7 +97,7 @@ export default function ProductDetailsScreen() {
         toast.error("please try again!");
       });
   };
-  const { cart, addItemToCart } = useCart() as any;
+  const { addItemToCart } = useCart() as any;
 
   const handleAddToCart = (rentalDuration: number) => {
     if (rentalDuration > 0) {
@@ -137,7 +134,7 @@ export default function ProductDetailsScreen() {
                     maxHeight: 350,
                     maxWidth: 350,
 
-                    borderRadius: "7px",
+                    borderRadius: 15,
                   }}
                   key={product._id}
                   alt="Could not load."
@@ -164,15 +161,17 @@ export default function ProductDetailsScreen() {
           <p>
             One-time deposit: <strong>€{product.deposit}</strong>&nbsp;
           </p>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <Rating
-              name="half-rating"
-              value={product.avgRating}
-              precision={0.5}
-              readOnly
-            />
-            <span style={{ marginLeft: 5 }}>({product.numberRatings})</span>
-          </div>
+          {product.numberRatings > 0 && (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Rating
+                name="half-rating"
+                value={product.avgRating}
+                precision={0.5}
+                readOnly
+              />
+              <span style={{ marginLeft: 5 }}>({product.numberRatings})</span>
+            </div>
+          )}
           <Typography style={{ marginTop: 20 }} variant="body1">
             {product.description}
           </Typography>
@@ -223,16 +222,25 @@ export default function ProductDetailsScreen() {
           </div>
         </div>
       </div>
-      <div className="suggestionsContainer">
-        <h3> More products of this category:</h3>
-        <div
-          style={{ display: width > breakpoint ? "flex" : "block", margin: 60 }}
-        >
-          {suggestedProducts?.map((product: Product) => (
-            <ProductCard product={product} />
-          ))}
+
+      {suggestedProducts.length > 0 && (
+        <div style={{ marginTop: 150 }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <h3> More products of this category:</h3>
+          </div>
+          <div
+            className="suggestionsCards"
+            style={{
+              display: width > breakpoint ? "flex" : "block",
+              margin: 60,
+            }}
+          >
+            {suggestedProducts?.map((product: Product) => (
+              <ProductCard product={product} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
