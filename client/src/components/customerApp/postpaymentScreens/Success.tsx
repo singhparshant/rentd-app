@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { getOrdersPath } from "../../../api/requestPaths";
+import useCart from "../../../zustand/useCart";
 
 type Props = {};
 
 const Success = (props: Props) => {
+  const emptyCart = useCart((state: any) => state.emptyCart);
   const [seconds, setSeconds] = useState(3);
   const history = useHistory();
   useEffect(() => {
+    emptyCart();
     const timer = setInterval(() => {
       setSeconds((seconds) => seconds - 1);
     }, 1000);
@@ -21,7 +24,7 @@ const Success = (props: Props) => {
       clearInterval(timer);
       clearInterval(interval);
     };
-  }, [history]);
+  }, [history, emptyCart]);
 
   return (
     <div

@@ -51,6 +51,8 @@ export default function CartScreen() {
       history.push("/login");
       return;
     }
+    const order: Order = { customerId: user.id, orderItems: cart };
+
     axiosInstance
       .post("/payment/create-checkout-session", order)
       .then((res) => {

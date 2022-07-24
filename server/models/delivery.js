@@ -7,9 +7,15 @@ let deliverySchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "order",
     },
-    address: String,
+    address: {
+      type: String,
+      required: false,
+    },
     status: String,
-    estimatedArrival: Date,
+    estimatedArrival: {
+      type: Date,
+      required: false,
+    },
     arrivalDate: {
       type: Date,
       required: false,

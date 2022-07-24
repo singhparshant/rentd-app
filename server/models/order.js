@@ -8,17 +8,18 @@ let orderSchema = new Schema(
       ref: "user",
     },
     paymentId: String,
-    subscriptionId: String,
+    amount: Number,
     orderItems: [
       {
         _id: String,
-        productID: {
+        productId: {
           type: Schema.Types.ObjectId,
           ref: "product",
         },
         quantity: Number,
         duration: Number,
         status: String,
+        subscriptionId: String,
         deliveryId: {
           type: Schema.Types.ObjectId,
           ref: "delivery",

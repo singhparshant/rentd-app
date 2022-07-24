@@ -8,5 +8,6 @@ const app = require("../app");
 const PaymentsController = require("../controllers/payment");
 
 router.post("/create-checkout-session", PaymentsController.create_session);
+router.post("/refund", PaymentsController.refund);
 
 module.exports = router;
