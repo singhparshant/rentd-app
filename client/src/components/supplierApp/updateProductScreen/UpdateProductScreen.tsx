@@ -12,7 +12,6 @@ import toast from "react-hot-toast";
 import { useHistory, useLocation } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
 import { Product } from "../../common/interfaces/Interfaces";
-import { ReactComponent as Tick } from "../../../assets/icons/tick.svg";
 import imageIcon from "../../../assets/imageIcon.png";
 import { readFileContent, verifyProductData } from "../../../utils/functions";
 
@@ -28,8 +27,11 @@ export default function UpdateProductScreen() {
   const [product, setProduct] = useState<Product>(state.fromProductsPage);
   const [categories, setCategories] = useState([]);
   const uploadImageRef = useRef<HTMLInputElement>(null);
+  const [updateImages, setUpdateImages] = useState(false);
   const history = useHistory();
 
+  console.log("product", product);
+  console.log("update images", updateImages);
   const getMinRentalDurationOption = () => {
     let options = [{ label: "Select duration", value: 0 }];
     for (let i = 1; i <= 12; i++)
@@ -54,6 +56,7 @@ export default function UpdateProductScreen() {
   const handleProductImagesUpload = async (files: FileList | null) => {
     //overwrite previous images
     setProduct((prev) => ({ ...prev, productImages: [] }));
+    setUpdateImages(true);
     if (!files) return;
     for (let i = 0; i < files.length; i++) {
       const imageContent = await readFileContent(files.item(i));
@@ -69,11 +72,17 @@ export default function UpdateProductScreen() {
       toast.error("invalid data!");
       return;
     }
+    const toastId = toast.loading("loading");
     try {
-      await axiosInstance.put(`/products/${product._id}`, product);
+      await axiosInstance.put(
+        `/products/${product._id}?updateImages=${updateImages}`,
+        product
+      );
+      toast.dismiss(toastId);
       toast.success("updated!");
       history.push("/products");
     } catch (error) {
+      toast.dismiss(toastId);
       toast.error("something went wrong");
     }
   };

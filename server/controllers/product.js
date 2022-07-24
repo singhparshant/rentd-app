@@ -206,8 +206,42 @@ const read = async (req, res) => {
 };
 
 const update = async (req, res) => {
+  const newImages = req.query.updateImages || "";
+
+  if (newImages === "true") {
+    const productImages = req.body.productImages;
+    //store product images in storage/productImages
+    const extenstions = productImages.map((imgContent) =>
+      imgContent.substring(imgContent.indexOf("/") + 1, imgContent.indexOf(";"))
+    );
+    let fileNames = productImages.map(
+      (_, idx) => uuid() + "." + extenstions[idx]
+    );
+
+    //prune input
+    for (let i = 0; i < productImages.length; i++) {
+      const regex = new RegExp(`^data:image\/${extenstions[i]};base64,`);
+      productImages[i] = productImages[i].replace(regex, "");
+    }
+    productImages.map((imgContent, idx) => {
+      fs.writeFile(
+        `${__dirname}/../storage/productImages/${fileNames[idx]}`,
+        imgContent,
+        "base64",
+        function (err) {
+          console.log(err);
+        }
+      );
+    });
+    req.body.productImages = fileNames;
+  } else {
+    const product = await Product.findById(req.params.id);
+    req.body.productImages = product.productImages;
+  }
+
   let productId = req.params.id;
   let updatedProduct = req.body;
+
   Product.findByIdAndUpdate(productId, { $set: updatedProduct }, { new: true })
     .then((data) => {
       if (!data) {
