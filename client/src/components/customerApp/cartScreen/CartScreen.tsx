@@ -43,7 +43,8 @@ export default function CartScreen() {
   const { width } = useViewport();
   const breakpoint = 550;
 
-  //todo: create an order out of the basket
+  //create an order out of the basket
+  const order: Order = { customerId: user.id, orderItems: cart };
 
   const handleCheckout = () => {
     if (!user) {
