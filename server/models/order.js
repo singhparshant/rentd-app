@@ -20,6 +20,7 @@ let orderSchema = new Schema(
         duration: Number,
         status: String,
         subscriptionId: String,
+        stripeCustomerId: String,
         deliveryId: {
           type: Schema.Types.ObjectId,
           ref: "delivery",

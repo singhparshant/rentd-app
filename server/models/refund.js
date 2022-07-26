@@ -2,18 +2,11 @@ const mongoose = require("mongoose");
 
 var refundSchema = new mongoose.Schema(
   {
-    orderId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "order",
-    },
+    orderId: String,
     orderItemId: String,
-    paymentId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "payment",
-    },
+    paymentId: String,
     description: {
       type: String,
-      ref: "payment",
       required: false,
     },
   },
