@@ -1,8 +1,9 @@
 const Order = require("../models/order");
 const Product = require("../models/product");
 const Refund = require("../models/refund");
-
+const Delivery = require("../models/delivery");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST);
+
 let orderData;
 
 const createProductAndPrice = async (orderItems) => {
@@ -23,7 +24,7 @@ const createProductAndPrice = async (orderItems) => {
       priceRecurring = await stripe.prices.create({
         // description: `Duration of renting is ${orderItem.duration}`,
         // quantiy: orderItem.quantity,
-        unit_amount: item.monthlyPrice * 100,
+        unit_amount: item.monthlyPrice * (1 - 0.01 * item.discount) * 100,
         currency: "eur",
         recurring: { interval: "month" },
         product: stripeProduct.id,
@@ -94,6 +95,7 @@ const refund = async (req, res) => {
   const orderId = req.body.orderId.toString();
   const orderItemId = req.body.orderItemId.toString();
 
+  //Find the order and corresponding relevent orderItem from the DB
   const order = await Order.findById(orderId);
   const orderItemfromDb = order.orderItems.find(
     (orderItem) => orderItem._id === orderItemId
@@ -103,19 +105,45 @@ const refund = async (req, res) => {
   const product = await Product.findById(orderItemfromDb.productId);
 
   //Get the delivery id to update the delivery item to return
-  const deliveryId = await Product.findById(orderItemfromDb.deliveryId);
+  const deliveryId = await Delivery.findById(orderItemfromDb.deliveryId);
 
+  //Get the customer subscriptions object from stripe.
+  const subscriptionData = await stripe.subscriptions.list({
+    customer: orderItemfromDb.stripeCustomerId,
+  });
+
+  // get the current number of active subscription items for a customer
+  const currentNumberSubscriptions = subscriptionData.data[0]
+    ? subscriptionData.data[0].items.data.length
+    : 0;
+
+  //Get the parent subscription id of the subscription items.
+  const parentSubscriptionId = subscriptionData.data[0]
+    ? subscriptionData.data[0].id
+    : "";
   try {
     // cancel the recurring subscription
-    const cancelSub = await stripe.subscriptionItems.del(
-      orderItemfromDb.subscriptionId
-    );
+    // If there are multiple subscription items under a parent subscription, delete one item
+    // If there is only one item, delete the whole parent subscription
+    if (currentNumberSubscriptions > 1) {
+      console.log(
+        "Deleting subscription item: ",
+        orderItemfromDb.subscriptionId
+      );
+      await stripe.subscriptionItems.del(orderItemfromDb.subscriptionId);
+    } else if (currentNumberSubscriptions === 1) {
+      console.log("Deleting parent subscription: ", parentSubscriptionId);
+      await stripe.subscriptions.del(parentSubscriptionId);
+    }
 
-    //Do a refund of the amount equivalent to one monthly price + Deposit
-    console.log(" product :  ", orderItemfromDb);
+    // Do a refund of the amount equivalent to (one monthly price - discount) + Deposit
     const refund = await stripe.refunds.create({
       payment_intent: order.paymentId,
-      amount: (product.monthlyPrice + product.deposit) * 100,
+      amount:
+        orderItemfromDb.quantity *
+        (product.monthlyPrice * (1 - 0.01 * product.discount) +
+          product.deposit) *
+        100,
     });
 
     //Update the order status to refunded
@@ -125,6 +153,7 @@ const refund = async (req, res) => {
     });
     order.orderItems = updatedOrderItem;
 
+    //Create the refund mongo object
     const refundObject = new Refund({
       orderID: orderId,
       orderItemId: orderItemId,
@@ -132,6 +161,7 @@ const refund = async (req, res) => {
       paymentId: order.paymentId,
     });
 
+    console.log("Refund obj: ", refundObject);
     //Save the update order, delivery items and create a new refund item
     await order.save();
     await refundObject.save();

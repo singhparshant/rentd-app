@@ -28,10 +28,11 @@ const stripeWebhook = asyncHandler(async (req, res) => {
   // Handle the event
   if (event.type === "payment_intent.succeeded") {
     const orderRequest = getOrder();
+    const stripeCustomerId = event.data.object.customer;
 
     //get the subscription list using customer id retrieved from the event
     const subscriptionList = await stripe.subscriptions.list({
-      customer: event.data.customer,
+      customer: stripeCustomerId,
     });
 
     //get the subscription items from the subscriptions list.
@@ -61,6 +62,7 @@ const stripeWebhook = asyncHandler(async (req, res) => {
       orderItem["subscriptionId"] = orderItems_subId_mappping.find(
         (mapping) => mapping.orderItemId === orderItem._id
       ).subId;
+      orderItem["stripeCustomerId"] = stripeCustomerId;
 
       return orderItem;
     });
