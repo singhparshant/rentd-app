@@ -17,7 +17,6 @@ const createProductAndPrice = async (orderItems) => {
       name: item.name,
       // images: [`../storage/productImages/${item.productImages[0]}`],
     });
-    console.log("Product id : ", stripeProduct.id);
 
     try {
       priceRecurring = await stripe.prices.create({
@@ -44,8 +43,8 @@ const createProductAndPrice = async (orderItems) => {
     }
     retVal.push({
       item: orderItem,
-      priceOneTime: priceOneTime,
-      priceRecurring: priceRecurring,
+      priceOneTime,
+      priceRecurring,
     });
   }
   const oneTimePaymentsArray = retVal.map((row) => {
@@ -83,6 +82,7 @@ const create_session = async (req, res) => {
       success_url: "http://localhost:3000/success",
       cancel_url: "http://localhost:3000/failure",
     });
+
     res.json({ url: session.url });
   } catch (e) {
     console.log(e);
