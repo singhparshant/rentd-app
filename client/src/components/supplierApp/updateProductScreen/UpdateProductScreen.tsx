@@ -9,11 +9,11 @@ import {
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
 import { Product } from "../../common/interfaces/Interfaces";
-import { ReactComponent as Tick } from "../../../assets/icons/tick.svg";
 import imageIcon from "../../../assets/imageIcon.png";
+import { readFileContent, verifyProductData } from "../../../utils/functions";
 
 interface LocationInterface {
   state: {
@@ -27,7 +27,11 @@ export default function UpdateProductScreen() {
   const [product, setProduct] = useState<Product>(state.fromProductsPage);
   const [categories, setCategories] = useState([]);
   const uploadImageRef = useRef<HTMLInputElement>(null);
+  const [updateImages, setUpdateImages] = useState(false);
+  const history = useHistory();
 
+  console.log("product", product);
+  console.log("update images", updateImages);
   const getMinRentalDurationOption = () => {
     let options = [{ label: "Select duration", value: 0 }];
     for (let i = 1; i <= 12; i++)
@@ -48,10 +52,49 @@ export default function UpdateProductScreen() {
   const handleChange = (e: any) => {
     setProduct((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const handleProductImagesUpload = (files: any) => {};
 
-  const handleUpdateProduct = () => {
-    toast.success("updated!");
+  const handleProductImagesUpload = async (files: FileList | null) => {
+    //overwrite previous images
+    setProduct((prev) => ({ ...prev, productImages: [] }));
+    setUpdateImages(true);
+    if (!files) return;
+    for (let i = 0; i < files.length; i++) {
+      const imageContent = await readFileContent(files.item(i));
+      setProduct((prev) => ({
+        ...prev,
+        productImages: [...prev.productImages, imageContent],
+      }));
+    }
+  };
+
+  const handleUpdateProduct = async () => {
+    if (!verifyProductData(product)) {
+      toast.error("invalid data!");
+      return;
+    }
+    const toastId = toast.loading("loading");
+    try {
+      await axiosInstance.put(
+        `/products/${product._id}?updateImages=${updateImages}`,
+        product
+      );
+      toast.dismiss(toastId);
+      toast.success("updated!");
+      history.push("/products");
+    } catch (error) {
+      toast.dismiss(toastId);
+      toast.error("something went wrong");
+    }
+  };
+
+  const handleDeleteProduct = async () => {
+    try {
+      await axiosInstance.delete(`/products/${product._id}`);
+      toast.success("deleted!");
+      history.push("/products");
+    } catch (error) {
+      toast.error("something went wrong");
+    }
   };
 
   return (
@@ -65,6 +108,7 @@ export default function UpdateProductScreen() {
       }}
     >
       <h1>Update Product</h1>
+
       <Container
         component="main"
         maxWidth="sm"
@@ -78,7 +122,11 @@ export default function UpdateProductScreen() {
           }}
         >
           <img
-            src={`data:image/png;base64,${product.productImages[0]}`}
+            src={
+              product.productImages[0]?.startsWith("data:")
+                ? `${product.productImages[0]}`
+                : `data:image/png;base64,${product.productImages[0]}`
+            }
             alt="could not load."
             style={{ borderRadius: 20, width: 200 }}
           />
@@ -229,12 +277,6 @@ export default function UpdateProductScreen() {
               ref={uploadImageRef}
               onChange={(e) => handleProductImagesUpload(e.target.files)}
             />
-            {product.productImages.length > 0 && (
-              <>
-                <span style={{ color: "green" }}>Uploaded!</span>
-                <Tick style={{ color: "green" }} />
-              </>
-            )}
           </div>
         </Box>
 
@@ -242,18 +284,28 @@ export default function UpdateProductScreen() {
           style={{
             display: "flex",
             justifyContent: "center",
+            alignItems: "center",
             marginTop: "5%",
           }}
         >
           <div
             className="button"
             style={{
-              width: "fit-content",
               textAlign: "center",
             }}
             onClick={handleUpdateProduct}
           >
-            <Typography style={{ fontSize: "20px" }}>Update product</Typography>
+            <div style={{ fontSize: 15 }}>Update</div>
+          </div>
+
+          <div
+            className="button"
+            style={{
+              textAlign: "center",
+            }}
+            onClick={handleDeleteProduct}
+          >
+            <div style={{ fontSize: 15 }}>Delete</div>
           </div>
         </div>
       </Container>
