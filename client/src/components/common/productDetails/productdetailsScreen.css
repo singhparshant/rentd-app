@@ -1,17 +1,14 @@
 .productdetailsScreen {
   display: flex;
-  /* flex: 1  1 ; */
   margin: 20px;
 }
 
 .carouselContainer {
-  /* border: 2px solid black; */
   flex-grow: 1.5;
   flex-basis: 0;
   height: 400px;
   margin: 5px;
   padding: 3px;
-  /* border-radius: 5px; */
   justify-content: center;
   align-items: center;
 }
@@ -44,9 +41,13 @@
   display: flex;
   margin: 60px 20px;
 }
-.suggestionsContainer {
+.suggestionsCards {
   margin-top: 200px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.suggestionsContainer {
+  margin-top: 200px;
 }
