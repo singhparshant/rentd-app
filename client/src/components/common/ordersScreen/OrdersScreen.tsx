@@ -1,4 +1,4 @@
-import { Card } from "@mui/material";
+import { Card, CircularProgress } from "@mui/material";
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useOrders } from "../../../hooks/useOrders";
@@ -8,12 +8,20 @@ import { parseDate } from "../../../utils/functions";
 
 export default function OrdersScreen() {
   const user = useAuthState((state: any) => state.user);
-  const { orders, loading, error } = useOrders();
+  const { orders, loading } = useOrders();
 
   if (!user) return <Redirect to="/login" />;
-  console.log("orders", orders);
 
-  return (
+  return loading ? (
+    <CircularProgress
+      sx={{
+        marginLeft: "50%",
+        marginTop: "20px",
+        marginBottom: "20px",
+        color: "#2b0245",
+      }}
+    />
+  ) : (
     <div>
       <div
         style={{
@@ -37,7 +45,7 @@ export default function OrdersScreen() {
           <>
             {orders.map((order: any, index: number) => (
               <Link
-                to={`/orders/${order._id}`}
+                to={{ pathname: `/orders/${order._id}`, state: { order } }}
                 style={{ textDecoration: "none", width: "60%", color: "black" }}
               >
                 <Card
