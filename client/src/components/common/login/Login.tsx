@@ -13,6 +13,7 @@ import useAuthState from "../../../zustand/useAuthState";
 import toast from "react-hot-toast";
 import axiosInstance from "../../../api/axios";
 import useCart from "../../../zustand/useCart";
+import useFilters from "../../../zustand/useFilters";
 const theme = createTheme();
 
 export default function Login() {
@@ -21,6 +22,7 @@ export default function Login() {
   const [userData, setUserData] = useState({ email: "", password: "" });
   const fromRef = useRef<any>(null);
   const emptyCart = useCart((state: any) => state.emptyCart);
+  const resetFilters = useFilters((state: any) => state.resetFilters);
 
   const handleLogin = async () => {
     try {
@@ -29,6 +31,7 @@ export default function Login() {
 
       setUser(user);
       emptyCart();
+      resetFilters();
       history.push("/");
     } catch (error) {
       toast.error("please try again!");

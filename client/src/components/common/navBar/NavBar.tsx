@@ -20,6 +20,7 @@ const NavBar = () => {
   const history = useHistory();
   const user = useAuthState((state: any) => state.user);
   const setUser = useAuthState((state: any) => state.setUser);
+  const resetFilters = useFilters((state: any) => state.resetFilters);
 
   const handleLogout = async () => {
     try {
@@ -29,6 +30,7 @@ const NavBar = () => {
       await axiosInstance.get("/users/logout");
 
       setUser(null);
+      resetFilters();
       history.push("/");
     } catch (error) {
       console.log(error);
