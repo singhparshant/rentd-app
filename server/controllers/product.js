@@ -2,7 +2,6 @@
 
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
-const util = require("util");
 const { v4: uuid } = require("uuid");
 const Product = require("../models/product");
 

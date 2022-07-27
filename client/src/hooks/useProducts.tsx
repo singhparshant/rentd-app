@@ -30,7 +30,7 @@ const useProducts = (filters: Filter) => {
       setLoading(false);
     };
     fetchData();
-  }, [filters]);
+  }, [filters, user]);
   return { products, loading, error, pages };
 };
 export default useProducts;
