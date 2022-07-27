@@ -16,7 +16,7 @@ const list = async (req, res) => {
   }
 }
 const create = async (req, res) => {
-  if(Object.keys(req.body).length === 0)
+  if (Object.keys(req.body).length === 0)
     return res.status(400).json({
       success: false,
       error: "Bad request",
@@ -44,9 +44,9 @@ const read = async (req, res) => {
       success: false,
       error: "Bad request",
       message: "The request parameter is absent",
-  });
+    });
 
-  try{
+  try {
     let delivery = await Delivery.findById(req.params.id);
     if (!delivery) {
       return res.status(404).json({
@@ -59,7 +59,7 @@ const read = async (req, res) => {
   } catch (err) {
     return res.status(500).json({
       success: false,
-      error: "Order could not be read",
+      error: "Delivery could not be read",
       message: "Internal server error",
     });
   }
@@ -68,9 +68,9 @@ const read = async (req, res) => {
 const update = async (req, res) => {
   let deliveryId = req.params.id
   let update = req.body
-  Delivery.findByIdAndUpdate(deliveryId, {$set: update}, {new: true})
+  Delivery.findByIdAndUpdate(deliveryId, { $set: update }, { new: true })
     .then(data => {
-      if(!data) {
+      if (!data) {
         return res.status(404).json({
           success: false,
           message: "Delivery not found with id " + req.params.id
@@ -82,15 +82,15 @@ const update = async (req, res) => {
         message: "Delivery successfully updated"
       });
     }).catch(err => {
-      if(err.kind === 'ObjectId') {
+      if (err.kind === 'ObjectId') {
         return res.status(404).json({
           success: false,
           message: "Delivery not found with id " + req.params.id
         });
       }
       return res.status(500).send({
-          success: false,
-          message: "Error updating delivery with id " + req.params.id
+        success: false,
+        message: "Error updating delivery with id " + req.params.id
       });
     });
 }
@@ -112,15 +112,15 @@ const remove = async (req, res) => {
     }).catch(err => {
       if (err.kind === 'ObjectId') {
         return res.status(404).send({
-            success: false,
-            message: "Delivery not found with id " + req.params.id
+          success: false,
+          message: "Delivery not found with id " + req.params.id
         });
       }
       return res.status(500).send({
         success: false,
         message: "Could not delete delivery with id " + req.params.id
+      });
     });
-  });
 }
 
-module.exports = {list, create, read, update, remove};
+module.exports = { list, create, read, update, remove };

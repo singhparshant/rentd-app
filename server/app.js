@@ -12,11 +12,9 @@ const shoppingCartRouter = require("./routes/shoppingCart.js");
 const userRouter = require("./routes/user.js");
 const applicationRouter = require("./routes/application.js");
 const stripeWebhookRouter = require("./routes/webHook");
-const swaggerJsDoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
-const User = require("./models/user");
 const checkoutRouter = require("./routes/checkout.js");
 const categoryRouter = require("./routes/category.js");
+const deliveryRouter = require("./routes/delivery.js");
 const cors = require("cors");
 const app = express();
 var bodyParser = require("body-parser");
@@ -55,6 +53,7 @@ app.use("/users", userRouter);
 app.use("/applications", applicationRouter);
 app.use("/categories", categoryRouter);
 app.use("/payment", checkoutRouter);
+app.use("/deliveries", deliveryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
