@@ -24,12 +24,11 @@ export default function ApplicationsOverview({
                 pathname: `/applications/${application._id}`,
                 state: application,
               }}
-              style={{ textDecoration: "none", width: "80%", color: "black" }}
+              style={{ textDecoration: "none", width: "60%", color: "black" }}
             >
               <Card
                 sx={{
                   margin: "8px",
-                  // width: "80%",
                   transition: "transform 0.15s ease-in-out",
                   "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
                 }}

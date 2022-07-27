@@ -1,12 +1,30 @@
 const Order = require("../models/order");
 
 const list = async (req, res) => {
-  try {
-    let orders = await Order.find();
-    res.status(200).json({
-      data: orders,
-      success: true,
+  if (!req.query.userId || !req.query.role)
+    return res.status(400).json({
+      success: false,
+      error: "Bad request",
+      message: "userId and role missing!",
     });
+  const { userId, role } = req.query;
+  try {
+
+    if (role === "customer") {
+      //filter orders by customerId
+      console.log("here")
+
+      let orders = await Order.find({ customerId: userId });
+      console.log("orders", orders)
+      res.status(200).json({
+        data: orders,
+        success: true,
+      });
+
+    } else if (role === "supplier") {
+
+    }
+
   } catch (err) {
     res.status(400).res.status(500).json({
       success: false,
@@ -16,7 +34,7 @@ const list = async (req, res) => {
   }
 }
 const create = async (req, res) => {
-  if(Object.keys(req.body).length === 0)
+  if (Object.keys(req.body).length === 0)
     return res.status(400).json({
       success: false,
       error: "Bad request",
@@ -44,9 +62,9 @@ const read = async (req, res) => {
       success: false,
       error: "Bad request",
       message: "The request parameter is absent",
-  });
+    });
 
-  try{
+  try {
     let order = await Order.findById(req.params.id);
     if (!order) {
       return res.status(404).json({
@@ -68,9 +86,9 @@ const read = async (req, res) => {
 const update = async (req, res) => {
   let orderId = req.params.id
   let update = req.body
-  Order.findByIdAndUpdate(orderId, {$set: update}, {new: true})
+  Order.findByIdAndUpdate(orderId, { $set: update }, { new: true })
     .then(data => {
-      if(!data) {
+      if (!data) {
         return res.status(404).json({
           success: false,
           message: "Order not found with id " + req.params.id
@@ -82,15 +100,15 @@ const update = async (req, res) => {
         message: "Order successfully updated"
       });
     }).catch(err => {
-      if(err.kind === 'ObjectId') {
+      if (err.kind === 'ObjectId') {
         return res.status(404).json({
           success: false,
           message: "Order not found with id " + req.params.id
         });
       }
       return res.status(500).send({
-          success: false,
-          message: "Error updating order with id " + req.params.id
+        success: false,
+        message: "Error updating order with id " + req.params.id
       });
     });
 }
@@ -112,16 +130,16 @@ const remove = async (req, res) => {
     }).catch(err => {
       if (err.kind === 'ObjectId') {
         return res.status(404).send({
-            success: false,
-            message: "Order not found with id " + req.params.id
+          success: false,
+          message: "Order not found with id " + req.params.id
         });
       }
       return res.status(500).send({
         success: false,
         message: "Could not delete order with id " + req.params.id
+      });
     });
-  });
 }
 
-module.exports = {list, create, read, update, remove};
+module.exports = { list, create, read, update, remove };
 
