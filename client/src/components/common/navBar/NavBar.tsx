@@ -49,8 +49,8 @@ const NavBar = () => {
 const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
   const location = useLocation();
   const filter = createFilterOptions<any>();
-  const filters = useFilters((state: any) => state.filters);
   const setFilters = useFilters((state: any) => state.setFilters);
+  const resetFilters = useFilters((state: any) => state.resetFilters);
   const [searchString, setSearchString] = React.useState<any>(null);
   const history = useHistory();
 
@@ -71,6 +71,9 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
         <Autocomplete
           value={searchString || null}
           onChange={(event: any, newValue: any) => {
+            if (event.type === "click") {
+              resetFilters();
+            }
             setSearchString(newValue);
           }}
           className="autocomplete"
@@ -80,7 +83,7 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
             return filtered;
           }}
           id="free-solo-dialog-demo"
-          options={products}
+          options={[]}
           getOptionLabel={(option: any) => {
             // e.g value selected with enter, right from the input
             if (typeof option === "string") {
@@ -238,11 +241,5 @@ const AdminNavBar = ({ user, onLogout }: NabBarProps) => {
     </nav>
   );
 };
-
-const products: readonly any[] = [
-  { name: "Bike" },
-  { name: "Laptop" },
-  { name: "Book" },
-];
 
 export default NavBar;
