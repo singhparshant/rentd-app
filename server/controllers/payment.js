@@ -23,7 +23,11 @@ const createProductAndPrice = async (orderItems) => {
       priceRecurring = await stripe.prices.create({
         // description: `Duration of renting is ${orderItem.duration}`,
         // quantiy: orderItem.quantity,
-        unit_amount: item.monthlyPrice * (1 - 0.01 * item.discount) * 100,
+        unit_amount:
+          orderItem.duration *
+          item.monthlyPrice *
+          (1 - 0.01 * item.discount) *
+          100,
         currency: "eur",
         recurring: { interval: "month" },
         product: stripeProduct.id,
