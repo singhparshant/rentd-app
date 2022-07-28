@@ -14,6 +14,9 @@ const createProductAndPrice = async (orderItems) => {
   for (let i = 0; i < orderItems.length; i++) {
     let orderItem = orderItems[i];
     const item = orderItem.product;
+    const unit_amount_fixed = Math.floor(
+      item.monthlyPrice * (1 - 0.01 * item.discount)
+    );
     stripeProduct = await stripe.products.create({
       name: item.name,
       // images: [`../storage/productImages/${item.productImages[0]}`],
@@ -23,10 +26,7 @@ const createProductAndPrice = async (orderItems) => {
       priceRecurring = await stripe.prices.create({
         // description: `Duration of renting is ${orderItem.duration}`,
         // quantiy: orderItem.quantity,
-        unit_amount:
-          item.monthlyPrice *
-          (1 - 0.01 * item.discount) *
-          100,
+        unit_amount: unit_amount_fixed * 100,
         currency: "eur",
         recurring: { interval: "month" },
         product: stripeProduct.id,
@@ -74,7 +74,6 @@ const create_session = async (req, res) => {
 
   // Data requireds by the webhooks
   orderData = order;
-  // lineItemsData = lineItemsArray;
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -140,13 +139,14 @@ const refund = async (req, res) => {
     }
 
     // Do a refund of the amount equivalent to (one monthly price - discount) + Deposit
+    const amount_fixed = Math.floor(
+      orderItemfromDb.quantity *
+        (product.monthlyPrice * (1 - 0.01 * product.discount) + product.deposit)
+    );
+
     const refund = await stripe.refunds.create({
       payment_intent: order.paymentId,
-      amount:
-        orderItemfromDb.quantity *
-        (product.monthlyPrice * (1 - 0.01 * product.discount) +
-          product.deposit) *
-        100,
+      amount: amount_fixed * 100,
     });
 
     //Update the order status to refunded
@@ -173,9 +173,7 @@ const refund = async (req, res) => {
       message: "Succesfully processed refund and cancelled subscription",
     });
   } catch (error) {
-    res
-      .status(500)
-      .send(error);
+    res.status(500).send(error);
   }
 };
 
