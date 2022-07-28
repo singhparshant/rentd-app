@@ -12,10 +12,7 @@ const list = async (req, res) => {
 
     if (role === "customer") {
       //filter orders by customerId
-      console.log("here")
-
       let orders = await Order.find({ customerId: userId });
-      console.log("orders", orders)
       res.status(200).json({
         data: orders,
         success: true,

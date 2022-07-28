@@ -1,7 +1,13 @@
-import { CircularProgress, Container, dividerClasses } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Modal,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Redirect, useLocation, useParams } from "react-router-dom";
+import { Redirect, useHistory, useLocation } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
 import { parseDate } from "../../../utils/functions";
 import useAuthState from "../../../zustand/useAuthState";
@@ -12,6 +18,16 @@ export default function OrderDetailsScreen() {
   const { order } = location.state;
   const [loading, setLoading] = useState(true);
   const [orderItemsData, setOrderItemsData] = useState<any>([]);
+  const [refundOrderItemId, setRefundOrderItemId] = useState("");
+  const history = useHistory();
+
+  //for modal
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = (refundOrderItemId: string) => {
+    setRefundOrderItemId(refundOrderItemId);
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     //to prevent useEffect from being triggered twice
@@ -42,7 +58,6 @@ export default function OrderDetailsScreen() {
   if (!user) return <Redirect to="/login" />;
 
   const handleRefund = async (orderItemId: string) => {
-    console.log("orderItemId", orderItemId);
     try {
       const response = await axiosInstance.post("/payment/refund", {
         orderId: order._id,
@@ -52,6 +67,10 @@ export default function OrderDetailsScreen() {
     } catch (error) {
       toast.error("something went wrong!");
     }
+  };
+
+  const handleContact = () => {
+    history.push("/");
   };
 
   return loading ? (
@@ -104,10 +123,9 @@ export default function OrderDetailsScreen() {
                 <span>
                   <strong>
                     {orderItem.quantity *
-                      orderItem.product.monthlyPrice *
-                      orderItem.duration *
-                      (1 - 0.01 * orderItem.product.discount) +
-                      orderItem.product.deposit}
+                      (orderItem.product.monthlyPrice *
+                        (1 - 0.01 * orderItem.product.discount) +
+                        orderItem.product.deposit)}
                     €
                   </strong>
                 </span>
@@ -116,7 +134,9 @@ export default function OrderDetailsScreen() {
                 <div>
                   status:
                   <strong style={{ color: "green" }}>
-                    &nbsp;{orderItem.status}
+                    &nbsp;
+                    {orderItem.status.charAt(0).toUpperCase() +
+                      orderItem.status.substring(1)}
                   </strong>
                 </div>
 
@@ -149,7 +169,7 @@ export default function OrderDetailsScreen() {
                 {orderItem.status !== "refunded" && (
                   <div
                     className="button"
-                    onClick={() => handleRefund(orderItem._id)}
+                    onClick={() => handleOpen(orderItem._id)}
                   >
                     Refund
                   </div>
@@ -164,6 +184,64 @@ export default function OrderDetailsScreen() {
           </div>
         </div>
       </div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              <span style={{ fontWeight: "bold", fontSize: 28 }}>
+                Return Product
+              </span>
+            </Typography>
+          </div>
+          <Typography id="modal-modal-description" sx={{ mt: 4 }}>
+            <p style={{ fontSize: 18 }}>
+              Please state the reason for the refund:
+            </p>
+            <textarea
+              style={{
+                width: "95%",
+                minHeight: 150,
+                fontSize: 16,
+                padding: 10,
+              }}
+            ></textarea>
+          </Typography>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div className="button" onClick={handleContact}>
+              contact us
+            </div>
+            <div
+              className="button"
+              onClick={() => handleRefund(refundOrderItemId)}
+            >
+              confirm
+            </div>
+          </div>
+        </Box>
+      </Modal>
     </Container>
   );
 }
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  padding: 4,
+  borderRadius: 2,
+};
