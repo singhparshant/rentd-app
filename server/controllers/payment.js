@@ -15,19 +15,19 @@ const createProductAndPrice = async (orderItems) => {
     let orderItem = orderItems[i];
     const item = orderItem.product;
     const unit_amount_fixed = Math.floor(
-      item.monthlyPrice * (1 - 0.01 * item.discount)
+      (item.monthlyPrice * (1 - 0.01 * item.discount)).toFixed(2) * 100
     );
-    console.log();
+
     stripeProduct = await stripe.products.create({
       name: item.name,
       // images: [`../storage/productImages/${item.productImages[0]}`],
     });
-
+    console.log("Unit_amount: ", unit_amount_fixed);
     try {
       priceRecurring = await stripe.prices.create({
         // description: `Duration of renting is ${orderItem.duration}`,
         // quantiy: orderItem.quantity,
-        unit_amount: unit_amount_fixed * 100,
+        unit_amount: unit_amount_fixed,
         currency: "eur",
         recurring: { interval: "month" },
         product: stripeProduct.id,
@@ -140,15 +140,21 @@ const refund = async (req, res) => {
     }
 
     // Do a refund of the amount equivalent to (one monthly price - discount) + Deposit
+    const amount_after_discount = (
+      product.monthlyPrice *
+      (1 - 0.01 * product.discount)
+    ).toFixed(2);
+
     const amount_fixed = Math.floor(
-      orderItemfromDb.quantity *
-        (Math.floor(product.monthlyPrice * (1 - 0.01 * product.discount)) +
-          product.deposit)
+      (
+        orderItemfromDb.quantity *
+        (amount_after_discount + product.deposit)
+      ).toFixed(2) * 100
     );
     console.log("Refunding amount: ", amount_fixed);
     const refund = await stripe.refunds.create({
       payment_intent: order.paymentId,
-      amount: amount_fixed * 100,
+      amount: amount_fixed,
     });
 
     //Update the order status to refunded
