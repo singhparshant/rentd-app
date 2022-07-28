@@ -89,14 +89,16 @@ export default function OrderDetailsScreen() {
                 </div>
                 <span>
                   <strong>
-                    {Math.floor(
+                    {(
                       orderItem.quantity *
-                        (Math.floor(
+                      (parseFloat(
+                        (
                           orderItem.product.monthlyPrice *
-                            (1 - 0.01 * orderItem.product.discount)
-                        ) +
-                          orderItem.product.deposit)
-                    )}
+                          (1 - 0.01 * orderItem.product.discount)
+                        ).toFixed(2)
+                      ) +
+                        orderItem.product.deposit)
+                    ).toFixed(2)}
                     €
                   </strong>
                 </span>
