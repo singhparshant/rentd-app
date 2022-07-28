@@ -10,11 +10,10 @@ import {
 } from "../api/requestPaths";
 import NotFound from "../components/common/notFound/NotFound";
 import OrderDetailsScreen from "../components/common/orderDetailsScreen/OrderDetailsScreen";
-import OrdersScreen from "../components/common/ordersScreen/OrdersScreen";
-import ProductDetailsScreen from "../components/common/productDetails/ProductDetailsScreen";
 import ProfileScreen from "../components/common/profileScreen/ProfileScreen";
 import AddProductScreen from "../components/supplierApp/addProductScreen/AddProductScreen";
 import ProductsScreen from "../components/supplierApp/productsScreen/ProductsScreen";
+import SupplierOrdersScreen from "../components/supplierApp/SupplierOrdersScreen";
 import UpdateProductScreen from "../components/supplierApp/updateProductScreen/UpdateProductScreen";
 import { AppRoute } from "./customerAppRoutes";
 
@@ -26,7 +25,7 @@ export const supplierAppRoutes: Array<AppRoute> = [
 
   {
     path: getOrdersPath,
-    component: <OrdersScreen />,
+    component: <SupplierOrdersScreen />,
   },
 
   {

@@ -7,6 +7,7 @@ const Order = require("../models/order");
 const order = require("../models/order");
 const Delivery = require("../models/delivery");
 const User = require("../models/user");
+const Suppliers = require("../models/supplier");
 const signingSecret = process.env.STRIPE_SIGNING_SECRET;
 
 const stripeWebhook = asyncHandler(async (req, res) => {
@@ -53,6 +54,8 @@ const stripeWebhook = asyncHandler(async (req, res) => {
       address: await User.findById(orderRequest.customerId).address,
     });
 
+    let supplierObjects = [];
+
     //update orderitem object with new attributes like subscription id, delivery id and create a mongo order object
     orderRequest.orderItems = orderRequest.orderItems.map((orderItem) => {
       console.log("orderItem.product._id", orderItem.product._id);
@@ -73,12 +76,26 @@ const stripeWebhook = asyncHandler(async (req, res) => {
       amount: event.data.object.amount / 100,
     });
 
+    orderRequest.orderItems.map((orderItem) => {
+      supplierObjects.push(
+        new Suppliers({
+          quantity: orderItem.quantity,
+          duration: orderItem.duration,
+          paymentId: event.data.object.id,
+          customerId: orderRequest.customerId,
+          productId: orderItem.productId,
+          supplierId: orderItem.product.supplierId,
+        })
+      );
+    });
+
     //save in database
     try {
       console.log("order object to be saved: ", orderObject);
       console.log("delivery object to be saved: ", deliveryObject);
       await orderObject.save();
       await deliveryObject.save();
+      await Suppliers.insertMany(supplierObjects);
     } catch (error) {
       res.status(500);
     }
