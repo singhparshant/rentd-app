@@ -91,8 +91,10 @@ export default function OrderDetailsScreen() {
                   <strong>
                     {Math.floor(
                       orderItem.quantity *
-                        (orderItem.product.monthlyPrice *
-                          (1 - 0.01 * orderItem.product.discount) +
+                        (Math.floor(
+                          orderItem.product.monthlyPrice *
+                            (1 - 0.01 * orderItem.product.discount)
+                        ) +
                           orderItem.product.deposit)
                     )}
                     €
