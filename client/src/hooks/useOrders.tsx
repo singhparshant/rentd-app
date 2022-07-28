@@ -23,14 +23,15 @@ export const useOrders = () => {
           `/orders?userId=${id}&role=${role}`
         );
         let orders = response.data.data;
-
-        for (let i = 0; i < orders.length; i++) {
-          const orderItems = orders[i].orderItems;
-          for (let j = 0; j < orderItems.length; j++) {
-            const product = await getProductById(
-              orders[i].orderItems[j].productId
-            );
-            orders[i].orderItems[j] = { ...orders[i].orderItems[j], product };
+        if (role === "customer") {
+          for (let i = 0; i < orders.length; i++) {
+            const orderItems = orders[i].orderItems;
+            for (let j = 0; j < orderItems.length; j++) {
+              const product = await getProductById(
+                orders[i].orderItems[j].productId
+              );
+              orders[i].orderItems[j] = { ...orders[i].orderItems[j], product };
+            }
           }
         }
         setOrders(orders);

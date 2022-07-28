@@ -15,7 +15,6 @@ const SupplierOrdersScreen = (props: Props) => {
   const { orders, loading } = useOrders();
 
   if (!user) return <Redirect to="/login" />;
-  console.log(orders);
   return loading ? (
     <CircularProgress
       sx={{
@@ -37,7 +36,6 @@ const SupplierOrdersScreen = (props: Props) => {
       >
         <h1>Your orders</h1>
       </div>
-
       <div
         style={{
           display: "flex",
@@ -55,27 +53,23 @@ const SupplierOrdersScreen = (props: Props) => {
                   "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
                 }}
               >
-                <div key={index} className="applicationCard">
-                  <p>{order.product.name}</p>
-
-                  {/* <div> */}
-                  <div
-                    style={{
-                      paddingBottom: 5,
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <b>Quanitity:</b> {order.quantity}
-                    <b>Duration:</b> {order.duration}
+                <div
+                  key={index}
+                  className="applicationCard"
+                  style={{ height: "auto" }}
+                >
+                  <div style={{ width: "50%" }}>
+                    <ul>
+                      <li>{order.product.name}</li>
+                    </ul>
                   </div>
-                  {/* {order.createdAt && (
-                      <span>
-                        <b>Order at: </b>
-                        {parseDate(new Date(order.createdAt))}
-                      </span>
-                    )} */}
-                  {/* </div> */}
+
+                  <div>
+                    <div style={{ paddingBottom: 5 }}>
+                      <b>Quantity:</b> {order.quantity} <br />
+                      <b>Duration:</b> {order.duration}
+                    </div>
+                  </div>
 
                   <img className="applicationImage" src={orderImage} alt="" />
                 </div>
