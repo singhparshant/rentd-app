@@ -1,6 +1,4 @@
-import React from "react";
 import useViewport from "../../../hooks/useViewPort";
-import useAuthState from "../../../zustand/useAuthState";
 import MobileComponent from "../../common/body/MobileComponent";
 import Sidebar from "../../common/body/Sidebar";
 import ProductsOverview from "../../productsOverview/ProductsOverview";
@@ -8,7 +6,7 @@ import ProductsOverview from "../../productsOverview/ProductsOverview";
 export default function ProductsScreen() {
   const { width } = useViewport();
   const breakpoint = 550;
-  const user = useAuthState((state: any) => state.user);
+  // const user = useAuthState((state: any) => state.user);
 
   return (
     <div>

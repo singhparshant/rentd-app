@@ -1,21 +1,11 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import React from "react";
+import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
-import {
-  Card,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Rating,
-  Select,
-} from "@mui/material";
-import useAuthState from "../../../zustand/useAuthState";
-import axios from "axios";
-import axiosInstance from "../../../api/axios";
 import toast from "react-hot-toast";
+import axiosInstance from "../../../api/axios";
+import useAuthState from "../../../zustand/useAuthState";
 
 interface userInfo {
   username: string;
@@ -27,8 +17,8 @@ interface userInfo {
 }
 export default function ProfileScreen() {
   const state = useAuthState() as any;
-  const [name, setName] = useState(0);
-  const [address, setAddress] = useState(0);
+  // const [name, setName] = useState(0);
+  // const [address, setAddress] = useState(0);
   const [details, setDetails] = useState<userInfo>({
     username: "",
     address: "",
@@ -61,7 +51,7 @@ export default function ProfileScreen() {
       console.log("hello");
     };
     fetchUser();
-  }, []);
+  }, [state.user.id]);
 
   //console.log("fetched user: ", fetchUser)
   //const { user } = useAuthState() as any;

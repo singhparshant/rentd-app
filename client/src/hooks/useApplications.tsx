@@ -21,6 +21,6 @@ export const useApplications = (status: string) => {
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [status]);
   return { applications, loading, error };
 };
