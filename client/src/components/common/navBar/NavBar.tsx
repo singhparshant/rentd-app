@@ -165,8 +165,18 @@ const CustomerNavBar = ({ user, onLogout }: NabBarProps) => {
 };
 
 const SupplierNavBar = ({ user, onLogout }: NabBarProps) => {
+  const filter = createFilterOptions<any>();
   const location = useLocation();
   const resetFilters = useFilters((state: any) => state.resetFilters);
+  const [searchString, setSearchString] = React.useState<any>(null);
+  const setFilters = useFilters((state: any) => state.setFilters);
+
+  const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setFilters("searchString", searchString);
+    }
+    setSearchString(searchString);
+  };
 
   const buttons = [
     {
@@ -182,6 +192,47 @@ const SupplierNavBar = ({ user, onLogout }: NabBarProps) => {
         <Link onClick={resetFilters} to="/">
           <img className="logo" src={logo} alt="logo" />
         </Link>
+        <React.Fragment>
+          <Autocomplete
+            value={searchString || null}
+            onChange={(event: any, newValue: any) => {
+              if (event.type === "click") {
+                resetFilters();
+              }
+              setSearchString(newValue);
+            }}
+            className="autocomplete"
+            style={{ backgroundColor: "white", borderRadius: 7 }}
+            filterOptions={(options, params) => {
+              const filtered = filter(options, params);
+              return filtered;
+            }}
+            id="free-solo-dialog-demo"
+            options={[]}
+            getOptionLabel={(option: any) => {
+              // e.g value selected with enter, right from the input
+              if (typeof option === "string") {
+                return option;
+              }
+              if (option.inputValue) {
+                return option.inputValue;
+              }
+              return option.name;
+            }}
+            selectOnFocus
+            clearOnBlur
+            handleHomeEndKeys
+            onKeyUp={handleSubmit}
+            renderOption={(props: any, option: any) => (
+              <li {...props}>{option.name}</li>
+            )}
+            sx={{ width: 600, marginRight: 2, marginLeft: 2, padding: 0.3 }}
+            freeSolo
+            renderInput={(params: any) => (
+              <TextField {...params} label="Search for products" />
+            )}
+          />
+        </React.Fragment>
 
         {buttons.map((btn) => (
           <Link to={btn.path} style={{ textDecoration: "none" }}>

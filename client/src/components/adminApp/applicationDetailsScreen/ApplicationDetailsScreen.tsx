@@ -31,7 +31,7 @@ export default function ApplicationDetailsScreen() {
   return (
     <Container
       component="main"
-      maxWidth="xs"
+      maxWidth="sm"
       sx={{ boxShadow: 5, paddingBottom: 5, marginTop: 10 }}
     >
       <div className="applicationDetailsContainer">

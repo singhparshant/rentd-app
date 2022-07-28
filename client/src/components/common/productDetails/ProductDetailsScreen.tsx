@@ -181,10 +181,12 @@ export default function ProductDetailsScreen() {
             <label style={{ fontSize: "20px" }}>Total Amount: &nbsp;</label>
             <strong style={{ color: "green", fontSize: 30 }}>
               €
-              {product.monthlyPrice *
-                rentalDuration *
-                (1 - 0.01 * product.discount) +
-                product.deposit}
+              {(
+                product.monthlyPrice *
+                  rentalDuration *
+                  (1 - 0.01 * product.discount) +
+                product.deposit
+              ).toFixed(2)}
             </strong>
             <br />
             <label style={{ fontSize: "10px" }}>

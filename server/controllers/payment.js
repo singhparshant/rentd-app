@@ -175,7 +175,7 @@ const refund = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .send({ message: "Could not cancel subscription/ process refund" });
+      .send(error);
   }
 };
 

@@ -14,7 +14,6 @@ const list = async (req, res) => {
   try {
     if (role === "customer") {
       //filter orders by customerId
-
       let orders = await Order.find({ customerId: userId });
       res.status(200).json({
         data: orders,
