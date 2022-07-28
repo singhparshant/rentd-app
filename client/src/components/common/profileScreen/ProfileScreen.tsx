@@ -127,7 +127,7 @@ export default function ProfileScreen() {
                   label="Old password"
                   margin="normal"
                   required
-                  type={"string"}
+                  type={"password"}
                   placeholder="Old password"
                   name="oldPassword"
                   autoComplete="Old password"
@@ -144,7 +144,7 @@ export default function ProfileScreen() {
                   label="New password"
                   margin="normal"
                   required
-                  type={"string"}
+                  type={"password"}
                   placeholder="New password"
                   name="newPassword"
                   autoComplete="New password"

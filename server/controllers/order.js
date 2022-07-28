@@ -20,12 +20,13 @@ const list = async (req, res) => {
         success: true,
       });
     } else if (role === "supplier") {
-      let result = [],
-        product;
+      let result = [];
+      let product;
       let supplierOrders = await Suppliers.find({ supplierId: userId });
+      console.log("supplier orders", supplierOrders)
       // supplierOrders.forEach((item) => {
       for (let i = 0; i < supplierOrders.length; i++) {
-        item = supplierOrders[i];
+        const item = supplierOrders[i];
         product = await Product.findById(item.productId);
         result.push({
           product: product,

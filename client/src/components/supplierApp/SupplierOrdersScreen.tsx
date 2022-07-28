@@ -15,7 +15,7 @@ const SupplierOrdersScreen = (props: Props) => {
   const { orders, loading } = useOrders();
 
   if (!user) return <Redirect to="/login" />;
-  console.log(orders);
+  console.log("orders for supplier", orders);
   return loading ? (
     <CircularProgress
       sx={{
