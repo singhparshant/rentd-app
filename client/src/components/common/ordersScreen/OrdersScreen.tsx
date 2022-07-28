@@ -9,7 +9,7 @@ import { parseDate } from "../../../utils/functions";
 export default function OrdersScreen() {
   const user = useAuthState((state: any) => state.user);
   const { orders, loading } = useOrders();
-
+  console.log("orders", orders);
   if (!user) return <Redirect to="/login" />;
 
   return loading ? (
@@ -55,8 +55,18 @@ export default function OrdersScreen() {
                     "&:hover": { transform: "scale3d(1.05, 1.05, 1)" },
                   }}
                 >
-                  <div key={index} className="applicationCard">
-                    <p>Order {index + 1}</p>
+                  <div
+                    key={index}
+                    className="applicationCard"
+                    style={{ height: "auto" }}
+                  >
+                    <div style={{ width: "50%" }}>
+                      <ul>
+                        {order.orderItems.map((orderItem: any) => (
+                          <li>{orderItem.product.name}</li>
+                        ))}
+                      </ul>
+                    </div>
 
                     <div>
                       <div style={{ paddingBottom: 5 }}>

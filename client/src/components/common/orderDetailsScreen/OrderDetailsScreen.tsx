@@ -16,8 +16,6 @@ export default function OrderDetailsScreen() {
   const user = useAuthState((state: any) => state.user);
   const location = useLocation() as any;
   const { order } = location.state;
-  const [loading, setLoading] = useState(true);
-  const [orderItemsData, setOrderItemsData] = useState<any>([]);
   const [refundOrderItemId, setRefundOrderItemId] = useState("");
   const [refundDescription, setRefundDescription] = useState("");
   const history = useHistory();
@@ -29,32 +27,6 @@ export default function OrderDetailsScreen() {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
-
-  useEffect(() => {
-    //to prevent useEffect from being triggered twice
-    let ignore = false;
-    const getOrderItems = async () => {
-      for (let i = 0; i < order.orderItems.length; i++) {
-        const orderItem = order.orderItems[i];
-        //get the product
-        const productResponse = await axiosInstance.get(
-          `/products/${orderItem.productId}`
-        );
-        const product = productResponse.data;
-        if (!ignore)
-          setOrderItemsData((prev: any) => [
-            ...prev,
-            { ...orderItem, product },
-          ]);
-      }
-      setLoading(false);
-    };
-
-    getOrderItems();
-    return () => {
-      ignore = true;
-    };
-  }, []);
 
   if (!user) return <Redirect to="/login" />;
 
@@ -77,16 +49,7 @@ export default function OrderDetailsScreen() {
     history.push("/");
   };
 
-  return loading ? (
-    <CircularProgress
-      sx={{
-        marginLeft: "50%",
-        marginTop: "20px",
-        marginBottom: "20px",
-        color: "#2b0245",
-      }}
-    />
-  ) : (
+  return (
     <Container
       component="main"
       maxWidth="md"
@@ -107,7 +70,7 @@ export default function OrderDetailsScreen() {
         </p>
 
         <div style={{ marginLeft: 40 }}>
-          {orderItemsData.map((orderItem: any) => (
+          {order.orderItems.map((orderItem: any) => (
             <div>
               <div
                 style={{
