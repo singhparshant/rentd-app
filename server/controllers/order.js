@@ -29,7 +29,7 @@ const list = async (req, res) => {
         product = await Product.findById(item.productId);
         result.push({
           product: product,
-          quantiy: item.quantity,
+          quantity: item.quantity,
           duration: item.duration,
         });
       }

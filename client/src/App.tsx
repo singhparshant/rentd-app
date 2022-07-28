@@ -1,15 +1,12 @@
 import { Button } from "@mui/material";
-import React from "react";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
-import Footer from "./components/common/footer/Footer";
-import NavBar from "./components/common/navBar/NavBar";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { customerAppRoutes } from "./routes/customerAppRoutes";
-import useAuthState from "./zustand/useAuthState";
-import { supplierAppRoutes } from "./routes/supplierAppRoutes";
-import { adminAppRoutes } from "./routes/adminAppRoutes";
 import { Toaster } from "react-hot-toast";
-import { failure, success } from "./api/requestPaths";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import NavBar from "./components/common/navBar/NavBar";
+import { adminAppRoutes } from "./routes/adminAppRoutes";
+import { customerAppRoutes } from "./routes/customerAppRoutes";
+import { supplierAppRoutes } from "./routes/supplierAppRoutes";
+import useAuthState from "./zustand/useAuthState";
 
 const ErrorHandler = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
