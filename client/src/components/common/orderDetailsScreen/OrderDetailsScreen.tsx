@@ -1,5 +1,6 @@
 import { CircularProgress, Container, dividerClasses } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { Redirect, useLocation, useParams } from "react-router-dom";
 import axiosInstance from "../../../api/axios";
 import { parseDate } from "../../../utils/functions";
@@ -40,7 +41,18 @@ export default function OrderDetailsScreen() {
 
   if (!user) return <Redirect to="/login" />;
 
-  const handleRefund = () => {};
+  const handleRefund = async (orderItemId: string) => {
+    console.log("orderItemId", orderItemId);
+    try {
+      const response = await axiosInstance.post("/payment/refund", {
+        orderId: order._id,
+        orderItemId: orderItemId,
+      });
+      console.log("refund response, ", response.data);
+    } catch (error) {
+      toast.error("something went wrong!");
+    }
+  };
 
   return loading ? (
     <CircularProgress
@@ -135,7 +147,10 @@ export default function OrderDetailsScreen() {
                   alt="Could not load."
                 />
                 {orderItem.status !== "refunded" && (
-                  <div className="button" onClick={handleRefund}>
+                  <div
+                    className="button"
+                    onClick={() => handleRefund(orderItem._id)}
+                  >
                     Refund
                   </div>
                 )}
