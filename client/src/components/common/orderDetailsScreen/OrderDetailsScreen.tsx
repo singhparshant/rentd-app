@@ -19,6 +19,7 @@ export default function OrderDetailsScreen() {
   const [loading, setLoading] = useState(true);
   const [orderItemsData, setOrderItemsData] = useState<any>([]);
   const [refundOrderItemId, setRefundOrderItemId] = useState("");
+  const [refundDescription, setRefundDescription] = useState("");
   const history = useHistory();
 
   //for modal
@@ -62,8 +63,11 @@ export default function OrderDetailsScreen() {
       const response = await axiosInstance.post("/payment/refund", {
         orderId: order._id,
         orderItemId: orderItemId,
+        description: refundDescription,
       });
       console.log("refund response, ", response.data);
+      toast.success("refunded!");
+      history.push("/orders");
     } catch (error) {
       toast.error("something went wrong!");
     }
@@ -208,6 +212,8 @@ export default function OrderDetailsScreen() {
               Please state the reason for the refund:
             </p>
             <textarea
+              value={refundDescription}
+              onChange={(e) => setRefundDescription(e.target.value)}
               style={{
                 width: "95%",
                 minHeight: 150,
