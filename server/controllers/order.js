@@ -1,4 +1,7 @@
+const order = require("../models/order");
 const Order = require("../models/order");
+const Product = require("../models/product");
+const Suppliers = require("../models/supplier");
 
 const list = async (req, res) => {
   if (!req.query.userId || !req.query.role)
@@ -9,30 +12,41 @@ const list = async (req, res) => {
     });
   const { userId, role } = req.query;
   try {
-
     if (role === "customer") {
       //filter orders by customerId
-      console.log("here")
 
       let orders = await Order.find({ customerId: userId });
-      console.log("orders", orders)
       res.status(200).json({
         data: orders,
         success: true,
       });
-
     } else if (role === "supplier") {
-
+      let result = [],
+        product;
+      let supplierOrders = await Suppliers.find({ supplierId: userId });
+      // supplierOrders.forEach((item) => {
+      for (let i = 0; i < supplierOrders.length; i++) {
+        item = supplierOrders[i];
+        product = await Product.findById(item.productId);
+        result.push({
+          product: product,
+          quantiy: item.quantity,
+          duration: item.duration,
+        });
+      }
+      res.status(200).json({
+        data: result,
+        success: true,
+      });
     }
-
   } catch (err) {
-    res.status(400).res.status(500).json({
+    res.status(500).json({
       success: false,
       error: "Request for orders failed",
-      message: err.message
+      message: err.message,
     });
   }
-}
+};
 const create = async (req, res) => {
   if (Object.keys(req.body).length === 0)
     return res.status(400).json({
@@ -45,7 +59,7 @@ const create = async (req, res) => {
     order = await order.save();
     res.status(200).json({
       success: true,
-      data: order
+      data: order,
     });
   } catch (err) {
     return res.status(500).json({
@@ -54,7 +68,7 @@ const create = async (req, res) => {
       message: err.message,
     });
   }
-}
+};
 
 const read = async (req, res) => {
   if (!req.params.id)
@@ -84,62 +98,63 @@ const read = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  let orderId = req.params.id
-  let update = req.body
+  let orderId = req.params.id;
+  let update = req.body;
   Order.findByIdAndUpdate(orderId, { $set: update }, { new: true })
-    .then(data => {
+    .then((data) => {
       if (!data) {
         return res.status(404).json({
           success: false,
-          message: "Order not found with id " + req.params.id
+          message: "Order not found with id " + req.params.id,
         });
       }
       res.status(200).json({
         success: true,
         data: data,
-        message: "Order successfully updated"
+        message: "Order successfully updated",
       });
-    }).catch(err => {
-      if (err.kind === 'ObjectId') {
+    })
+    .catch((err) => {
+      if (err.kind === "ObjectId") {
         return res.status(404).json({
           success: false,
-          message: "Order not found with id " + req.params.id
+          message: "Order not found with id " + req.params.id,
         });
       }
       return res.status(500).send({
         success: false,
-        message: "Error updating order with id " + req.params.id
+        message: "Error updating order with id " + req.params.id,
       });
     });
-}
+};
 
 const remove = async (req, res) => {
   Order.findByIdAndRemove(req.params.id)
-    .then(data => {
+    .then((data) => {
       if (!data) {
         return res.status(404).json({
           success: false,
-          message: "Order not found with id " + req.params.id
+          message: "Order not found with id " + req.params.id,
         });
       }
       res.status(200).json({
         success: true,
         data: data,
-        message: "Order successfully deleted!"
+        message: "Order successfully deleted!",
       });
-    }).catch(err => {
-      if (err.kind === 'ObjectId') {
+    })
+    .catch((err) => {
+      if (err.kind === "ObjectId") {
         return res.status(404).send({
           success: false,
-          message: "Order not found with id " + req.params.id
+          message: "Order not found with id " + req.params.id,
         });
       }
       return res.status(500).send({
         success: false,
-        message: "Could not delete order with id " + req.params.id
+        message: "Could not delete order with id " + req.params.id,
       });
     });
-}
+};
 
 module.exports = { list, create, read, update, remove };
-
