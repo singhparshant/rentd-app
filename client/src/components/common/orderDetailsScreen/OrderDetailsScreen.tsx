@@ -54,7 +54,7 @@ export default function OrderDetailsScreen() {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [order.orderItems]);
 
   if (!user) return <Redirect to="/login" />;
 

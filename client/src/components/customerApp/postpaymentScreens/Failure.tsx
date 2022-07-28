@@ -1,6 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useEffect, useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { getCartPath } from "../../../api/requestPaths";
 
 type Props = {};

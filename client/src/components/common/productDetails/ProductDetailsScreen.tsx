@@ -1,3 +1,4 @@
+import Typography from "@material-ui/core/Typography";
 import {
   FormControl,
   InputLabel,
@@ -6,14 +7,13 @@ import {
   Select,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import Carousel1 from "react-material-ui-carousel";
-import Typography from "@material-ui/core/Typography";
 import toast from "react-hot-toast";
+import Carousel1 from "react-material-ui-carousel";
 import { useLocation, useParams } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 import axiosInstance from "../../../api/axios";
 import { getProductsPath } from "../../../api/requestPaths";
 import useViewport from "../../../hooks/useViewPort";
-import { v4 as uuid } from "uuid";
 import useCart from "../../../zustand/useCart";
 import ProductCard from "../../productsOverview/ProductCard";
 import { OrderItem, Product } from "../interfaces/Interfaces";
@@ -25,23 +25,23 @@ interface LocationInterface {
   };
 }
 
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    // slidesToSlide: 3, // optional, default to 1.
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-    // slidesToSlide: 2, // optional, default to 1.
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-    // slidesToSlide: 1, // optional, default to 1.
-  },
-};
+// const responsive = {
+//   desktop: {
+//     breakpoint: { max: 3000, min: 1024 },
+//     items: 3,
+//     // slidesToSlide: 3, // optional, default to 1.
+//   },
+//   tablet: {
+//     breakpoint: { max: 1024, min: 464 },
+//     items: 2,
+//     // slidesToSlide: 2, // optional, default to 1.
+//   },
+//   mobile: {
+//     breakpoint: { max: 464, min: 0 },
+//     items: 1,
+//     // slidesToSlide: 1, // optional, default to 1.
+//   },
+// };
 
 export default function ProductDetailsScreen() {
   const { id } = useParams<any>();
