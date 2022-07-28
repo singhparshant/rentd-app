@@ -24,7 +24,6 @@ const createProductAndPrice = async (orderItems) => {
         // description: `Duration of renting is ${orderItem.duration}`,
         // quantiy: orderItem.quantity,
         unit_amount:
-          orderItem.duration *
           item.monthlyPrice *
           (1 - 0.01 * item.discount) *
           100,
