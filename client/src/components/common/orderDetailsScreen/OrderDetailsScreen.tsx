@@ -153,7 +153,7 @@ export default function OrderDetailsScreen() {
             </div>
           ))}
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <strong>Total: {order.amount}€</strong>
+            <strong>Total: {order.amount.toFixed(2)}€</strong>
           </div>
         </div>
       </div>
