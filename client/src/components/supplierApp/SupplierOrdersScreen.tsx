@@ -68,7 +68,7 @@ const SupplierOrdersScreen = (props: Props) => {
                   <div>
                     <div style={{ paddingBottom: 5 }}>
                       <b>Quantity:</b> {order.quantity} <br />
-                      <b>Duration:</b> {order.duration}
+                      <b>Duration:</b> {order.duration} Months
                     </div>
                   </div>
 
