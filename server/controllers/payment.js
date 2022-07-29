@@ -14,8 +14,8 @@ const createProductAndPrice = async (orderItems) => {
   for (let i = 0; i < orderItems.length; i++) {
     let orderItem = orderItems[i];
     const item = orderItem.product;
-    const unit_amount_fixed = Math.floor(
-      (item.monthlyPrice * (1 - 0.01 * item.discount)).toFixed(2) * 100
+    const unit_amount_fixed = Math.round(
+      item.monthlyPrice * (1 - 0.01 * item.discount) * 100
     );
 
     stripeProduct = await stripe.products.create({
@@ -140,16 +140,11 @@ const refund = async (req, res) => {
     }
 
     // Do a refund of the amount equivalent to (one monthly price - discount) + Deposit
-    const amount_after_discount = (
-      product.monthlyPrice *
-      (1 - 0.01 * product.discount)
-    ).toFixed(2);
+    const amount_after_discount =
+      product.monthlyPrice * (1 - 0.01 * product.discount);
 
-    const amount_fixed = Math.floor(
-      (
-        orderItemfromDb.quantity *
-        (amount_after_discount + product.deposit)
-      ).toFixed(2) * 100
+    const amount_fixed = Math.round(
+      orderItemfromDb.quantity * (amount_after_discount + product.deposit) * 100
     );
     console.log("Refunding amount: ", amount_fixed);
     const refund = await stripe.refunds.create({
